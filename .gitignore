@@ -50,4 +50,4 @@ nosetests.xml
 
 ### WaikUp ###
 # Production files
-prod_settings.py
+waikup/prod_settings.py
