@@ -1,0 +1,4 @@
+Flask
+Flask-Script
+Flask-Peewee
+psycopg2
