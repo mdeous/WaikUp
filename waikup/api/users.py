@@ -24,6 +24,7 @@ class TokenResource(Resource):
 @users.route('/auth', methods=['POST'])
 @required_fields('username', 'password')
 def auth():
+    """Authenticate an user and reply with its auth token."""
     from waikup.models import User
     try:
         user = User.get(User.username == request.form['username'])
@@ -38,6 +39,7 @@ def auth():
 
 @users.route('/deauth', methods=['POST'])
 def deauth():
+    """Delete given token."""
     from waikup.models import Token
     token_str = request.headers['Auth']
     token = Token.get(Token.token == token_str)
@@ -47,6 +49,7 @@ def deauth():
 @users.route('/')
 @login_required(admin=True)
 def list_users():
+    """Get all users in database."""
     from waikup.models import User
     user_objs = list(User.select())
     data = ResourceSet(UserResource, user_objs).data
@@ -56,6 +59,7 @@ def list_users():
 @users.route('/<int:userid>')
 @login_required(admin=True)
 def get_user(userid):
+    """Get user with given ID."""
     from waikup.models import User
     try:
         user = User.get(User.id == userid)
@@ -69,6 +73,7 @@ def get_user(userid):
 @login_required(admin=True)
 @required_fields('username', 'first_name', 'last_name', 'email', 'password')
 def create_user():
+    """Create a new user."""
     from waikup.models import User
     user = User.create(
         username=request.form.get('username'),
@@ -84,6 +89,7 @@ def create_user():
 @users.route('/<int:userid>', methods=['PUT'])
 @login_required(admin=True)
 def update_user(userid):
+    """Update informations for user with given ID."""
     from waikup.models import User
     user = User.get(User.id == userid)
     user.safe_update(request.form)
@@ -93,6 +99,7 @@ def update_user(userid):
 @users.route('/<int:userid>', methods=['DELETE'])
 @login_required(admin=True)
 def delete_user(userid):
+    """Delete user with given ID."""
     from waikup.models import User
     User.safe_delete(User.id == userid)
     return jsonify({"success": True})
