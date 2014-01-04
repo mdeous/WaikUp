@@ -32,11 +32,11 @@ and the `git-flow` utility can be found [here](https://github.com/nvie/gitflow "
     * `url` (required)
     * `title` (required)
     * `description`
-* `/api/links/<id>` [PUT+Auth+Owner] - Update informations for link with given ID
+* `/api/links/<id>` [PUT+Owner] - Update informations for link with given ID
     * `url`
     * `title`
     * `description`
-* `/api/links/<id>` [DELETE+Auth+Owner] - Delete link with given ID
+* `/api/links/<id>` [DELETE+Owner] - Delete link with given ID
 
 ### Users API
 
