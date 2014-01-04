@@ -27,7 +27,9 @@ def auth():
     from waikup.models import User
     try:
         user = User.get(User.username == request.form['username'])
-    except DoesNotExist:
+        if not user.check_password(request.form['password']):
+            raise ApiError("Invalid credentials", status_code=403)
+    except ApiError:
         raise ApiError("Invalid credentials", status_code=403)
     token = user.generate_token()
     data = TokenResource(token).data
@@ -38,11 +40,7 @@ def auth():
 def deauth():
     from waikup.models import Token
     token_str = request.headers['Auth']
-    try:
-        token = Token.get(Token.token == token_str)
-        token.delete_instance()
-    except DoesNotExist:
-        raise ApiError("Invalid token")
+    token = Token.get(Token.token == token_str)
     return jsonify({"success": True})
 
 

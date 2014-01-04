@@ -31,11 +31,8 @@ def list_links():
 def get_link(linkid):
     """Get link with given ID."""
     from waikup.models import Link
-    try:
-        link = Link.get(Link.id == linkid)
-        data = LinkResource(link).data
-    except DoesNotExist:
-        raise ApiError("Link not found: %d" % linkid, status_code=404)
+    link = Link.get(Link.id == linkid)
+    data = LinkResource(link).data
     return jsonify(data)
 
 
@@ -71,9 +68,5 @@ def update_link(linkid):
 def delete_link(linkid):
     """Delete link with given ID."""
     from waikup.models import Link
-    try:
-        delete_query = Link.delete().where(Link.id == linkid)
-        delete_query.execute()
-    except DoesNotExist:
-        raise ApiError("Link not found: %d" % linkid, status_code=404)
+    Link.safe_delete(Link.id == linkid)
     return jsonify({"success": True})
