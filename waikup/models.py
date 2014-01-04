@@ -3,13 +3,14 @@
 import os
 from datetime import datetime, timedelta
 from hashlib import md5
+from flask.ext.peewee.auth import Auth
 
 from peewee import *
-from flask.ext.peewee.admin import ModelAdmin
+from flask.ext.peewee.admin import ModelAdmin, Admin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from waikup import settings
-from waikup.app import db, admin
+from waikup.app import db, app
 
 
 ## MODELS
@@ -43,6 +44,11 @@ class User(BaseModel):
 
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
+
+    @classmethod
+    def from_token(cls, token):
+        token_obj = Token.get(Token.token == token)
+        return token_obj.user
 
     def set_password(self, password):
         self.password = generate_password_hash(password, settings.HASH_METHOD, settings.HASH_SALT_LEN)
@@ -101,6 +107,24 @@ class LinkAdmin(ModelAdmin):
     foreign_key_lookups = {'author': 'username'}
 
 
+## AUTHENTICATION SYSTEM
+
+
+class CustomAuth(Auth):
+    def get_user_model(self):
+        return User
+
+    def get_model_admin(self, model_admin=None):
+        return UserAdmin
+
+
+class CustomAdmin(Admin):
+    def check_user_permission(self, user):
+        return user.admin
+
+
+auth = CustomAuth(app, db)
+admin = CustomAdmin(app, auth)
 admin.register(User, UserAdmin)
 admin.register(Token, TokenAdmin)
 admin.register(Link, LinkAdmin)

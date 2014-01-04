@@ -45,9 +45,9 @@ def get_link(linkid):
 def create_link():
     """Create a new link."""
     from waikup.models import Link, User
-    # FIXME: implement real ownership
-    user = User.get(User.username == 'mdeous')
-    link = Link(
+    token = request.headers['Auth']
+    user = User.from_token(token)
+    link = Link.create(
         url=request.form.get('url'),
         title=request.form.get('title'),
         description=request.form.get('description'),

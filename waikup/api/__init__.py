@@ -89,7 +89,6 @@ def owner_required(func):
         except DoesNotExist:
             raise ApiError("Link not found: %d" % linkid, status_code=404)
         if link.author != token.user:
-            print "NOOOOO"
             abort(403)
         return func(linkid)
     return wrapper

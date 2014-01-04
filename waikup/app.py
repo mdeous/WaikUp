@@ -18,10 +18,8 @@ app.config.from_object(settings)
 app.register_blueprint(links, url_prefix='/api/links')
 app.register_blueprint(users, url_prefix='/api/users')
 
-# Setup database and admin area
+# Setup database
 db = Database(app)
-auth = Auth(app, db)
-admin = Admin(app, auth)
 
 
 @app.errorhandler(ApiError)
