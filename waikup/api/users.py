@@ -93,6 +93,9 @@ def update_user(userid):
     from waikup.models import User
     user = User.get(User.id == userid)
     user.safe_update(request.form)
+    if 'password' in request.form:
+        user.set_password(request.form['password'])
+        user.save()
     return jsonify({"success": True})
 
 
