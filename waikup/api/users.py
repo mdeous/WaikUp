@@ -82,5 +82,17 @@ def create_user():
 
 
 @users.route('/<int:userid>', methods=['PUT'])
+@login_required(admin=True)
 def update_user(userid):
+    from waikup.models import User
+    user = User.get(User.id == userid)
+    user.safe_update(request.form)
+    return jsonify({"success": True})
+
+
+@users.route('/<int:userid>', methods=['DELETE'])
+@login_required(admin=True)
+def delete_user(userid):
+    from waikup.models import User
+    User.safe_delete(User.id == userid)
     return jsonify({"success": True})
