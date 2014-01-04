@@ -11,24 +11,54 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from waikup import settings
 from waikup.app import db, app
+from waikup.lib.errors import ApiError
 
 
 ## MODELS
 
 
-class BaseModel(db.Model):
-    update_fields = ()
+class ApiModel(db.Model):
+    safe_fields = ()
     id = PrimaryKeyField()
 
     def safe_update(self, data):
-        for field in self.update_fields:
+        for field in self.safe_fields:
             if (field in data) and (data[field] is not None):
                 setattr(self, field, data[field])
-        return self.save()
+        try:
+            result = self.save()
+        except IntegrityError:
+            raise ApiError("Item values overlap with an existing one")
+        return result
+
+    @classmethod
+    def get(cls, *args, **kwargs):
+        try:
+            obj = cls.get(*args, **kwargs)
+        except DoesNotExist:
+            raise ApiError("Item does not exist", status_code=404)
+        return obj
+
+    @classmethod
+    def create(cls, *args, **kwargs):
+        try:
+            result = cls.create(*args, **kwargs)
+        except IntegrityError:
+            raise ApiError("Item already exists")
+        return result
+
+    @classmethod
+    def safe_delete(cls, *args, **kwargs):
+        try:
+            delete_query = cls.delete().where(*args, **kwargs)
+            result = delete_query.execute()
+        except DoesNotExist:
+            raise ApiError("Item does not exist", status_code=404)
+        return result
 
 
-class User(BaseModel):
-    update_fields = (
+class User(ApiModel):
+    safe_fields = (
         'username',
         'first_name',
         'last_name',
@@ -65,7 +95,7 @@ class User(BaseModel):
         return delete_query.execute()
 
 
-class Token(BaseModel):
+class Token(ApiModel):
     token = CharField(default=lambda: md5(os.urandom(128)).hexdigest())
     user = ForeignKeyField(User, related_name='tokens', unique=True)
     expiry = DateTimeField(default=lambda: datetime.now()+timedelta(weeks=1))
@@ -74,8 +104,8 @@ class Token(BaseModel):
         return u'%s' % self.token
 
 
-class Link(BaseModel):
-    update_fields = (
+class Link(ApiModel):
+    safe_fields = (
         'url',
         'title',
         'description'
