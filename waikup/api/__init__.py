@@ -78,14 +78,14 @@ def check_token_header(token):
     return token
 
 
-def owner_required(func, obj_type):
+def owner_required(func):
     @wraps(func)
-    def wrapper(objid):
+    def wrapper(linkid):
         from waikup.models import Link
         token = request.headers.get('Auth')
         token = check_token_header(token)
-        link = Link.get(Link.id == objid)
+        link = Link.get(Link.id == linkid)
         if (link.author != token.user) or (not token.user.admin):
             abort(403)
-        return func(objid)
+        return func(linkid)
     return wrapper
