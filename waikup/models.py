@@ -34,7 +34,7 @@ class ApiModel(db.Model):
     @classmethod
     def get(cls, *args, **kwargs):
         try:
-            obj = cls.get(*args, **kwargs)
+            obj = super(ApiModel, cls).get(*args, **kwargs)
         except DoesNotExist:
             raise ApiError("Item does not exist", status_code=404)
         return obj
@@ -42,7 +42,7 @@ class ApiModel(db.Model):
     @classmethod
     def create(cls, *args, **kwargs):
         try:
-            result = cls.create(*args, **kwargs)
+            result = super(ApiModel, cls).create(*args, **kwargs)
         except IntegrityError:
             raise ApiError("Item already exists")
         return result
@@ -50,7 +50,7 @@ class ApiModel(db.Model):
     @classmethod
     def safe_delete(cls, *args, **kwargs):
         try:
-            delete_query = cls.delete().where(*args, **kwargs)
+            delete_query = super(ApiModel, cls).where(*args, **kwargs)
             result = delete_query.execute()
         except DoesNotExist:
             raise ApiError("Item does not exist", status_code=404)
