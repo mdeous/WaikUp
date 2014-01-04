@@ -90,6 +90,7 @@ def create_user():
 @login_required(admin=True)
 def update_user(userid):
     """Update informations for user with given ID."""
+    # TODO: find a way to allow an user to update its own informations
     from waikup.models import User
     user = User.get(User.id == userid)
     user.safe_update(request.form)
