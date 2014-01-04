@@ -3,7 +3,7 @@
 from flask import Blueprint, jsonify, request
 from peewee import DoesNotExist
 
-from api import Resource, ResourceSet
+from waikup.api import Resource, ResourceSet, login_required, owner_required
 from waikup.lib.errors import ApiError
 from waikup.lib.helpers import required_fields
 
@@ -40,6 +40,7 @@ def get_link(linkid):
 
 
 @links.route('/', methods=['POST'])
+@login_required()
 @required_fields('url', 'title')
 def create_link():
     """Create a new link."""
@@ -56,6 +57,7 @@ def create_link():
 
 
 @links.route('/<int:linkid>', methods=['PUT'])
+@owner_required
 def update_link(linkid):
     """Update informations for link with given ID."""
     from waikup.models import Link
@@ -65,10 +67,13 @@ def update_link(linkid):
 
 
 @links.route('/<int:linkid>', methods=['DELETE'])
+@owner_required
 def delete_link(linkid):
     """Delete link with given ID."""
     from waikup.models import Link
     try:
-        Link.delete().where(Link.id == linkid)
+        delete_query = Link.delete().where(Link.id == linkid)
+        delete_query.execute()
     except DoesNotExist:
         raise ApiError("Link not found: %d" % linkid, status_code=404)
+    return jsonify({"success": True})

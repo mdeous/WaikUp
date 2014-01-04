@@ -1,5 +1,13 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
+from functools import wraps
+
+from flask import request, abort
+from peewee import DoesNotExist
+
+from waikup.lib.errors import ApiError
+
 
 class Resource(object):
     name = ''
@@ -37,3 +45,51 @@ class ResourceSet(object):
         for resource in self.resources:
             result[self.name].append(resource.dict)
         return result
+
+
+class login_required(object):
+    def __init__(self, admin=False):
+        self.admin = admin
+
+    def __call__(self, func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            token = request.headers.get('Auth')
+            check_token_header(token)
+            if self.admin:
+                if not token.user.admin:
+                    abort(403)
+            return func(*args, **kwargs)
+        return wrapper
+
+
+def check_token_header(token):
+    from waikup.models import Token
+    token = request.headers.get('Auth')
+    if token is None:
+        abort(403)
+    try:
+        token = Token.get(Token.token == token)
+    except DoesNotExist:
+        abort(403)
+    if token.expiry < datetime.now():
+        token.delete_instance()
+        abort(403)
+    return token
+
+
+def owner_required(func):
+    @wraps(func)
+    def wrapper(linkid):
+        from waikup.models import Link
+        token = request.headers.get('Auth')
+        token = check_token_header(token)
+        try:
+            link = Link.get(Link.id == linkid)
+        except DoesNotExist:
+            raise ApiError("Link not found: %d" % linkid, status_code=404)
+        if link.author != token.user:
+            print "NOOOOO"
+            abort(403)
+        return func(linkid)
+    return wrapper
