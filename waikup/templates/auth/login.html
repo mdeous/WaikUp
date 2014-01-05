@@ -18,12 +18,12 @@
                     {{ field(class=css_class) }}
                     {% if field.description %}<span class="help-block">{{ field.description|safe() }}</span>{% endif %}
                     {% for error in field.errors %}<span class="help-block"><strong>{{ error }}</strong></span>{% endfor %}
-                </div>
-            </div>
+                </div><!-- /.input -->
+            </div><!-- /.form-group{% if field.errors %}.has-error{% endif %} -->
         {% endfor %}
         <br>
         <div class="actions">
             <button class="btn btn-primary" type="submit">Log in</button>
-        </div>
+        </div><!-- /.actions -->
     </form>
 {% endblock %}
