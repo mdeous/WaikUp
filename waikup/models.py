@@ -107,12 +107,14 @@ class Link(ApiModel):
     safe_fields = (
         'url',
         'title',
-        'description'
+        'description',
+        'archived'
     )
     url = CharField(unique=True)
     title = CharField()
     description = TextField(null=True)
     submitted = DateTimeField(default=datetime.now)
+    archived = BooleanField(default=False)
     author = ForeignKeyField(User, related_name='links')
 
     def __unicode__(self):
