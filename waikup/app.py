@@ -7,12 +7,14 @@ from waikup import settings
 from waikup.lib.errors import ApiError, http_error
 from waikup.views.api.links import links
 from waikup.views.api.users import users
+from waikup.views.webui import webui
 
 # Setup application
 app = Flask(__name__)
 app.config.from_object(settings)
 
 # Setup views
+app.register_blueprint(webui, url_prefix='/')
 app.register_blueprint(links, url_prefix='/api/links')
 app.register_blueprint(users, url_prefix='/api/users')
 

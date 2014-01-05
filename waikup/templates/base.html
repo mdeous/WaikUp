@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WaikUp - {% block title %}{% endblock %}</title>
+    <meta name="description" content="Collaborative news sharing platform">
+    <meta name="keywords" content="RSS,Atom,feeds,collaboration">
+    <meta name="author" content="Atheos">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="charset" content="UTF-8">
+</head>
+<body>
+{% include "header.html" %}
+<div class="container">
+    {% block body -%}{{ lipsum() }}{%- endblock %}
+</div><!-- /.container -->
+{%-  block js -%}
+    <script type="text/javascript" src="{{ url_for('static', filename="js/jquery-2.0.3.min.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename="js/bootstrap.min.js") }}"></script>
+    {% block extra_js %}{% endblock %}
+{%- endblock %}
+{%- block css -%}
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/bootstrap.min.css") }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/bootstrap-theme.min.css") }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/waikup.css") }}"/>
+    {%- block extra_css -%}{%- endblock -%}
+{%- endblock -%}
+</body>
+</html>
