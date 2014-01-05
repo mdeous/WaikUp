@@ -1,4 +1,12 @@
+@font-face {
+    font-family: 'chintzy';
+    src: url(../fonts/chintzy.ttf);
+}
 body {
     padding-top: 70px;
     padding-bottom: 40px;
+}
+.navbar-brand {
+    font-family: 'chintzy';
+    font-size: 200%;
 }
