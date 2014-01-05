@@ -13,3 +13,6 @@ body {
 #login-form {
     text-align: center;
 }
+.underline {
+    text-decoration: underline;
+}
