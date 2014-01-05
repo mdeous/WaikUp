@@ -3,21 +3,21 @@
 import os
 from datetime import datetime, timedelta
 from hashlib import md5
-from flask.ext.peewee.auth import Auth
 
-from peewee import *
 from flask.ext.peewee.admin import ModelAdmin, Admin
+from flask.ext.peewee.auth import Auth
+from peewee import *
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from waikup import settings
-from waikup.app import db, app
+from waikup.lib import globals as g
 from waikup.lib.errors import ApiError
 
 
 ## MODELS
 
 
-class ApiModel(db.Model):
+class ApiModel(g.db.Model):
     safe_fields = ()
     id = PrimaryKeyField()
 
@@ -152,11 +152,3 @@ class CustomAuth(Auth):
 class CustomAdmin(Admin):
     def check_user_permission(self, user):
         return user.admin
-
-
-auth = CustomAuth(app, db)
-admin = CustomAdmin(app, auth)
-admin.register(User, UserAdmin)
-admin.register(Token, TokenAdmin)
-admin.register(Link, LinkAdmin)
-admin.setup()
