@@ -3,7 +3,7 @@
 from flask import Blueprint, jsonify, request
 
 from waikup.lib.helpers import required_fields
-from waikup.views.api import Resource, ResourceSet, login_required, owner_required
+from waikup.views.api import Resource, ResourceSet, token_required, owner_required
 
 
 links = Blueprint('links', __name__)
@@ -35,7 +35,7 @@ def get_link(linkid):
 
 
 @links.route('/', methods=['POST'])
-@login_required()
+@token_required()
 @required_fields('url', 'title')
 def create_link():
     """Create a new link."""

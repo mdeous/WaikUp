@@ -5,7 +5,7 @@ from peewee import DoesNotExist
 
 from waikup.lib.errors import ApiError
 from waikup.lib.helpers import required_fields
-from waikup.views.api import Resource, ResourceSet, login_required
+from waikup.views.api import Resource, ResourceSet, token_required
 
 users = Blueprint('users', __name__)
 
@@ -47,7 +47,7 @@ def deauth():
 
 
 @users.route('/')
-@login_required(admin=True)
+@token_required(admin=True)
 def list_users():
     """Get all users in database."""
     from waikup.models import User
@@ -57,7 +57,7 @@ def list_users():
 
 
 @users.route('/<int:userid>')
-@login_required(admin=True)
+@token_required(admin=True)
 def get_user(userid):
     """Get user with given ID."""
     from waikup.models import User
@@ -70,7 +70,7 @@ def get_user(userid):
 
 
 @users.route('/', methods=['POST'])
-@login_required(admin=True)
+@token_required(admin=True)
 @required_fields('username', 'first_name', 'last_name', 'email', 'password')
 def create_user():
     """Create a new user."""
@@ -87,7 +87,7 @@ def create_user():
 
 
 @users.route('/<int:userid>', methods=['PUT'])
-@login_required(admin=True)
+@token_required(admin=True)
 def update_user(userid):
     """Update informations for user with given ID."""
     # TODO: find a way to allow an user to update its own informations
@@ -101,7 +101,7 @@ def update_user(userid):
 
 
 @users.route('/<int:userid>', methods=['DELETE'])
-@login_required(admin=True)
+@token_required(admin=True)
 def delete_user(userid):
     """Delete user with given ID."""
     from waikup.models import User

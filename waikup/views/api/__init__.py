@@ -45,7 +45,7 @@ class ResourceSet(object):
         return result
 
 
-class login_required(object):
+class token_required(object):
     def __init__(self, admin=False):
         self.admin = admin
 
