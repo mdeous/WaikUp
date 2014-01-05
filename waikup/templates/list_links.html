@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+    <table class="table table-condensed table-hover">
+    <thead>
+        <tr>
+            <th>URL</th>
+            <th>Title</th>
+            <th>Submission date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for link in links %}
+            <tr>
+                <td><a id="link{{ loop.index }}"
+                       class="collapser"
+                       data-toggle="collapse"
+                       data-target="link{{ loop.index }}"
+                    >
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>&nbsp;&nbsp;<a href="{{ link.url }}">{{ link.url }}
+                </a></td>
+                <td>{{ link.title }}</td>
+                <td>{{ link.submitted }}</td>
+            </tr>
+            <tr class="collapse out" id="link{{ loop.index }}">
+                <!-- FIXME colspan doens't work -->
+                <td colspan="3">{{ link.description }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
+{% block extra_js %}
+    <script type="text/javascript">
+        $('.collapser').click(function() {
+            var itemSelector = 'tr#'+$(this).attr('id');
+            if ($(itemSelector).hasClass('out')) {
+                $(itemSelector).addClass('in');
+                $(itemSelector).removeClass('out');
+            } else {
+                $(itemSelector).addClass('out');
+                $(itemSelector).removeClass('in');
+            }
+        });
+        $('a[rel=popover]').popover();
+    </script>
+{% endblock %}
