@@ -2,10 +2,13 @@
 
 import os
 from datetime import datetime, timedelta
+from functools import wraps
 from hashlib import md5
 
-from flask.ext.peewee.admin import ModelAdmin, Admin
+from flask import url_for, redirect, request, abort
+from flask.ext.peewee.admin import ModelAdmin
 from flask.ext.peewee.auth import Auth
+from flask.ext.peewee.utils import get_next
 from peewee import *
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -20,6 +23,8 @@ from waikup.lib.errors import ApiError
 class ApiModel(g.db.Model):
     safe_fields = ()
     id = PrimaryKeyField()
+    no_item_code = 404
+    no_item_message = "Item does not exist"
 
     def safe_update(self, data):
         for field in self.safe_fields:
@@ -36,7 +41,7 @@ class ApiModel(g.db.Model):
         try:
             obj = super(ApiModel, cls).get(*args, **kwargs)
         except DoesNotExist:
-            raise ApiError("Item does not exist", status_code=404)
+            raise ApiError(cls.no_item_message, status_code=cls.no_item_code)
         return obj
 
     @classmethod
@@ -50,10 +55,10 @@ class ApiModel(g.db.Model):
     @classmethod
     def safe_delete(cls, *args, **kwargs):
         try:
-            delete_query = super(ApiModel, cls).where(*args, **kwargs)
+            delete_query = cls.delete().where(*args, **kwargs)
             result = delete_query.execute()
         except DoesNotExist:
-            raise ApiError("Item does not exist", status_code=404)
+            raise ApiError(cls.no_item_message, status_code=cls.no_item_code)
         return result
 
 
@@ -63,6 +68,7 @@ class User(ApiModel):
         'last_name',
         'email'
     )
+    no_item_message = "User does not exist"
     username = CharField(unique=True)
     first_name = CharField()
     last_name = CharField()
@@ -95,6 +101,8 @@ class User(ApiModel):
 
 
 class Token(ApiModel):
+    no_item_code = 403
+    no_item_message = "Forbidden"
     token = CharField(default=lambda: md5(os.urandom(128)).hexdigest())
     user = ForeignKeyField(User, related_name='tokens', unique=True)
     expiry = DateTimeField(default=lambda: datetime.now()+timedelta(weeks=1))
@@ -141,14 +149,50 @@ class LinkAdmin(ModelAdmin):
 ## AUTHENTICATION SYSTEM
 
 
-class CustomAuth(Auth):
+class HybridAuth(Auth):
+    @staticmethod
+    def check_token_header():
+        token_str = request.headers.get('Auth')
+        if token_str is None:
+            abort(403)
+        try:
+            token = Token.get(Token.token == token_str)
+            if token.expiry < datetime.now():
+                token.delete_instance()
+                abort(403)
+            return token
+        except DoesNotExist:
+            abort(403)
+
+    def owner_required(self, func):
+        @wraps(func)
+        def wrapper(linkid):
+            token = self.check_token_header()
+            link = Link.get(Link.id == linkid)
+            if (link.author != token.user) or (not token.user.admin):
+                abort(403)
+            return func(linkid)
+        return wrapper
+
     def get_user_model(self):
         return User
 
     def get_model_admin(self, model_admin=None):
         return UserAdmin
 
-
-class CustomAdmin(Admin):
-    def check_user_permission(self, user):
-        return user.admin
+    def test_user(self, test_func):
+        def decorator(func):
+            @wraps(func)
+            def inner(*args, **kwargs):
+                if request.blueprint in ('links', 'users'):
+                    token = self.check_token_header()
+                    if not test_func(token.user):
+                        abort(403)
+                else:
+                    user = self.get_logged_in_user()
+                    if not user or not test_func(user):
+                        login_url = url_for('%s.login' % self.blueprint.name, next=get_next())
+                        return redirect(login_url)
+                return func(*args, **kwargs)
+            return inner
+        return decorator

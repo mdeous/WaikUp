@@ -3,9 +3,10 @@
 from flask import Blueprint, request, jsonify
 from peewee import DoesNotExist
 
+from waikup.lib import globals as g
 from waikup.lib.errors import ApiError
 from waikup.lib.helpers import required_fields
-from waikup.views.api import Resource, ResourceSet, token_required
+from waikup.views.api import Resource, ResourceSet
 
 users = Blueprint('users', __name__)
 
@@ -47,7 +48,7 @@ def deauth():
 
 
 @users.route('/')
-@token_required(admin=True)
+@g.auth.admin_required
 def list_users():
     """Get all users in database."""
     from waikup.models import User
@@ -57,7 +58,7 @@ def list_users():
 
 
 @users.route('/<int:userid>')
-@token_required(admin=True)
+@g.auth.admin_required
 def get_user(userid):
     """Get user with given ID."""
     from waikup.models import User
@@ -70,7 +71,7 @@ def get_user(userid):
 
 
 @users.route('/', methods=['POST'])
-@token_required(admin=True)
+@g.auth.admin_required
 @required_fields('username', 'first_name', 'last_name', 'email', 'password')
 def create_user():
     """Create a new user."""
@@ -87,7 +88,7 @@ def create_user():
 
 
 @users.route('/<int:userid>', methods=['PUT'])
-@token_required(admin=True)
+@g.auth.admin_required
 def update_user(userid):
     """Update informations for user with given ID."""
     # TODO: find a way to allow an user to update its own informations
@@ -101,7 +102,7 @@ def update_user(userid):
 
 
 @users.route('/<int:userid>', methods=['DELETE'])
-@token_required(admin=True)
+@g.auth.admin_required
 def delete_user(userid):
     """Delete user with given ID."""
     from waikup.models import User

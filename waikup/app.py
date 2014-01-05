@@ -20,12 +20,13 @@ g.db = db
 
 
 # Setup authentication and admin panel
-from waikup.models import User, Token, Link, UserAdmin, TokenAdmin, LinkAdmin, CustomAuth, CustomAdmin
+from flask.ext.peewee.admin import Admin
+from waikup.models import User, Token, Link, UserAdmin, TokenAdmin, LinkAdmin, HybridAuth
 
-auth = CustomAuth(app, db)
+auth = HybridAuth(app, db)
 g.auth = auth
 
-admin = CustomAdmin(app, auth)
+admin = Admin(app, auth)
 admin.register(User, UserAdmin)
 admin.register(Token, TokenAdmin)
 admin.register(Link, LinkAdmin)

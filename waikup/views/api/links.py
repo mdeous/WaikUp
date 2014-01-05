@@ -2,8 +2,9 @@
 
 from flask import Blueprint, jsonify, request
 
+from waikup.lib import globals as g
 from waikup.lib.helpers import required_fields
-from waikup.views.api import Resource, ResourceSet, token_required, owner_required
+from waikup.views.api import Resource, ResourceSet
 
 
 links = Blueprint('links', __name__)
@@ -35,7 +36,7 @@ def get_link(linkid):
 
 
 @links.route('/', methods=['POST'])
-@token_required()
+@g.auth.login_required
 @required_fields('url', 'title')
 def create_link():
     """Create a new link."""
@@ -52,7 +53,7 @@ def create_link():
 
 
 @links.route('/<int:linkid>', methods=['PUT'])
-@owner_required
+@g.auth.owner_required
 def update_link(linkid):
     """Update informations for link with given ID."""
     from waikup.models import Link
@@ -62,7 +63,7 @@ def update_link(linkid):
 
 
 @links.route('/<int:linkid>', methods=['DELETE'])
-@owner_required
+@g.auth.owner_required
 def delete_link(linkid):
     """Delete link with given ID."""
     from waikup.models import Link
