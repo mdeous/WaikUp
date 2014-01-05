@@ -10,3 +10,6 @@ body {
     font-family: 'chintzy';
     font-size: 200%;
 }
+#login-form {
+    text-align: center;
+}
