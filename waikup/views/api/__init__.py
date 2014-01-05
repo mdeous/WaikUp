@@ -6,8 +6,6 @@ from functools import wraps
 from flask import request, abort
 from peewee import DoesNotExist
 
-from waikup.lib.errors import ApiError
-
 
 class Resource(object):
     name = ''

@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, jsonify, request
-from peewee import DoesNotExist
 
-from waikup.api import Resource, ResourceSet, login_required, owner_required
-from waikup.lib.errors import ApiError
 from waikup.lib.helpers import required_fields
+from waikup.views.api import Resource, ResourceSet, login_required, owner_required
 
 
 links = Blueprint('links', __name__)

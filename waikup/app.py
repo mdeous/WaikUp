@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask
-from flask.ext.peewee.admin import Admin
-from flask.ext.peewee.auth import Auth
 from flask.ext.peewee.db import Database
 
 from waikup import settings
-from waikup.api.links import links
-from waikup.api.users import users
 from waikup.lib.errors import ApiError, http_error
+from waikup.views.api.links import links
+from waikup.views.api.users import users
 
 # Setup application
 app = Flask(__name__)

@@ -3,9 +3,9 @@
 from flask import Blueprint, request, jsonify
 from peewee import DoesNotExist
 
-from waikup.api import Resource, ResourceSet, login_required
 from waikup.lib.errors import ApiError
 from waikup.lib.helpers import required_fields
+from waikup.views.api import Resource, ResourceSet, login_required
 
 users = Blueprint('users', __name__)
 
