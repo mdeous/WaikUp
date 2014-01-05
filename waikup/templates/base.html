@@ -12,7 +12,7 @@
 <body>
 {% include "header.html" %}
 <div class="container">
-    {% block body -%}{{ lipsum() }}{%- endblock %}
+    {% block content -%}{{ lipsum() }}{%- endblock %}
 </div><!-- /.container -->
 {%-  block js -%}
     <script type="text/javascript" src="{{ url_for('static', filename="js/jquery-2.0.3.min.js") }}"></script>
