@@ -1,4 +1,5 @@
 Flask
 Flask-Script
 Flask-Peewee
+Flask-WTF
 psycopg2

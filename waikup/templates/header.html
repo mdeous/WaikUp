@@ -13,7 +13,7 @@
             {% if user %}
                 <ul class="nav navbar-nav">
                     <li class="nav-divider"></li>
-                    <li><a href="{{ url_for('webui.list_links') }}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Links</a></li>
+                    <li><a href="{{ url_for('webui.index') }}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Links</a></li>
                     <li><a href="#"><span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;Archives</a></li>
                     <li class="nav-divider"></li>
                 </ul>
@@ -52,33 +52,7 @@
     </div><!-- /.container -->
 </div><!-- /.navbar.navbar-inverse.navbar-fixed-top -->
 
-<div class="modal fade"
-     id="new-link-modal"
-     tabindex="-1"
-     role="dialog"
-     aria-labelledby="new-link-modal-label"
-     aria-hidden="true"
->
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="new-link-modal-label">Submit link</h4>
-            </div><!-- /.modal-header -->
-            <div class="modal-body">
-                <!-- TODO: add content -->
-            </div><!-- /.modal-body -->
-            <div class="modal-footer">
-                <button class="btn btn-success">
-                    <span class="glyphicon glyphicon-ok-circle"></span> Save
-                </button>
-                <button class="btn btn-danger" data-dismiss="modal">
-                    <span class="glyphicon glyphicon-remove-circle"></span> Cancel
-                </button>
-            </div><!-- /.modal-footer -->
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal.fade -->
+{% include "new_link.html" %}
 
 <div class="modal fade"
      id="profile-modal"
@@ -95,6 +69,7 @@
             </div><!-- /.modal-header -->
             <div class="modal-body">
                 <!-- TODO: add content -->
+                {{ lipsum() }}
             </div><!-- /.modal-body -->
             <div class="modal-footer">
                 <button class="btn btn-success">

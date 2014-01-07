@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-    <table id="links-list" class="table table-condensed table-hover">
+    <a href="#"><span class="glyphicon glyphicon-zoom-in expand-all"></span></a>
+    <a href="#"><span class="glyphicon glyphicon-zoom-out collapse-all"></span></a>
+    <table id="links-list" class="table table-hover table-responsive table-bordered">
     <thead>
         <tr>
             <th>URL</th>
@@ -30,18 +32,17 @@
         {% endfor %}
     </tbody>
     </table>
+    <a href="#"><span class="glyphicon glyphicon-zoom-in expand-all"></span></a>
+    <a href="#"><span class="glyphicon glyphicon-zoom-out collapse-all"></span></a>
 {% endblock %}
+
 {% block extra_js %}
     <script type="text/javascript">
-        $('.collapser').click(function() {
-            var itemSelector = 'div#'+$(this).attr('id');
-            if ($(itemSelector).hasClass('out')) {
-                $(itemSelector).addClass('in');
-                $(itemSelector).removeClass('out');
-            } else {
-                $(itemSelector).addClass('out');
-                $(itemSelector).removeClass('in');
-            }
+        $('.expand-all').click(function() {
+            $('.collapse.out').removeClass('out').addClass('in');
+        });
+        $('.collapse-all').click(function() {
+            $('.collapse.in').removeClass('in').addClass('out');
         });
     </script>
 {% endblock %}

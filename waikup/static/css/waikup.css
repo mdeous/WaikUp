@@ -17,8 +17,11 @@ body {
     text-decoration: underline;
 }
 table#links-list>tbody>tr>td#collapsible-td {
-    padding: 0px;
+    padding: 0;
 }
 table#links-list>tbody>tr>td {
-    border: 0;
+    border: 0,5px;
+}
+.expand-all, .collapse-all {
+    color: black;
 }
