@@ -113,7 +113,7 @@ class Token(ApiModel):
 
 class Link(ApiModel):
     class Meta(object):
-        orderby = ('submitted',)
+        order_by = ('submitted',)
 
     safe_fields = (
         'url',
