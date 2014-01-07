@@ -13,7 +13,7 @@
             {% if user %}
                 <ul class="nav navbar-nav">
                     <li class="nav-divider"></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Links</a></li>
+                    <li><a href="{{ url_for('webui.list_links') }}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Links</a></li>
                     <li><a href="#"><span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;Archives</a></li>
                     <li class="nav-divider"></li>
                 </ul>
