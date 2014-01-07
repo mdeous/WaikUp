@@ -31,7 +31,7 @@
                             <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{ user.username }}&nbsp;<b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">
+                            <li><a href="#" data-toggle="modal" data-target="#profile-modal">
                                 <span class="glyphicon glyphicon-cog"></span> Profile
                             </a></li>
                             {% if user.admin %}
@@ -50,6 +50,7 @@
         </div><!-- /.navbar-collapse.collapse -->
     </div><!-- /.container -->
 </div><!-- /.navbar.navbar-inverse.navbar-fixed-top -->
+
 <div class="modal fade"
      id="new-link-modal"
      tabindex="-1"
@@ -62,6 +63,34 @@
             <div class="modal-header">
                 <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="new-link-modal-label">Submit link</h4>
+            </div><!-- /.modal-header -->
+            <div class="modal-body">
+                <!-- TODO: add content -->
+            </div><!-- /.modal-body -->
+            <div class="modal-footer">
+                <button class="btn btn-success">
+                    <span class="glyphicon glyphicon-ok-circle"></span> Save
+                </button>
+                <button class="btn btn-danger" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-remove-circle"></span> Cancel
+                </button>
+            </div><!-- /.modal-footer -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal.fade -->
+
+<div class="modal fade"
+     id="profile-modal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="profile-modal-label"
+     aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="new-link-modal-label">Your profile</h4>
             </div><!-- /.modal-header -->
             <div class="modal-body">
                 <!-- TODO: add content -->
