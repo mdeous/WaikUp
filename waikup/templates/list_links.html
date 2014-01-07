@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <table class="table table-condensed table-hover">
+    <table id="links-list" class="table table-condensed table-hover">
     <thead>
         <tr>
             <th>URL</th>
@@ -22,9 +22,10 @@
                 <td>{{ link.title }}</td>
                 <td>{{ link.submitted }}</td>
             </tr>
-            <tr class="collapse out" id="link{{ loop.index }}">
-                <!-- FIXME colspan doens't work -->
-                <td colspan="3">{{ link.description }}</td>
+            <tr>
+                <td id="collapsible-td" colspan="3" style="padding: 0px;">
+                    <div class="collapse out" id="link{{ loop.index }}">{{ link.description }}</div>
+                </td>
             </tr>
         {% endfor %}
     </tbody>
@@ -33,7 +34,7 @@
 {% block extra_js %}
     <script type="text/javascript">
         $('.collapser').click(function() {
-            var itemSelector = 'tr#'+$(this).attr('id');
+            var itemSelector = 'div#'+$(this).attr('id');
             if ($(itemSelector).hasClass('out')) {
                 $(itemSelector).addClass('in');
                 $(itemSelector).removeClass('out');
@@ -42,6 +43,5 @@
                 $(itemSelector).removeClass('in');
             }
         });
-        $('a[rel=popover]').popover();
     </script>
 {% endblock %}

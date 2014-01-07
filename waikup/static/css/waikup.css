@@ -16,3 +16,9 @@ body {
 .underline {
     text-decoration: underline;
 }
+table#links-list>tbody>tr>td#collapsible-td {
+    padding: 0px;
+}
+table#links-list>tbody>tr>td {
+    border: 0;
+}
