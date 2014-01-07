@@ -11,6 +11,8 @@ DATABASE = {
     "password": "waikup",
     "engine": "peewee.PostgresqlDatabase"
 }
+DEBUG_TB_PROFILER_ENABLED = True
+DEBUG_TB_TEMPLATE_EDITOR_ENABLED = True
 
 try:
     from prod_settings import *
