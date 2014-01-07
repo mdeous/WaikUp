@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask
+from flask import Flask, request
 from flask.ext.peewee.db import Database
+from werkzeug.contrib.atom import AtomFeed
 
 from waikup import settings
 from waikup.lib import globals as g
@@ -9,17 +10,20 @@ from waikup.lib.errors import ApiError, http_error
 
 
 # Setup application
+
 app = Flask(__name__)
 app.config.from_object(settings)
 g.app = app
 
 
 # Setup database
+
 db = Database(app)
 g.db = db
 
 
 # Setup authentication and admin panel
+
 from flask.ext.peewee.admin import Admin
 from waikup.models import User, Token, Link, UserAdmin, TokenAdmin, LinkAdmin, HybridAuth
 
@@ -35,6 +39,7 @@ g.admin = admin
 
 
 # Setup views
+
 from waikup.views.api.links import links
 from waikup.views.api.users import users
 from waikup.views.webui import webui
@@ -43,6 +48,28 @@ app.register_blueprint(webui, url_prefix='/')
 app.register_blueprint(links, url_prefix='/api/links')
 app.register_blueprint(users, url_prefix='/api/users')
 
+
+@app.route('/links.atom')
+def links_feed():
+    feed = AtomFeed(
+        'Recently submitted links',
+        feed_url=request.url,
+        url=request.base_url
+    )
+    all_links = Link.select().limit(settings.ATOM_LINKS_COUNT)
+    for link in all_links:
+        feed.add(
+            link.title,
+            unicode(link.description),
+            content_type='text',
+            author='%s %s' % (link.author.first_name, link.author.last_name),
+            url=link.url,
+            updated=link.submitted
+        )
+    return feed.get_response()
+
+
+# Setup custom error handlers
 
 @app.errorhandler(ApiError)
 def api_error_handler(error):
@@ -77,6 +104,7 @@ def server_error_handler(error):
 
 
 # Setup debug toolbar
+
 if app.debug:
     from flask.ext.debugtoolbar import DebugToolbarExtension
     app.config['DEBUG_TB_PROFILER_ENABLED'] = True
