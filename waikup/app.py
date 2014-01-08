@@ -44,7 +44,7 @@ from waikup.views.api.links import links
 from waikup.views.api.users import users
 from waikup.views.webui import webui
 
-app.register_blueprint(webui, url_prefix='/')
+app.register_blueprint(webui)
 app.register_blueprint(links, url_prefix='/api/links')
 app.register_blueprint(users, url_prefix='/api/users')
 
