@@ -9,12 +9,10 @@ $('.collapser').click(function() {
     }
 });
 $('.expand-all').click(function() {
-    $('.collapse.out').addClass('in');
-    $('.collapse.out').removeClass('out');
+    $('.collapse.out').removeClass('out').addClass('in');
 });
 $('.collapse-all').click(function() {
-    $('.collapse.in').addClass('out');
-    $('.collapse.in').removeClass('in');
+    $('.collapse.in').removeClass('in').addClass('out');
 });
 $('#new-link-save').click(function() {
     $('#new-link-form').submit();

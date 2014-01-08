@@ -2,14 +2,3 @@
 {% block content %}
     {% include "links_list.html" %}
 {% endblock %}
-
-{% block extra_js %}
-    <script type="text/javascript">
-        $('.expand-all').click(function() {
-            $('.collapse.out').removeClass('out').addClass('in');
-        });
-        $('.collapse-all').click(function() {
-            $('.collapse.in').removeClass('in').addClass('out');
-        });
-    </script>
-{% endblock %}
