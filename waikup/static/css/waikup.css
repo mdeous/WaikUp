@@ -16,17 +16,16 @@ body {
 .underline {
     text-decoration: underline;
 }
-table#links-list>tbody>tr>td#collapsible-td {
+#collapsible-td {
     padding: 0 20px 0 20px;
 }
-table#links-list>tbody>tr>td {
-    border: 0;
-}
-.expand-all, .collapse-all {
-    color: #000000;
-}
+table#links-list>tbody>tr>td,
 table#user-profile>tbody>tr>td {
     border: 0;
+}
+.expand-all,
+.collapse-all {
+    color: #000000;
 }
 a.collapser:hover {
     text-decoration: none;
