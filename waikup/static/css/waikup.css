@@ -7,7 +7,7 @@ body {
     padding-bottom: 40px;
 }
 .navbar-brand {
-    font-family: 'chintzy';
+    font-family: 'chintzy',serif;
     font-size: 200%;
 }
 #login-form {
@@ -17,11 +17,17 @@ body {
     text-decoration: underline;
 }
 table#links-list>tbody>tr>td#collapsible-td {
-    padding: 0;
+    padding: 0 20px 0 20px;
 }
 table#links-list>tbody>tr>td {
-    border: 0,5px;
+    border: 0;
 }
 .expand-all, .collapse-all {
-    color: black;
+    color: #000000;
+}
+table#user-profile>tbody>tr>td {
+    border: 0;
+}
+a.collapser:hover {
+    text-decoration: none;
 }
