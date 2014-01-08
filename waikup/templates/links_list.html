@@ -6,24 +6,25 @@
         <th>URL</th>
         <th>Title</th>
         <th>Submission date</th>
+        <th>Submitter</th>
     </tr>
 </thead>
 <tbody>
     {% for link in links %}
         <tr>
-            <td><a id="link{{ loop.index }}"
-                   class="collapser"
-                   data-toggle="collapse"
-                   data-target="link{{ loop.index }}"
-                >
+            <td>
+                <a id="link{{ loop.index }}" class="collapser" data-toggle="collapse" data-target="link{{ loop.index }}">
                     <span class="glyphicon glyphicon-eye-open"></span>
-                </a>&nbsp;&nbsp;<a href="{{ link.url }}">{{ link.url }}
+                </a>
+                <a class="archive-link" id="link{{ loop.index }}" href="#"></a>
+                &nbsp;&nbsp;<a href="{{ link.url }}">{{ link.url }}
             </a></td>
             <td>{{ link.title }}</td>
             <td>{{ link.submitted }}</td>
+            <td>{{ link.author.first_name }} {{ link.author.last_name }}</td>
         </tr>
         <tr>
-            <td id="collapsible-td" colspan="3">
+            <td id="collapsible-td" colspan="4">
                 <div class="collapse out" id="link{{ loop.index }}">{{ link.description }}</div>
             </td>
         </tr>
