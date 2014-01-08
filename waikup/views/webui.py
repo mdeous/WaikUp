@@ -32,3 +32,13 @@ def index():
         links=links,
         new_link_form=form
     )
+
+
+@webui.route('/archives')
+@g.auth.login_required
+def archives():
+    return render_template(
+        'archives.html',
+        page_name='archives',
+        new_link_form=NewLinkForm()
+    )
