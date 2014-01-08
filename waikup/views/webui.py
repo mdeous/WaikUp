@@ -28,6 +28,7 @@ def index():
     links = Link.select()
     return render_template(
         'index.html',
+        page_name='index',
         links=links,
         new_link_form=form
     )
