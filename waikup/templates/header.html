@@ -53,32 +53,5 @@
 </div><!-- /.navbar.navbar-inverse.navbar-fixed-top -->
 
 {% include "new_link.html" %}
+{% include "user_profile.html" %}
 
-<div class="modal fade"
-     id="profile-modal"
-     tabindex="-1"
-     role="dialog"
-     aria-labelledby="profile-modal-label"
-     aria-hidden="true"
->
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="new-link-modal-label">Your profile</h4>
-            </div><!-- /.modal-header -->
-            <div class="modal-body">
-                <!-- TODO: add content -->
-                {{ lipsum() }}
-            </div><!-- /.modal-body -->
-            <div class="modal-footer">
-                <button class="btn btn-success">
-                    <span class="glyphicon glyphicon-ok-circle"></span> Save
-                </button>
-                <button class="btn btn-danger" data-dismiss="modal">
-                    <span class="glyphicon glyphicon-remove-circle"></span> Cancel
-                </button>
-            </div><!-- /.modal-footer -->
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal.fade -->
