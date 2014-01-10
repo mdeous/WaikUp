@@ -16,10 +16,10 @@ webui = Blueprint('webui', __name__)
 def index():
     toggle_link_id = request.args.get('toggle')
     if toggle_link_id is not None:
-        try:
-            Link.toggle_archiving(toggle_link_id)
+        result_ok = Link.toggle_archiving(toggle_link_id)
+        if result_ok:
             flash("Archived link %s" % toggle_link_id, category="success")
-        except DoesNotExist:
+        else:
             flash("Link does not exist: %s" % toggle_link_id, category="danger")
     links = Link.select().where(Link.archived == False)
     return render_template(
@@ -34,10 +34,10 @@ def index():
 def archives():
     toggle_link_id = request.args.get('toggle')
     if toggle_link_id is not None:
-        try:
-            Link.toggle_archiving(toggle_link_id)
-            flash("Marked link as active", category="success")
-        except DoesNotExist:
+        result_ok = Link.toggle_archiving(toggle_link_id)
+        if result_ok:
+            flash("Marked link as active: %s" % toggle_link_id, category="success")
+        else:
             flash("Link does not exist: %s" % toggle_link_id, category="danger")
     links = Link.select().where(Link.archived == True)
     return render_template(

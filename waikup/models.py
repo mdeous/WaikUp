@@ -135,9 +135,10 @@ class Link(ApiModel):
     def toggle_archiving(cls, linkid):
         link = cls.get(cls.id == linkid)
         if link is None:
-            raise DoesNotExist
+            return False
         link.archived = not link.archived
         link.save()
+        return True
 
 
 ## ADMIN PANEL MODELS
