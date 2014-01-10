@@ -16,7 +16,7 @@
         {% set category="info" if category=="message" else category %}
         <div class="alert alert-dismissable alert-{{ category }} fade in">
             <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong class="underline">{{ category|title }}</strong>: {{ message }}
+            <strong class="underline">{{ ('error' if category == 'danger' else category)|title }}</strong>: {{ message }}
         </div>
     {% endfor %}
     {% block content -%}{{ lipsum() }}{%- endblock %}
