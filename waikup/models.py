@@ -133,9 +133,10 @@ class Link(ApiModel):
 
     @classmethod
     def toggle_archiving(cls, linkid):
-        link = cls.get(cls.id == linkid)
-        if link is None:
+        links = list(cls.select().where(cls.id == linkid))
+        if not links:
             return False
+        link = links[0]
         link.archived = not link.archived
         link.save()
         return True
