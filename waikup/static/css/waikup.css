@@ -27,6 +27,7 @@ table#user-profile>tbody>tr>td {
 .collapse-all {
     color: #000000;
 }
-a.collapser:hover {
+a.collapser:hover,
+a.toggle-archive:hover {
     text-decoration: none;
 }

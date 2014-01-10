@@ -15,10 +15,19 @@
         {% for link in links %}
             <tr>
                 <td>
-                    <a id="link{{ loop.index }}" class="collapser" data-toggle="collapse" data-target="link{{ loop.index }}">
+                    <a id="link{{ link.id }}" class="collapser" data-toggle="collapse" data-target="link{{ link.id }}" href="#">
                         <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>&nbsp;
+                    <a class="toggle-archive"
+                       id="link{{ link.id }}"
+                       {# TODO: find a way to use POST requests #}
+                       href="{{ url_for('webui.'+page_name, toggle=link.id) }}">
+                        {% if page_name == 'index' %}
+                            <span class="glyphicon glyphicon-folder-close"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-folder-open"></span>
+                        {% endif %}
                     </a>
-                    <a class="archive-link" id="link{{ loop.index }}" href="#"></a>
                     &nbsp;&nbsp;<a href="{{ link.url }}">{{ link.url }}
                 </a></td>
                 <td>{{ link.title }}</td>
@@ -27,7 +36,7 @@
             </tr>
             <tr>
                 <td id="collapsible-td" colspan="4">
-                    <div class="collapse out" id="link{{ loop.index }}">{{ link.description }}</div>
+                    <div class="collapse out" id="link{{ link.id }}">{{ link.description }}</div>
                 </td>
             </tr>
         {% endfor %}

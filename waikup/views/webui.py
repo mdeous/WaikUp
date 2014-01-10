@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
+from peewee import DoesNotExist
 
 from waikup.lib import globals as g
 from waikup.models import Link
@@ -10,9 +11,16 @@ from waikup.forms import NewLinkForm
 webui = Blueprint('webui', __name__)
 
 
-@webui.route('/', methods=['GET', 'POST'])
+@webui.route('/')
 @g.auth.login_required
 def index():
+    toggle_link_id = request.args.get('toggle')
+    if toggle_link_id is not None:
+        try:
+            Link.toggle_archiving(toggle_link_id)
+            flash("Archived link %s" % toggle_link_id, category="success")
+        except DoesNotExist:
+            flash("Link does not exist: %s" % toggle_link_id, category="danger")
     links = Link.select().where(Link.archived == False)
     return render_template(
         'links_list.html',
@@ -21,9 +29,16 @@ def index():
     )
 
 
-@webui.route('/archives', methods=['GET', 'POST'])
+@webui.route('/archives')
 @g.auth.login_required
 def archives():
+    toggle_link_id = request.args.get('toggle')
+    if toggle_link_id is not None:
+        try:
+            Link.toggle_archiving(toggle_link_id)
+            flash("Marked link as active", category="success")
+        except DoesNotExist:
+            flash("Link does not exist: %s" % toggle_link_id, category="danger")
     links = Link.select().where(Link.archived == True)
     return render_template(
         'links_list.html',

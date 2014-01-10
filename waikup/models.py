@@ -131,6 +131,14 @@ class Link(ApiModel):
     def __unicode__(self):
         return u'%s' % self.url
 
+    @classmethod
+    def toggle_archiving(cls, linkid):
+        link = cls.get(cls.id == linkid)
+        if link is None:
+            raise DoesNotExist
+        link.archived = not link.archived
+        link.save()
+
 
 ## ADMIN PANEL MODELS
 
