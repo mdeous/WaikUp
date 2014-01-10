@@ -15,7 +15,7 @@ webui = Blueprint('webui', __name__)
 def index():
     links = Link.select().where(Link.archived == False)
     return render_template(
-        'index.html',
+        'links_list.html',
         page_name='index',
         links=links
     )
@@ -26,7 +26,7 @@ def index():
 def archives():
     links = Link.select().where(Link.archived == True)
     return render_template(
-        'archives.html',
+        'links_list.html',
         page_name='archives',
         links=links
     )
