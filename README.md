@@ -58,3 +58,32 @@ and the `git-flow` utility can be found [here](https://github.com/nvie/gitflow "
     * `email`
     * `password`
 * `/api/links/<id>` [DELETE+Admin] - Delete user with given ID
+
+## Deployment
+
+Deploying the application for production use requires to use a standalone Web server. This documentation
+describes the procedure using the Apache web server on a debian based system.
+
+* Make sure that the following packages are installed on the system:
+  * `apache2`
+  * `libapache2-mod-wsgi`
+  * `postgresql`
+  * `libpq-dev`
+* Enable SSL using `a2enmod ssl` and generate the appropriate certificates in `/etc/apache2`.
+* Create a new virtualenv in `/var/www`, and clone the repository into the virtualenv's `src` folder:
+
+
+    cd /var/www
+    virtualenv waikup
+    chmod +x waikup
+    cd waikup
+    git clone git@bitbucket.org:MatToufoutu/waikup.git src
+
+* Activate the newly created virtualenv and install the application:
+
+
+    source bin/activate
+    cd src
+    python setup.py install
+
+* Configure Apache using the settings provided in the `waikup.wsgi` file.
