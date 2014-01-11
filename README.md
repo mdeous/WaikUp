@@ -80,12 +80,14 @@ describes the procedure using the Apache web server on a debian based system.
     cd waikup
     git clone git@bitbucket.org:MatToufoutu/waikup.git src
 
+
 * Activate the newly created virtualenv and install the application:
 
 
     source bin/activate
     cd src
     python setup.py install
+
 
 * Configure Apache using the settings provided in the `waikup.wsgi` file.
 * Create a `/var/www/waikup/src/waikup/prod_settings.py` file with (at least) the following values defined:
