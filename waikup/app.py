@@ -5,7 +5,7 @@ from flask.ext.peewee.db import Database
 from werkzeug.contrib.atom import AtomFeed
 
 from waikup import settings
-from waikup.forms import NewLinkForm
+from waikup.forms import NewLinkForm, ChangePasswordForm
 from waikup.lib import globals as g
 from waikup.lib.errors import ApiError, http_error
 
@@ -71,8 +71,11 @@ def links_feed():
 
 
 @app.context_processor
-def new_link_form():
-    return {'new_link_form': NewLinkForm()}
+def global_forms():
+    return {
+        'new_link_form': NewLinkForm(),
+        'chpasswd_form': ChangePasswordForm()
+    }
 
 
 # Setup custom error handlers

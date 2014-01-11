@@ -24,3 +24,12 @@ $('#new-link-cancel').click(function() {
     $('#link-desc').val('');
     return true
 });
+$('#password-save').click(function() {
+    $('#change-passwd-form').submit();
+    return true;
+});
+$('#password-cancel').click(function() {
+    $('#old-password').val('');
+    $('#new-password').val('');
+    $('#confirm-password').val('');
+});

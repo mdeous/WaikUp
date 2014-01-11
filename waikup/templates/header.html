@@ -39,9 +39,12 @@
                             <li><a href="#" data-toggle="modal" data-target="#profile-modal">
                                 <span class="glyphicon glyphicon-cog"></span> Profile
                             </a></li>
+                            <li><a href="#" data-toggle="modal" data-target="#change-passwd-modal">
+                                <span class="glyphicon glyphicon-lock"></span> Change password
+                            </a></li>
                             {% if user.admin %}
                                 <li><a href="{{ url_for('admin.index') }}">
-                                    <span class="glyphicon glyphicon-flash"></span> Administration
+                                    <span class="glyphicon glyphicon-flash"></span> Database administration
                                 </a></li>
                             {% endif %}
                             <li class="divider"></li>
@@ -58,4 +61,4 @@
 
 {% include "new_link.html" %}
 {% include "user_profile.html" %}
-
+{% include "change_password.html" %}

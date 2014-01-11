@@ -5,7 +5,7 @@ from peewee import DoesNotExist
 
 from waikup.lib import globals as g
 from waikup.models import Link
-from waikup.forms import NewLinkForm
+from waikup.forms import NewLinkForm, ChangePasswordForm
 
 
 webui = Blueprint('webui', __name__)
@@ -61,6 +61,26 @@ def new_link():
     for field_name, field_errors in form.errors.iteritems():
         for field_error in field_errors:
             flash("%s (field: %s)" % (field_error, field_name), category='danger')
-    for field in ('url', 'title', 'description'):
-        getattr(form, field).data = ''
+    return redirect(redirect_to)
+
+
+@webui.route('/chpasswd', methods=['POST'])
+@g.auth.login_required
+def change_password():
+    redirect_to = request.args.get('redir', 'index')
+    redirect_to = url_for('webui.'+redirect_to)
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        user = g.auth.get_logged_in_user()
+        errors = False
+        if not user.check_password(form.old.data):
+            flash("Wrong password", category='danger')
+            return redirect(redirect_to)
+        user.set_password(form.new.data)
+        user.save()
+        flash("Password changed", category='success')
+        return redirect(redirect_to)
+    for field_name, field_errors in form.errors.iteritems():
+        for field_error in field_errors:
+            flash("%s (field: %s)" % (field_error, field_name), category='danger')
     return redirect(redirect_to)
