@@ -65,10 +65,10 @@ Deploying the application for production use requires to use a standalone Web se
 describes the procedure using the Apache web server on a debian based system.
 
 * Make sure that the following packages are installed on the system:
-  * `apache2`
-  * `libapache2-mod-wsgi`
-  * `postgresql`
-  * `libpq-dev`
+    * `apache2`
+    * `libapache2-mod-wsgi`
+    * `postgresql`
+    * `libpq-dev`
 
 * Enable SSL using `a2enmod ssl` and generate the appropriate certificates in `/etc/apache2`.
 * Create a new virtualenv in `/var/www`, and clone the repository into the virtualenv's `src` folder:
