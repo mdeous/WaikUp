@@ -110,20 +110,3 @@ def gone_handler(error):
 @app.errorhandler(500)
 def server_error_handler(error):
     return http_error(error)
-
-
-# Setup debug toolbar
-
-if app.debug:
-    from flask.ext.debugtoolbar import DebugToolbarExtension
-    app.config['DEBUG_TB_PROFILER_ENABLED'] = True
-    app.config['DEBUG_TB_TEMPLATE_EDITOR_ENABLED'] = True
-    app.config['DEBUG_TB_PANELS'] = (
-        'flask_debugtoolbar.panels.timer.TimerDebugPanel',
-        'flask_debugtoolbar.panels.headers.HeaderDebugPanel',
-        'flask_debugtoolbar.panels.request_vars.RequestVarsDebugPanel',
-        'flask_debugtoolbar.panels.config_vars.ConfigVarsDebugPanel',
-        'flask_debugtoolbar.panels.template.TemplateDebugPanel',
-        'flask_debugtoolbar.panels.profiler.ProfilerDebugPanel',
-    )
-    toolbar = DebugToolbarExtension(app)
