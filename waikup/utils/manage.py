@@ -45,4 +45,9 @@ def adduser(admin=False, inactive=False):
     user.save()
 
 
-manager.run()
+def main():
+    manager.run()
+
+
+if __name__ == '__main__':
+    main()
