@@ -69,6 +69,7 @@ describes the procedure using the Apache web server on a debian based system.
   * `libapache2-mod-wsgi`
   * `postgresql`
   * `libpq-dev`
+
 * Enable SSL using `a2enmod ssl` and generate the appropriate certificates in `/etc/apache2`.
 * Create a new virtualenv in `/var/www`, and clone the repository into the virtualenv's `src` folder:
 
@@ -87,3 +88,6 @@ describes the procedure using the Apache web server on a debian based system.
     python setup.py install
 
 * Configure Apache using the settings provided in the `waikup.wsgi` file.
+* Create a `/var/www/waikup/src/waikup/prod_settings.py` file with (at least) the following values defined:
+  * `DEBUG = False`
+  * `SECRET_KEY = 'some secret key'` (can be generated using `''.join(choice(string.printable) for _ in range(32))`)
