@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import os
-import sys
+import site
 
-waikup_dir = os.path.join(os.path.realpath(os.path.dirname(__file__)), 'waikup')
-sys.path.insert(0, waikup_dir)
+activate_this = '/var/www/waikup/bin/activate_this.py'
+execfile(activate_this, dict(__file__=activate_this))
 
 from waikup.app import app as application
-
