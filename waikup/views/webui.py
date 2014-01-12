@@ -84,3 +84,12 @@ def change_password():
         for field_error in field_errors:
             flash("%s (field: %s)" % (field_error, field_name), category='danger')
     return redirect(redirect_to)
+
+
+@webui.route('/email', methods=['GET', 'POST'])
+@g.auth.admin_required
+def email_mgmt():
+    return render_template(
+        'email_mgmt.html',
+        page_name='email_mgmt'
+    )
