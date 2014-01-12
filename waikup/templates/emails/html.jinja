@@ -1,0 +1,16 @@
+Bonjour,
+<br/><br/>
+Voici les liens sélectionnés par les consultants durant la semaine dernière:
+<br/>
+<ol>
+{% for link in links %}
+    <li><strong>{{ link.title|title }}</strong> - <a href="{{ link.url }}">{{ link.url }}</a></li>
+    <p>{{ link.description }}</p>
+{% endfor %}
+</ol>
+<br/>
+Bonne lecture!
+<br/><br/>
+<em>
+P.S.: Ceci est un message automatique, veuillez contacter <a href="mailto:{{ reply_to }}">{{ reply_to }}</a> pour toute réclamation.
+</em>

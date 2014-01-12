@@ -1,0 +1,12 @@
+Bonjour,
+
+Voici les liens sélectionnés par les consultants durant la semaine dernière:
+
+{% for link in links %}
+    {{ loop.index }}. {{ link.title|title|safe }} - {{ link.url }}
+       -> {{ link.description|safe }}
+{% endfor %}
+
+Bonne lecture!
+
+P.S.: Ceci est un message automatique, veuillez contacter {{ reply_to }} pour toute réclamation.

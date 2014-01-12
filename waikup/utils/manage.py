@@ -5,6 +5,7 @@ from getpass import getpass
 
 from flask.ext.mail import Message
 from flask.ext.script import Manager
+from jinja2 import Environment, PackageLoader
 
 from waikup.app import app, db, mail
 from waikup.models import User, Token, Link
@@ -16,7 +17,7 @@ manager = Manager(app)
 def setupdb():
     """Creates the database schema."""
     for table in (User, Token, Link):
-        print "[+] Creating table: %s" % table._meta.name
+        print "[+] Creating table: %s..." % table._meta.name
         table.create_table(fail_silently=True)
     print "[+] Done"
 
@@ -25,7 +26,7 @@ def setupdb():
 def resetdb():
     """Resets database content."""
     for table in (Token, Link, User):
-        print "[+] Resetting table content: %s" % table._meta.name
+        print "[+] Resetting table content: %s..." % table._meta.name
         db.database.drop_table(table)
     print "[+] Done"
 
@@ -58,46 +59,18 @@ def adduser(admin=False, inactive=False):
 @manager.command
 def sendmail():
     """Sends an email containing lastly submitted links."""
-    def generate_txt(link_objects):
-        links_txt = ""
-        email_txt = app.config['MAIL_REPLY_TO']
-        for link_obj in link_objects:
-            links_subtxt = '* %(title)s - %(link)s\n'
-            links_subtxt += '    %(description)s\n'
-            links_txt += links_subtxt
-            links_txt = links_txt % {
-                'title': link_obj.title,
-                'link': link_obj.url,
-                'description': link_obj.description
-            }
-        full_txt = app.config['MAIL_BODY_TEMPLATE'] % {'links_list': links_txt, 'reply_to': email_txt}
-        return full_txt
-
-    def generate_html(link_objects):
-        links_html = "<br><ul>"
-        email_html = '<a href="mailto:%(address)s">%(address)s</a>' % {'address': app.config['MAIL_REPLY_TO']}
-        for link_obj in link_objects:
-            link_subhtml = '<li>%(title)s - <a href="%(link)s">%(link)s</a></li>'
-            link_subhtml += '<ul><li>%(description)s</li></ul>'
-            link_subhtml = link_subhtml % {
-                'title': link_obj.title,
-                'link': link_obj.url,
-                'description': link_obj.description
-            }
-            links_html += link_subhtml
-        links_html += '</ul>'
-        full_html = app.config['MAIL_BODY_TEMPLATE'] % {'links_list': links_html, 'reply_to': email_html}
-        return full_html
-
     links = Link.select().where(Link.archived == False)
-    print "[+] Formatting TXT and HTML email templates"
+    print "[+] Loading and populating email templates..."
+    env = Environment(loader=PackageLoader('waikup', 'templates/emails'))
+    html = env.get_template('html.jinja').render(links=links, reply_to=app.config['MAIL_REPLY_TO'])
+    text = env.get_template('text.jinja').render(links=links, reply_to=app.config['MAIL_REPLY_TO'])
+    print "[+] Sending email..."
     msg = Message(recipients=app.config['MAIL_RECIPIENTS'])
     msg.subject = app.config['MAIL_TITLE']
-    msg.body = generate_txt(links)
-    msg.html = generate_html(links)
-    print "[+] Sending email"
+    msg.body = text
+    msg.html = html
     mail.send(msg)
-    print "[+] Archiving links"
+    print "[+] Archiving links..."
     for link in links:
         link.archived = True
         link.save()
