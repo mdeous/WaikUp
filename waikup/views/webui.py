@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from peewee import DoesNotExist
 
 from waikup.lib import globals as g
 from waikup.models import Link
