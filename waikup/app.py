@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request
+from flask.ext.mail import Mail
 from flask.ext.peewee.db import Database
 from werkzeug.contrib.atom import AtomFeed
 
@@ -21,6 +22,12 @@ g.app = app
 
 db = Database(app)
 g.db = db
+
+
+# Setup mailing
+
+mail = Mail(app)
+g.mail = mail
 
 
 # Setup authentication and admin panel

@@ -7,3 +7,4 @@
 app = None
 db = None
 admin = None
+mail = None
