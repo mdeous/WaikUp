@@ -31,7 +31,7 @@
                     &nbsp;&nbsp;<a href="{{ link.url }}">{{ link.url }}
                 </a></td>
                 <td>{{ link.title }}</td>
-                <td>{{ link.submitted }}</td>
+                <td>{{ link.submitted.strftime(config.DATETIME_FORMAT) }}</td>
                 <td>{{ link.author.first_name }} {{ link.author.last_name }}</td>
             </tr>
             <tr>

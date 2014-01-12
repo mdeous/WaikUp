@@ -12,6 +12,7 @@ DATABASE = {
     "engine": "peewee.PostgresqlDatabase"
 }
 ATOM_LINKS_COUNT = 50
+DATETIME_FORMAT = '%b %d %Y at %H:%M:%S'
 MAIL_SERVER = 'localhost'
 MAIL_PORT = 25
 MAIL_USE_TLS = False
