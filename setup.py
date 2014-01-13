@@ -32,6 +32,7 @@ setup(
             'static/js/*',
             'templates/*.html',
             'templates/auth/*.html',
+            'templates/emails/*.html',
             'templates/macros/*.html'
         ]
     },
