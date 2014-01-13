@@ -16,19 +16,24 @@
         {% for link in links %}
             <tr>
                 <td>
-                    <a id="link{{ link.id }}" class="collapser" data-toggle="collapse" data-target="link{{ link.id }}" href="#">
+                    <a id="link{{ link.id }}" class="collapser link-action" data-toggle="collapse" data-target="link{{ link.id }}" href="#">
                         <span class="glyphicon glyphicon-eye-open"></span>
                     </a>&nbsp;
-                    <a class="toggle-archive"
-                       id="link{{ link.id }}"
-                       {# TODO: find a way to use POST requests #}
+                    <a class="toggle-archive link-action"
+                       id="{{ link.url }}"
                        href="{{ url_for('webui.'+page_name, toggle=link.id) }}">
                         {% if page_name == 'index' %}
                             <span class="glyphicon glyphicon-folder-close"></span>
                         {% else %}
                             <span class="glyphicon glyphicon-folder-open"></span>
                         {% endif %}
-                    </a>
+                    </a>&nbsp;
+                    {% if page_name == 'archives' and user.admin %}
+                        <a href="{{ url_for('webui.delete_link', redir=page_name, linkid=link.id) }}" class="delete-link link-action" id="{{ link.url }}">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+
+                    {% endif %}
                     &nbsp;&nbsp;<a href="{{ link.url }}">{{ link.url }}
                 </a></td>
                 <td>{{ link.title }}</td>
@@ -45,4 +50,20 @@
     </table>
     <a href="#" title="expand all"><span class="glyphicon glyphicon-zoom-in expand-all"></span></a>
     <a href="#" title="collapse all"><span class="glyphicon glyphicon-zoom-out collapse-all"></span></a>
+{% endblock %}
+{% block extra_js %}
+    <script type="text/javascript">
+    $('.link-action').each(function(index, item) {
+        $(item).click(function() {
+            var linkURL = $(this).attr('id');
+            var result = false;
+            if ($(this).hasClass('toggle-archive')) {
+                result = confirm("You are about to toggle archiving on a link:\n"+linkURL+"\nAre you sure?");
+            } else if ($(this).hasClass('delete-link')) {
+                result = confirm("You are about to delete a link:\n"+linkURL+"\nAre you sure?");
+            }
+            return result;
+        });
+    });
+    </script>
 {% endblock %}

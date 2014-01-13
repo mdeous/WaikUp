@@ -85,6 +85,25 @@ def change_password():
     return redirect(redirect_to)
 
 
+@webui.route('/delete')
+@g.auth.admin_required
+def delete_link():
+    redirect_to = request.args.get('redir', 'index')
+    redirect_to = url_for('webui.'+redirect_to)
+    linkid = request.args.get('linkid')
+    if linkid is None:
+        flash("No link specified", category='danger')
+        return redirect(redirect_to)
+    links = list(Link.select().where(Link.id == linkid))
+    if not links:
+        flash("Link does not exist: %s" % linkid, category='danger')
+        return redirect(redirect_to)
+    link = links[0]
+    link.delete_instance()
+    flash("Deleted link: %s" % linkid, category='success')
+    return redirect(redirect_to)
+
+
 @webui.route('/email', methods=['GET', 'POST'])
 @g.auth.admin_required
 def email_mgmt():
