@@ -16,7 +16,11 @@
         {% for link in links %}
             <tr>
                 <td>
-                    <a id="link{{ link.id }}" class="collapser link-action" data-toggle="collapse" data-target="link{{ link.id }}" href="#">
+                    <a id="link{{ link.id }}"
+                       class="collapser link-action"
+                       data-toggle="collapse"
+                       data-target="link{{ link.id }}"
+                       href="#">
                         <span class="glyphicon glyphicon-eye-open"></span>
                     </a>&nbsp;
                     <a class="toggle-archive link-action"
@@ -28,8 +32,10 @@
                             <span class="glyphicon glyphicon-folder-open"></span>
                         {% endif %}
                     </a>&nbsp;
-                    {% if page_name == 'archives' and user.admin %}
-                        <a href="{{ url_for('webui.delete_link', redir=page_name, linkid=link.id) }}" class="delete-link link-action" id="{{ link.url }}">
+                    {% if user.admin %}
+                        <a href="{{ url_for('webui.delete_link', redir=page_name, linkid=link.id) }}"
+                           class="delete-link link-action"
+                           id="{{ link.url }}">
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
 
