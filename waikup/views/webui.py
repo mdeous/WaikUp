@@ -20,7 +20,7 @@ def index():
             flash("Archived link %s" % toggle_link_id, category="success")
         else:
             flash("Link does not exist: %s" % toggle_link_id, category="danger")
-    links = Link.select().where(Link.archived == False)
+    links = Link.select().where(Link.archived == False).order_by(Link.submitted.desc())
     return render_template(
         'links_list.html',
         page_name='index',
@@ -38,7 +38,7 @@ def archives():
             flash("Marked link as active: %s" % toggle_link_id, category="success")
         else:
             flash("Link does not exist: %s" % toggle_link_id, category="danger")
-    links = Link.select().where(Link.archived == True)
+    links = Link.select().where(Link.archived == True).order_by(Link.submitted.desc())
     return render_template(
         'links_list.html',
         page_name='archives',
