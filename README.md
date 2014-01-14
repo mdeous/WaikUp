@@ -93,3 +93,8 @@ describes the procedure using the Apache web server on a debian based system.
 * Create a `/var/www/waikup/src/waikup/prod_settings.py` file with (at least) the following values defined:
   * `DEBUG = False`
   * `SECRET_KEY = 'some secret key'` (can be generated using `''.join(choice(string.printable) for _ in range(32))`)
+
+For a list of settings you might wish to change (database, emails), have a look at the `waikup/settings.py` file.
+
+Emails can be sent using the `waikup_manage sendmail` command, if you want to automate this, just set a `crontab` entry
+to run this command periodically. When running this command, all active emails will be archived.
