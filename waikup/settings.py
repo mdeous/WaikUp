@@ -20,7 +20,6 @@ MAIL_USE_SSL = False
 MAIL_USERNAME = 'username'
 MAIL_PASSWORD = 'password'
 MAIL_DEFAULT_SENDER = 'sender@example.com'
-MAIL_REPLY_TO = 'sender@example.com'
 MAIL_TITLE = "Veille - en vrac"
 MAIL_BODY_TEMPLATE = u"""
 Bonjour,
@@ -30,8 +29,6 @@ Voici les liens sélectionnés par les consultants durant la semaine dernière:
 %(links_list)s
 
 Bonne lecture!
-
-Veuillez contacter %(reply_to)s en cas de besoin.
 
 """
 MAIL_RECIPIENTS = []
