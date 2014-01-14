@@ -20,12 +20,14 @@
                        class="collapser link-action"
                        data-toggle="collapse"
                        data-target="link{{ link.id }}"
-                       href="#">
+                       href="#"
+                       title="show description">
                         <span class="glyphicon glyphicon-eye-open"></span>
                     </a>&nbsp;
                     <a class="toggle-archive link-action"
                        id="{{ link.url }}"
-                       href="{{ url_for('webui.'+page_name, toggle=link.id) }}">
+                       href="{{ url_for('webui.'+page_name, toggle=link.id) }}"
+                       title="toggle archiving">
                         {% if page_name == 'index' %}
                             <span class="glyphicon glyphicon-folder-close"></span>
                         {% else %}
@@ -35,7 +37,8 @@
                     {% if user.admin %}
                         <a href="{{ url_for('webui.delete_link', redir=page_name, linkid=link.id) }}"
                            class="delete-link link-action"
-                           id="{{ link.url }}">
+                           id="{{ link.url }}"
+                           title="delete">
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
 
