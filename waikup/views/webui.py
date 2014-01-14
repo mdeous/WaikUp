@@ -20,7 +20,7 @@ def index():
             flash("Archived link %s" % toggle_link_id, category="success")
         else:
             flash("Link does not exist: %s" % toggle_link_id, category="danger")
-    links = Link.select().where(Link.archived == False)
+    links = Link.select().where(Link.archived == False).order_by(Link.submitted.desc())
     return render_template(
         'links_list.html',
         page_name='index',
@@ -38,7 +38,7 @@ def archives():
             flash("Marked link as active: %s" % toggle_link_id, category="success")
         else:
             flash("Link does not exist: %s" % toggle_link_id, category="danger")
-    links = Link.select().where(Link.archived == True)
+    links = Link.select().where(Link.archived == True).order_by(Link.submitted.desc())
     return render_template(
         'links_list.html',
         page_name='archives',
@@ -82,6 +82,25 @@ def change_password():
     for field_name, field_errors in form.errors.iteritems():
         for field_error in field_errors:
             flash("%s (field: %s)" % (field_error, field_name), category='danger')
+    return redirect(redirect_to)
+
+
+@webui.route('/delete')
+@g.auth.admin_required
+def delete_link():
+    redirect_to = request.args.get('redir', 'index')
+    redirect_to = url_for('webui.'+redirect_to)
+    linkid = request.args.get('linkid')
+    if linkid is None:
+        flash("No link specified", category='danger')
+        return redirect(redirect_to)
+    links = list(Link.select().where(Link.id == linkid))
+    if not links:
+        flash("Link does not exist: %s" % linkid, category='danger')
+        return redirect(redirect_to)
+    link = links[0]
+    link.delete_instance()
+    flash("Deleted link: %s" % linkid, category='success')
     return redirect(redirect_to)
 
 

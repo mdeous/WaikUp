@@ -29,6 +29,7 @@ setup(
         'waikup': [
             'static/css/*',
             'static/fonts/*',
+            'static/img/*',
             'static/js/*',
             'templates/*.html',
             'templates/auth/*.html',

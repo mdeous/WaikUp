@@ -1,3 +1,11 @@
+/*
+    WaikUp Global JavaScript
+ */
+
+hasClassName = function(element, cls) {
+    return (' '+element.className+' ').indexOf(' '+cls+' ') > -1;
+}
+
 $('.collapser').click(function() {
     var itemSelector = 'div#'+$(this).attr('id');
     if ($(itemSelector).hasClass('out')) {

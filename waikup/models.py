@@ -142,6 +142,24 @@ class Link(ApiModel):
         return True
 
 
+class MailingProfile(ApiModel):
+    name = CharField(unique=True)
+    sender = CharField()
+    reply_to = CharField()
+    title = CharField()
+    html_template = CharField()
+    text_template = CharField()
+
+
+class MailingAddress(ApiModel):
+    address = CharField(unique=True)
+
+
+class ProfileAddress(ApiModel):
+    profile = ForeignKeyField(MailingProfile)
+    address = ForeignKeyField(MailingAddress)
+
+
 ## ADMIN PANEL MODELS
 
 
