@@ -1,0 +1,40 @@
+{% macro modalform(name, title, form, redirect_to='index') %}
+<div class="modal fade"
+     id="{{ name }}"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="{{ name }}-label"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="{{ name }}-label">{{ title }}</h4>
+            </div><!-- /.modal-header -->
+            <div class="modal-body">
+                <form action="{{ url_for(form.endpoint, redir='webui.'+redirect_to) }}" id="{{ form.name }}" method="POST">
+                    {{ form.csrf_token() }}
+                    {% for field_name in form.fields %}
+                        {{ wtfield(form[field_name], field_name) }}
+                    {% endfor %}
+                </form>
+            </div><!-- /.modal-body -->
+            <div class="modal-footer">
+                <button class="btn btn-success" id="{{ form.name }}-save">
+                    <span class="glyphicon glyphicon-ok-circle"></span> Save
+                </button>
+                <button class="btn btn-danger" data-dismiss="modal" id="{{ form.name }}-cancel">
+                    <span class="glyphicon glyphicon-remove-circle"></span> Cancel
+                </button>
+            </div><!-- /.modal-footer -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal.fade -->
+{% endmacro %}
+
+{% macro wtfield(field, id) %}
+<div class="form-group">
+    <label for="{{ id }}">{{ field.label }}</label>
+    {{ field(class='form-control', id=id) }}
+</div>
+{% endmacro %}

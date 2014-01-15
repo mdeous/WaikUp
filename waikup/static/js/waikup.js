@@ -22,21 +22,21 @@ $('.expand-all').click(function() {
 $('.collapse-all').click(function() {
     $('.collapse.in').removeClass('in').addClass('out');
 });
-$('#new-link-save').click(function() {
+$('#newlink-save').click(function() {
     $('#new-link-form').submit();
     return true;
 });
-$('#new-link-cancel').click(function() {
+$('#newlink-cancel').click(function() {
     $('#link-url').val('');
     $('#link-title').val('');
     $('#link-desc').val('');
     return true
 });
-$('#password-save').click(function() {
+$('#chpasswd-save').click(function() {
     $('#change-passwd-form').submit();
     return true;
 });
-$('#password-cancel').click(function() {
+$('#chpasswd-cancel').click(function() {
     $('#old-password').val('');
     $('#new-password').val('');
     $('#confirm-password').val('');

@@ -44,7 +44,7 @@
                             <li><a href="#" data-toggle="modal" data-target="#profile-modal">
                                 <span class="glyphicon glyphicon-cog"></span> Profile
                             </a></li>
-                            <li><a href="#" data-toggle="modal" data-target="#change-passwd-modal">
+                            <li><a href="#" data-toggle="modal" data-target="#chpasswd-modal">
                                 <span class="glyphicon glyphicon-lock"></span> Change password
                             </a></li>
                             {% if user.admin %}
@@ -63,7 +63,3 @@
         </div><!-- /.navbar-collapse.collapse -->
     </div><!-- /.container -->
 </div><!-- /.navbar.navbar-inverse.navbar-fixed-top -->
-
-{% include "new_link.html" %}
-{% include "user_profile.html" %}
-{% include "change_password.html" %}

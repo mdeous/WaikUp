@@ -1,3 +1,4 @@
+{% import "macros/bootstrap.html" as bootstrap %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +23,9 @@
     {% endfor %}
     {% block content -%}{{ lipsum() }}{%- endblock %}
 </div><!-- /.container -->
+{{ bootstrap.modalform('new-link-modal', 'Submit link',  new_link_form, redirect_to=page_name) }}
+{{ bootstrap.modalform('chpasswd-modal', 'Change password', chpasswd_form, redirect_to=page_name) }}
+{% include "user_profile.html" %}
 {%- block js -%}
     <script type="text/javascript" src="{{ url_for('static', filename="js/jquery-2.0.3.min.js") }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename="js/bootstrap.min.js") }}"></script>
