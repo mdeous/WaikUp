@@ -1,40 +1,29 @@
-{% macro modalform(name, title, form, redirect_to='index') %}
-<div class="modal fade"
-     id="{{ name }}"
-     tabindex="-1"
-     role="dialog"
-     aria-labelledby="{{ name }}-label"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="{{ name }}-label">{{ title }}</h4>
-            </div><!-- /.modal-header -->
-            <div class="modal-body">
-                <form action="{{ url_for(form.endpoint, redir='webui.'+redirect_to) }}" id="{{ form.name }}" method="POST">
-                    {{ form.csrf_token() }}
-                    {% for field_name in form.fields %}
-                        {{ wtfield(form[field_name], field_name) }}
-                    {% endfor %}
-                </form>
-            </div><!-- /.modal-body -->
-            <div class="modal-footer">
-                <button class="btn btn-success" id="{{ form.name }}-save">
-                    <span class="glyphicon glyphicon-ok-circle"></span> Save
-                </button>
-                <button class="btn btn-danger" data-dismiss="modal" id="{{ form.name }}-cancel">
-                    <span class="glyphicon glyphicon-remove-circle"></span> Cancel
-                </button>
-            </div><!-- /.modal-footer -->
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal.fade -->
+{% macro with_errors(field) %}
+  {% if field.errors %}
+    {% set css_class = 'invalid ' + kwargs.pop('class', '') %}
+    {{ field(class=css_class, **kwargs) }}
+    {% if field.description %}<span class="help">{{ field.description|safe() }}</span>{% endif %}
+    <ul class="errors">{% for error in field.errors %}<li>{{ error|e }}</li>{% endfor %}</ul>
+  {% else %}
+    {{ field(**kwargs) }}
+    {% if field.description %}<span class="help">{{ field.description|safe() }}</span>{% endif %}
+  {% endif %}
 {% endmacro %}
 
-{% macro wtfield(field, id) %}
-<div class="form-group">
-    <label for="{{ id }}">{{ field.label }}</label>
-    {{ field(class='form-control', id=id) }}
-</div>
+{% macro wtfield(field, form_name) %}
+    <div class="form-group">
+        <label for="{{ form_name }}-{{ field.name }}">{{ field.label }}</label>
+        {{ field(class='form-control', id=form_name+'-'+field.name) }}
+    </div>
+{% endmacro %}
+
+{% macro wtform(form) %}
+    <form action="{{ url_for(form.endpoint, redir=page_name|default('index')) }}" id="{{ form.name }}-form" method="POST">
+        {{ form.csrf_token() }}
+        {% for field in form %}
+            {% if field.name != 'csrf_token'%}
+                {{ wtfield(field, form.name) }}
+            {% endif %}
+        {% endfor %}
+    </form>
 {% endmacro %}
