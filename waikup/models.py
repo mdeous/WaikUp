@@ -20,7 +20,7 @@ from waikup.lib.errors import ApiError
 ## MODELS
 
 
-class ApiModel(g.db.Model):
+class BaseModel(g.db.Model):
     safe_fields = ()
     id = PrimaryKeyField()
     no_item_code = 404
@@ -39,7 +39,7 @@ class ApiModel(g.db.Model):
     @classmethod
     def get(cls, *args, **kwargs):
         try:
-            obj = super(ApiModel, cls).get(*args, **kwargs)
+            obj = super(BaseModel, cls).get(*args, **kwargs)
         except DoesNotExist:
             raise ApiError(cls.no_item_message, status_code=cls.no_item_code)
         return obj
@@ -47,7 +47,7 @@ class ApiModel(g.db.Model):
     @classmethod
     def create(cls, *args, **kwargs):
         try:
-            result = super(ApiModel, cls).create(*args, **kwargs)
+            result = super(BaseModel, cls).create(*args, **kwargs)
         except IntegrityError:
             raise ApiError("Item already exists")
         return result
@@ -62,7 +62,7 @@ class ApiModel(g.db.Model):
         return result
 
 
-class User(ApiModel):
+class User(BaseModel):
     safe_fields = (
         'first_name',
         'last_name',
@@ -100,7 +100,7 @@ class User(ApiModel):
         return delete_query.execute()
 
 
-class Token(ApiModel):
+class Token(BaseModel):
     no_item_code = 403
     no_item_message = "Forbidden"
     token = CharField(default=lambda: md5(os.urandom(128)).hexdigest())
@@ -111,7 +111,14 @@ class Token(ApiModel):
         return u'%s' % self.token
 
 
-class Link(ApiModel):
+class Category(BaseModel):
+    name = CharField(unique=True)
+
+    def __unicode__(self):
+        return u'%s' % self.name
+
+
+class Link(BaseModel):
     class Meta(object):
         order_by = ('submitted',)
 
@@ -127,6 +134,7 @@ class Link(ApiModel):
     submitted = DateTimeField(default=datetime.now)
     archived = BooleanField(default=False)
     author = ForeignKeyField(User, related_name='links')
+    category = ForeignKeyField(Category, related_name='links', null=True)
 
     def __unicode__(self):
         return u'%s' % self.url
@@ -155,8 +163,12 @@ class TokenAdmin(ModelAdmin):
 
 
 class LinkAdmin(ModelAdmin):
-    columns = ('url', 'title', 'author')
-    foreign_key_lookups = {'author': 'username'}
+    columns = ('title', 'category', 'author')
+    foreign_key_lookups = {'author': 'username', 'category': 'name'}
+
+
+class CategoryAdmin(ModelAdmin):
+    columns = ('name',)
 
 
 ## AUTHENTICATION SYSTEM

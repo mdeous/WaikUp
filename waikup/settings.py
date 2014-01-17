@@ -11,6 +11,16 @@ DATABASE = {
     "password": "waikup",
     "engine": "peewee.PostgresqlDatabase"
 }
+DEFAULT_CATEGORIES = [
+    'Web',
+    'Forensics',
+    'Reverse Engineering',
+    'Cryptography',
+    'Development',
+    'News',
+    'Fun',
+    'Others'
+]
 ATOM_LINKS_COUNT = 50
 DATETIME_FORMAT = '%b %d %Y at %H:%M:%S'
 MAIL_SERVER = 'localhost'
@@ -21,16 +31,6 @@ MAIL_USERNAME = 'username'
 MAIL_PASSWORD = 'password'
 MAIL_DEFAULT_SENDER = 'sender@example.com'
 MAIL_TITLE = "Veille - en vrac"
-MAIL_BODY_TEMPLATE = u"""
-Bonjour,
-
-Voici les liens sélectionnés par les consultants durant la semaine dernière:
-
-%(links_list)s
-
-Bonne lecture!
-
-"""
 MAIL_RECIPIENTS = []
 
 

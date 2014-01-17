@@ -8,26 +8,34 @@ from flask.ext.script import Manager
 from jinja2 import Environment, PackageLoader
 
 from waikup.app import app, db, mail
-from waikup.models import User, Token, Link
+from waikup.models import User, Token, Link, Category
 
 manager = Manager(app)
+
+
+def create_categories():
+    for cat in app.config['DEFAULT_CATEGORIES']:
+        print "[+] Inserting category: %s" % cat
+        Category.create(name=cat)
 
 
 @manager.command
 def setupdb():
     """Creates the database schema."""
-    for table in (User, Token, Link):
+    for table in (User, Token, Link, Category):
         print "[+] Creating table: %s..." % table._meta.name
         table.create_table(fail_silently=True)
+    create_categories()
     print "[+] Done"
 
 
 @manager.command
 def resetdb():
     """Resets database content."""
-    for table in (Token, Link, User):
+    for table in (Token, Link, User, Category):
         print "[+] Resetting table content: %s..." % table._meta.name
         db.database.drop_table(table)
+    create_categories()
     print "[+] Done"
 
 

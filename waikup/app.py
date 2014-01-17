@@ -6,7 +6,6 @@ from flask.ext.peewee.db import Database
 from werkzeug.contrib.atom import AtomFeed
 
 from waikup import settings
-from waikup.forms import NewLinkForm, ChangePasswordForm
 from waikup.lib import globals as g
 from waikup.lib.errors import ApiError, http_error
 
@@ -33,7 +32,9 @@ g.mail = mail
 # Setup authentication and admin panel
 
 from flask.ext.peewee.admin import Admin
-from waikup.models import User, Token, Link, UserAdmin, TokenAdmin, LinkAdmin, HybridAuth
+from waikup.models import HybridAuth
+from waikup.models import User, Token, Link, Category
+from waikup.models import UserAdmin, TokenAdmin, LinkAdmin, CategoryAdmin
 
 auth = HybridAuth(app, db)
 g.auth = auth
@@ -42,6 +43,7 @@ admin = Admin(app, auth)
 admin.register(User, UserAdmin)
 admin.register(Token, TokenAdmin)
 admin.register(Link, LinkAdmin)
+admin.register(Category, CategoryAdmin)
 admin.setup()
 g.admin = admin
 
@@ -79,8 +81,11 @@ def links_feed():
 
 @app.context_processor
 def global_forms():
+    from waikup.forms import NewLinkForm, ChangePasswordForm
+    newlink_form = NewLinkForm()
+    newlink_form.set_category_choices()
     return {
-        'new_link_form': NewLinkForm(),
+        'new_link_form': newlink_form,
         'chpasswd_form': ChangePasswordForm()
     }
 

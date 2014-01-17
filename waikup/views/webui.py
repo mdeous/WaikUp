@@ -52,6 +52,7 @@ def new_link():
     redirect_to = request.args.get('redir', 'index')
     redirect_to = url_for('webui.'+redirect_to)
     form = NewLinkForm()
+    form.set_category_choices()
     if form.validate_on_submit():
         user = g.auth.get_logged_in_user()
         link = Link.create(url=form.url.data, title=form.title.data, description=form.description.data, author=user)
