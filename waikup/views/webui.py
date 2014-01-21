@@ -112,3 +112,9 @@ def email_mgmt():
         'email_mgmt.html',
         page_name='email_mgmt'
     )
+
+
+@webui.route('/genmail')
+@g.auth.admin_required
+def genmail():
+    return render_template('emails/html.jinja', links=Link.select())

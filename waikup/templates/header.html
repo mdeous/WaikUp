@@ -19,11 +19,14 @@
                     <li{% if page_name == 'archives' %} class="active"{% endif %}><a href="{{ url_for('webui.archives') }}">
                         <span class="glyphicon glyphicon-folder-close"></span>&nbsp;&nbsp;Archives
                     </a></li>
-{#                    {% if user.admin %}#}
+                    {% if user.admin %}
+                        <li><a href="{{ url_for('webui.genmail') }}">
+                            <span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;Generate Email
+                        </a></li>
 {#                        <li{% if page_name == 'email_mgmt' %} class="active"{% endif %}><a href="{{ url_for('webui.email_mgmt') }}">#}
 {#                            <span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;Mailing#}
 {#                        </a></li>#}
-{#                    {% endif %}#}
+                    {% endif %}
                     <li class="nav-divider"></li>
                 </ul>
                 <form class="navbar-form navbar-left">

@@ -33,7 +33,7 @@ $('#newlink-cancel').click(function() {
     return true
 });
 $('#chpasswd-save').click(function() {
-    $('#change-passwd-form').submit();
+    $('#chpasswd-form').submit();
     return true;
 });
 $('#chpasswd-cancel').click(function() {
