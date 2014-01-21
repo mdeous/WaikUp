@@ -1,0 +1,28 @@
+{% from "macros/bootstrap.html" import wtform %}
+<div class="modal fade"
+     id="chpasswd-modal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="chpasswd-modal-label"
+     aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="chpasswd-modal-label">Submit link</h4>
+            </div><!-- /.modal-header -->
+            <div class="modal-body">
+                {{ wtform(chpasswd_form) }}
+            </div><!-- /.modal-body -->
+            <div class="modal-footer">
+                <button class="btn btn-success" id="chpasswd-save">
+                    <span class="glyphicon glyphicon-ok-circle"></span> Save
+                </button>
+                <button class="btn btn-danger" data-dismiss="modal" id="chpasswd-cancel">
+                    <span class="glyphicon glyphicon-remove-circle"></span> Cancel
+                </button>
+            </div><!-- /.modal-footer -->
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal.fade -->

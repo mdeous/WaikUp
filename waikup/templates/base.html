@@ -23,8 +23,8 @@
     {% endfor %}
     {% block content -%}{{ lipsum() }}{%- endblock %}
 </div><!-- /.container -->
-{{ bootstrap.modalform('new-link-modal', 'Submit link',  new_link_form, redirect_to=page_name) }}
-{{ bootstrap.modalform('chpasswd-modal', 'Change password', chpasswd_form, redirect_to=page_name) }}
+{% include 'new_link.html' %}
+{% include 'change_passwd.html' %}
 {% include "user_profile.html" %}
 {%- block js -%}
     <script type="text/javascript" src="{{ url_for('static', filename="js/jquery-2.0.3.min.js") }}"></script>
