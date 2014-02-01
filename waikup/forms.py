@@ -27,7 +27,7 @@ class NewLinkForm(Form):
     )
     description = TextAreaField(
         'Description:',
-        validators=[optional()]
+        validators=[required()]
     )
     category = SelectField(
         'Category:',
