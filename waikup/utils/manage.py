@@ -26,6 +26,17 @@ def setupdb():
         print "[+] Creating table: %s..." % table._meta.name
         table.create_table(fail_silently=True)
     create_categories()
+    print "[+] Adding default credentials 'admin:admin'..."
+    user = User(
+        username='admin',
+        first_name='WaikUp',
+        last_name='Admin',
+        email='admin@example.org',
+        admin=True,
+        active=True
+    )
+    user.set_password('admin')
+    user.save()
     print "[+] Done"
 
 
