@@ -19,7 +19,7 @@ DEFAULT_CATEGORIES = [
     'Development',
     'News',
     'Fun',
-    'Others'
+    'Other'
 ]
 ATOM_LINKS_COUNT = 50
 DATETIME_FORMAT = '%b %d %Y at %H:%M:%S'
