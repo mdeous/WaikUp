@@ -32,7 +32,7 @@ class NewLinkForm(Form):
     category = SelectField(
         'Category:',
         validators=[optional(), is_category],
-        default='Others'
+        default='Other'
     )
 
     def set_category_choices(self):
