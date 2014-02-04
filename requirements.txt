@@ -4,3 +4,4 @@ Flask-Peewee
 Flask-WTF
 Flask-Mail
 psycopg2
+simplejson
