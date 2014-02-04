@@ -91,7 +91,6 @@ def importdb(model_name, data_file):
                 query = fk_model_cls.select().where(
                     *[getattr(fk_model_cls, fk_field) == item[fk_name][fk_field] for fk_field in item[fk_name]]
                 )
-                print query
                 fk_obj = query.first()
                 # item does not exist in db, create it
                 if fk_obj is None:
@@ -102,7 +101,6 @@ def importdb(model_name, data_file):
                     fk_obj = fk_model_cls()
                     for fk_field in item[fk_name]:
                         setattr(fk_obj, fk_field, item[fk_name][fk_field])
-                    print item[fk_name]
                     try:
                         fk_obj.save()
                         print "[+] Created %s object" % fk_name
