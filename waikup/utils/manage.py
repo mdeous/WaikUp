@@ -97,7 +97,6 @@ def importdb(model_name, data_file):
                     if not item[fk_name]:
                         print "[!] Only 'id' field provided for '%s', but wasn't found, skipping item" % fk_name
                         sys.exit(3)
-                    print "[+] Creating %s item" % fk_name
                     fk_obj = fk_model_cls()
                     for fk_field in item[fk_name]:
                         setattr(fk_obj, fk_field, item[fk_name][fk_field])
