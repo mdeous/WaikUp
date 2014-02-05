@@ -8,7 +8,7 @@ from getpass import getpass
 from flask.ext.mail import Message
 from flask.ext.script import Manager
 from jinja2 import Environment, PackageLoader
-from peewee import IntegrityError
+from peewee import IntegrityError, DoesNotExist
 
 from waikup.app import app, db, mail
 from waikup.models import User, Token, Link, Category
@@ -87,27 +87,8 @@ def importdb(model_name, data_file):
                     print "[!] Unexpected foreign key field: %s" % fk_name
                     sys.exit(3)
                 fk_model_cls = model_class._meta.fields[fk_name].rel_model
-                # try to get item with given criteria from db
-                query = fk_model_cls.select().where(
-                    *[getattr(fk_model_cls, fk_field) == item[fk_name][fk_field] for fk_field in item[fk_name]]
-                )
-                fk_obj = query.first()
-                # item does not exist in db, create it
-                if fk_obj is None:
-                    if not item[fk_name]:
-                        print "[!] Only 'id' field provided for '%s', but wasn't found, skipping item" % fk_name
-                        sys.exit(3)
-                    fk_obj = fk_model_cls()
-                    for fk_field in item[fk_name]:
-                        setattr(fk_obj, fk_field, item[fk_name][fk_field])
-                    try:
-                        fk_obj.save()
-                        print "[+] Created %s object" % fk_name
-                    except IntegrityError:
-                        print "[!] Duplicate %s object, skipping" % fk_name
-                        db.database.rollback()
-                        continue
-                item[fk_name] = fk_obj
+                # get item with given criteria from db (or create it)
+                item[fk_name] = fk_model_cls.get_or_create(**item[fk_name])
             # create a model object from the JSON item
             model_obj = model_class()
             for field in item:
