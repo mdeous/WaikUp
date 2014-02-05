@@ -117,4 +117,4 @@ def email_mgmt():
 @webui.route('/genmail')
 @g.auth.admin_required
 def genmail():
-    return render_template('emails/html.jinja', links=Link.select())
+    return render_template('emails/html.jinja', links=Link.select().where(Link.archived == False))
