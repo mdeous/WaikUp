@@ -1,10 +1,13 @@
 Bonjour,
 <br/><br/>
-Voici les liens sélectionnés par les consultants durant la semaine dernière:
+Voici les derniers liens sélectionnés par les consultants:
 <br/>
 <ol>
 {% for link in links %}
-    <li><strong>{{ link.title|title }}</strong> - <a href="{{ link.url }}">{{ link.url }}</a></li>
+    <li>
+        [{{ link.category.name }}]&nbsp;
+        <strong>{{ link.title|title }}</strong> - <a href="{{ link.url }}">{{ link.url }}</a>&nbsp;
+        ({{ link.author.first_name }} {{ link.author.last_name }})</li>
     <p>{{ link.description }}</p>
 {% endfor %}
 </ol>
