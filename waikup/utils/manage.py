@@ -155,8 +155,8 @@ def sendmail():
     links = Link.select().where(Link.archived == False)
     print "[+] Loading and populating email templates..."
     env = Environment(loader=PackageLoader('waikup', 'templates/emails'))
-    html = env.get_template('html.jinja').render(links=links)
-    text = env.get_template('text.jinja').render(links=links)
+    html = env.get_template('html.jinja2').render(links=links)
+    text = env.get_template('text.jinja2').render(links=links)
     print "[+] Sending email..."
     msg = Message(recipients=app.config['MAIL_RECIPIENTS'])
     msg.subject = app.config['MAIL_TITLE']

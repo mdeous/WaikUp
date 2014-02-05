@@ -80,6 +80,10 @@ class User(BaseModel):
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
 
+    @property
+    def full_name(self):
+        return "%s %s" % (self.first_name, self.last_name)
+
     @classmethod
     def from_token(cls, token):
         token_obj = Token.get(Token.token == token)

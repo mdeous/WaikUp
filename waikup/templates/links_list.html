@@ -44,7 +44,7 @@
                     &nbsp;&nbsp;<a href="{{ link.url }}" target="_blank">{{ link.title }}
                 </a></td>
                 <td>{{ link.submitted.strftime(config.DATETIME_FORMAT) }}</td>
-                <td>{{ link.author.first_name }} {{ link.author.last_name }}</td>
+                <td>{{ link.author.full_name }}</td>
             </tr>
             <tr>
                 <td id="collapsible-td" colspan="4">
