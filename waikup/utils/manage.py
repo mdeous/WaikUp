@@ -8,9 +8,10 @@ from getpass import getpass
 from flask.ext.mail import Message
 from flask.ext.script import Manager
 from jinja2 import Environment, PackageLoader
-from peewee import IntegrityError, DoesNotExist
+from peewee import IntegrityError
 
 from waikup.app import app, db, mail
+from waikup.lib.errors import ApiError
 from waikup.models import User, Token, Link, Category
 
 try:
@@ -124,6 +125,25 @@ def adduser(admin=False, inactive=False):
         admin=admin,
         active=not inactive
     )
+    user.set_password(password1)
+    user.save()
+    print "[+] Done"
+
+
+@manager.command
+def chpasswd(username):
+    """Change given user's password."""
+    try:
+        user = User.get(User.username == username)
+    except ApiError:
+        print "[!] Unknown user: %s" % username
+        sys.exit(1)
+    password1 = getpass("[>] Password: ")
+    password2 = getpass("[>] Confirm password: ")
+    if password1 != password2:
+        print "[!] Passwords don't match!"
+        sys.exit(2)
+    print "[+] Changing %s's password" % username
     user.set_password(password1)
     user.save()
     print "[+] Done"
