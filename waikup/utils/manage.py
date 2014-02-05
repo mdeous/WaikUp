@@ -65,6 +65,7 @@ def importdb(model_name, data_file):
     """Imports a JSON file previously generated with admin interface export command."""
     # handle arguments errors
     print "[+] Importing %s data from %s" % (model_name, data_file)
+    created_objects = 0
     table_names = [t._meta.name.lower() for t in TABLES]
     if model_name.lower() not in table_names:
         print "[!] Unknown model name: %s" % model_name
@@ -96,11 +97,11 @@ def importdb(model_name, data_file):
                 setattr(model_obj, field, item[field])
             try:
                 model_obj.save()
-                print "[+] Created %s object" % model_name
+                created_objects += 1
             except IntegrityError:
-                print "[!] Duplicate %s object, skipping" % model_name
                 db.database.rollback()
                 continue
+    print "[+] Created %d %s objects" % (created_objects, model_name)
     print "[+] Done"
 
 
