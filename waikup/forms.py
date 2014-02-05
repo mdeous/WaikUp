@@ -5,6 +5,7 @@ from wtforms import TextField, TextAreaField, PasswordField, SelectField
 from wtforms.fields.html5 import URLField
 from wtforms.validators import url, required, optional, equal_to, ValidationError
 
+from waikup import settings
 from waikup.models import Category
 
 
@@ -32,7 +33,7 @@ class NewLinkForm(Form):
     category = SelectField(
         'Category:',
         validators=[optional(), is_category],
-        default='Other'
+        default=settings.DEFAULT_CATEGORY
     )
 
     def set_category_choices(self):

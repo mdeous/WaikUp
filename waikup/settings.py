@@ -21,6 +21,7 @@ DEFAULT_CATEGORIES = [
     'Fun',
     'Other'
 ]
+DEFAULT_CATEGORY = 'Other'
 ATOM_LINKS_COUNT = 50
 DATETIME_FORMAT = '%b %d %Y at %H:%M:%S'
 MAIL_SERVER = 'localhost'

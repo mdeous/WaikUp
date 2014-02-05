@@ -112,7 +112,7 @@ class Token(BaseModel):
 
 
 class Category(BaseModel):
-    name = CharField(unique=True)
+    name = CharField(unique=True, default=settings.DEFAULT_CATEGORY)
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -134,7 +134,12 @@ class Link(BaseModel):
     submitted = DateTimeField(default=datetime.now)
     archived = BooleanField(default=False)
     author = ForeignKeyField(User, related_name='links')
-    category = ForeignKeyField(Category, related_name='links', null=True)
+    category = ForeignKeyField(
+        Category,
+        related_name='links',
+        null=True,
+        default=Category.get(Category.name==settings.DEFAULT_CATEGORY)
+    )
 
     def __unicode__(self):
         return u'%s' % self.url
