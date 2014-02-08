@@ -5,7 +5,7 @@ from operator import itemgetter
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
 from waikup.lib import globals as g
-from waikup.models import Link, User
+from waikup.models import Link, User, Category
 from waikup.forms import NewLinkForm, ChangePasswordForm
 
 
@@ -57,7 +57,14 @@ def new_link():
     form.set_category_choices()
     if form.validate_on_submit():
         user = g.auth.get_logged_in_user()
-        link = Link.create(url=form.url.data, title=form.title.data, description=form.description.data, author=user)
+        category = Category.get(Category.name == form.category.data)
+        link = Link.create(
+            url=form.url.data,
+            title=form.title.data,
+            description=form.description.data,
+            author=user,
+            category=category
+        )
         flash("New link added: %s" % form.url.data)
         return redirect(redirect_to)
     for field_name, field_errors in form.errors.iteritems():
