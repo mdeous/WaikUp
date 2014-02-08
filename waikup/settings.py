@@ -17,7 +17,9 @@ DEFAULT_CATEGORIES = [
     'Forensics',
     'Reverse Engineering',
     'Cryptography',
+    'Networking',
     'Development',
+    'Malware',
     'News',
     'Fun',
     'Other'
