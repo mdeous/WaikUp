@@ -7,6 +7,7 @@
     <thead>
         <tr>
             <th>Link</th>
+            <th>Category</th>
             <th>Submission date</th>
             <th>Submitter</th>
         </tr>
@@ -43,6 +44,7 @@
                     {% endif %}
                     &nbsp;&nbsp;<a href="{{ link.url }}" target="_blank">{{ link.title }}
                 </a></td>
+                <td>{{ link.category.name }}</td>
                 <td>{{ link.submitted.strftime(config.DATETIME_FORMAT) }}</td>
                 <td>{{ link.author.full_name }}</td>
             </tr>
