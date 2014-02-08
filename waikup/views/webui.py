@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from operator import itemgetter
+
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
 from waikup.lib import globals as g
-from waikup.models import Link
+from waikup.models import Link, User
 from waikup.forms import NewLinkForm, ChangePasswordForm
 
 
@@ -118,3 +120,15 @@ def email_mgmt():
 @g.auth.admin_required
 def genmail():
     return render_template('emails/html.jinja2', links=Link.select().where(Link.archived == False))
+
+
+@webui.route('/stats')
+@g.auth.login_required
+def stats():
+    users = User.select()
+    user_submissions = [(u.full_name, u.links.count()) for u in users]
+    top_five_submitters = list(reversed(sorted(user_submissions, key=itemgetter(1))))[:5]
+    return render_template(
+        'stats.html',
+        page_name="stats"
+    )
