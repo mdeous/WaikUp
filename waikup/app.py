@@ -3,6 +3,7 @@
 from flask import Flask, request
 from flask.ext.mail import Mail
 from flask.ext.peewee.db import Database
+from peewee import fn
 from werkzeug.contrib.atom import AtomFeed
 
 from waikup import settings
@@ -61,12 +62,19 @@ app.register_blueprint(users, url_prefix='/api/users')
 
 @app.route('/links.atom')
 def links_feed():
+    feed_title = 'Recently submitted links'
+    cat = request.args.get('cat')
+    if cat is not None:
+        feed_title += (' - %s' % cat)
+        category = Category.get(fn.lower(Category.name) == cat.lower())
+        all_links = Link.select().where(Link.category == category).limit(settings.ATOM_LINKS_COUNT)
+    else:
+        all_links = Link.select().limit(settings.ATOM_LINKS_COUNT)
     feed = AtomFeed(
-        'Recently submitted links',
+        feed_title,
         feed_url=request.url,
         url=request.base_url
     )
-    all_links = Link.select().limit(settings.ATOM_LINKS_COUNT)
     for link in all_links:
         feed.add(
             link.title,
