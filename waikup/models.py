@@ -142,7 +142,6 @@ class Link(BaseModel):
         Category,
         related_name='links',
         null=True,
-        default=Category.get(Category.name==settings.DEFAULT_CATEGORY)
     )
 
     def __unicode__(self):
