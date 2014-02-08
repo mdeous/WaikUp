@@ -21,6 +21,7 @@ setup(
         'waikup',
         'waikup.lib',
         'waikup.utils',
+        'waikup.utils.migrations',
         'waikup.lib',
         'waikup.views',
         'waikup.views.api'

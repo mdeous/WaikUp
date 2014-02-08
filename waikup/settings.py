@@ -11,6 +11,7 @@ DATABASE = {
     "password": "waikup",
     "engine": "peewee.PostgresqlDatabase"
 }
+DB_VERSION_FILE = '~/.waikup-db-version'
 DEFAULT_CATEGORIES = [
     'Web',
     'Forensics',

@@ -8,11 +8,12 @@ from getpass import getpass
 from flask.ext.mail import Message
 from flask.ext.script import Manager
 from jinja2 import Environment, PackageLoader
-from peewee import IntegrityError
+from peewee import IntegrityError, PeeweeException
 
 from waikup.app import app, db, mail
 from waikup.lib.errors import ApiError
 from waikup.models import User, Token, Link, Category
+from waikup.utils import migrations
 
 try:
     import simplejson as json
@@ -27,6 +28,22 @@ def create_categories():
     for cat in app.config['DEFAULT_CATEGORIES']:
         print "[+] Inserting category: %s" % cat
         Category.create(name=cat)
+
+
+def read_db_version():
+    version = 0
+    if os.path.exists(app.config['DB_VERSION_FILE']):
+        with open(app.config['DB_VERSION_FILE']) as inf:
+            version = inf.read().strip() or '0'
+            if not version.isdigit():
+                print "[!] Unexpected version value: %s" % version
+                sys.exit(2)
+    return int(version)
+
+
+def write_db_version(ver):
+    with open(app.config['DB_VERSION_FILE'], 'w') as outf:
+        outf.write(str(ver))
 
 
 @manager.command
@@ -103,6 +120,34 @@ def importdb(model_name, data_file):
                 continue
     print "[+] Created %d %s objects" % (created_objects, model_name)
     print "[+] Done"
+
+
+@manager.command
+@manager.option('-v', '--version', dest='version', default=None, help='Schema version to upgrade to')
+def migratedb(version=None):
+    """Applies database schema migrations."""
+    current_version = read_db_version()
+    max_version = version or len(migrations.modules)
+    highest_version = len(migrations.modules)
+    if max_version == current_version:
+        print "[+] No schema migration to apply"
+        sys.exit(0)
+    elif max_version > highest_version:
+        print "[!] Can't apply version %d, max version is %d" % (max_version, highest_version)
+        sys.exit(1)
+    for migration in migrations.modules[current_version:]:
+        vernum = migrations.modules.index(migration)+1
+        if vernum > max_version:
+            break
+        try:
+            migration.migrate()
+            print "[!] Applied schema migration: %d"
+        except PeeweeException as err:
+            print "[!] Error: %s" % err.message
+            sys.exit(3)
+        write_db_version(vernum)
+    print "[+] Done"
+    pass
 
 
 @manager.command
