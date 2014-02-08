@@ -34,7 +34,7 @@ setup(
             'static/js/*',
             'templates/*.html',
             'templates/auth/*.html',
-            'templates/emails/*.jinja',
+            'templates/emails/*.jinja2',
             'templates/macros/*.html'
         ]
     },
