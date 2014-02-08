@@ -134,7 +134,7 @@ class Link(BaseModel):
     )
     url = CharField(unique=True)
     title = CharField()
-    description = TextField(null=True)
+    description = TextField(default='No description')
     submitted = DateTimeField(default=datetime.now)
     archived = BooleanField(default=False)
     author = ForeignKeyField(User, related_name='links')
