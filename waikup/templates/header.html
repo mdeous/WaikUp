@@ -19,6 +19,9 @@
                     <li{% if page_name == 'archives' %} class="active"{% endif %}><a href="{{ url_for('webui.archives') }}">
                         <span class="glyphicon glyphicon-folder-close"></span>&nbsp;&nbsp;Archives
                     </a></li>
+                    <li{% if page_name == 'stats' %} class="active"{% endif %}><a href="{{ url_for('webui.stats') }}">
+                        <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;Stats
+                    </a></li>
                     {% if user.admin %}
                         <li><a href="{{ url_for('webui.genmail') }}">
                             <span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;Generate Email
