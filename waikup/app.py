@@ -65,7 +65,7 @@ def links_feed():
     feed_title = 'Recently submitted links'
     cat = request.args.get('cat')
     if cat is not None:
-        feed_title += (' - %s' % cat)
+        feed_title += (' - %s' % cat.title())
         category = Category.get(fn.lower(Category.name) == cat.lower())
         all_links = Link.select().where(Link.category == category).limit(settings.ATOM_LINKS_COUNT)
     else:
