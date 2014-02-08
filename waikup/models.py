@@ -172,7 +172,7 @@ class TokenAdmin(ModelAdmin):
 
 
 class LinkAdmin(ModelAdmin):
-    columns = ('title', 'category', 'author')
+    columns = ('title', 'category', 'author', 'archived')
     foreign_key_lookups = {'author': 'username', 'category': 'name'}
 
 
