@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from operator import itemgetter
+
 from flask import Blueprint, request, jsonify
 from peewee import DoesNotExist
 
@@ -77,3 +79,13 @@ def delete_user(userid):
     from waikup.models import User
     User.safe_delete(User.id == userid)
     return jsonify({"success": True})
+
+
+@users.route('/top5submitters')
+@g.auth.login_required
+def top_five_submitters():
+    from waikup.models import User
+    all_users = User.select()
+    user_submissions = [(u.full_name, u.links.count()) for u in all_users]
+    top_submitters = sorted(user_submissions, key=itemgetter(1), reverse=True)[:5]
+    return jsonify({"success": True, "submitters": top_submitters})
