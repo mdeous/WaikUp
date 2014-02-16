@@ -98,6 +98,15 @@ def global_forms():
     }
 
 
+@app.context_processor
+def global_variables():
+    from waikup.models import User
+    api_user = User.get(username='waikupapi')
+    return {
+        'internal_api_token': api_user.token.get().token
+    }
+
+
 # Setup custom error handlers
 
 @app.errorhandler(ApiError)
