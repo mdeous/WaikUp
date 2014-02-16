@@ -7,10 +7,10 @@ Collaborative news sharing platform.
 WaikUp is an application for teams who want a collaborative platform to share their
 findings around the Web.
 
-## API-centric
+## WebUI + RESTful API
 
-This application is entirely built around a RESTful API, allowing to build any interface
-on top of it, be it a traditionnal WebUI, a browser extension, or a mobile application.
+Additionally to the traditionnal web interface, WaikUp provides a RESTful API to allow
+any other interface (browser extension, mobile application, etc...) to be built upon.
 
 ## Version control workflow
 
@@ -40,10 +40,6 @@ and the `git-flow` utility can be found [here](https://github.com/nvie/gitflow "
 
 ### Users API
 
-* `/api/users/auth` [POST] - Retrieve an authentication token
-    * `username` (required)
-    * `password` (required)
-* `/api/users/deauth` [POST+Auth] - Delete authentication token
 * `/api/users/` [GET+Admin] - Get all users in database
 * `/api/users/<id>` [GET+Admin] - Get user with given ID
 * `/api/users/` [POST+Admin] - Create a new user
