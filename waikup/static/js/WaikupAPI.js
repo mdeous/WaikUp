@@ -30,8 +30,12 @@ var WaikUp = function(apiURL, apiKey) {
         return $.parseJSON(response.responseText);
     };
 
-    var methodsMap = {
-        query: query
+    var topFiveSubmitters = function() {
+        return this.query('/users/top5submitters');
     };
-    return methodsMap;
+
+    return {
+        query: query,
+        topFiveSubmitters: topFiveSubmitters
+    };
 };
