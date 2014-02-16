@@ -90,6 +90,15 @@ describes the procedure using the Apache web server on a debian based system.
   * `DEBUG = False`
   * `SECRET_KEY = 'some secret key'` (can be generated using `''.join(choice(string.printable) for _ in range(32))`)
 
+* Setup the database schema using the `waikup_manage setupdb` management command.
+
+When setting up the database, an admin user is created with 'admin:admin' credentials, this account is only meant for
+testing purpose, if you are deploying WaikUp in a production environment, immediately create a new admin user using the
+`waikup_manage adduser` command, and delete this one (once logged, this can be done from the admin interface).
+
+An API user is also created which username is 'waikupapi', this account is internal and should not be modified or deleted.
+It is created with a very strong random password, and can not be used as a normal user.
+
 For a list of settings you might wish to change (database, emails), have a look at the `waikup/settings.py` file.
 
 Emails can be sent using the `waikup_manage sendmail` command, if you want to automate this, just set a `crontab` entry
