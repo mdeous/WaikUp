@@ -35,7 +35,7 @@ var WaikUp = function(apiURL, apiKey) {
             data: data,
             async: async
         });
-        if (async) {
+        if (!async) {
             return $.parseJSON(response.responseText);
         }
         return null;
