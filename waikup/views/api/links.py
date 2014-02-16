@@ -17,6 +17,7 @@ class LinkResource(Resource):
 
 
 @links.route('/', methods=['GET'])
+@g.auth.login_required
 def list_links():
     """Get all links in database."""
     from waikup.models import Link
@@ -27,6 +28,7 @@ def list_links():
 
 
 @links.route('/<int:linkid>', methods=['GET'])
+@g.auth.login_required
 def get_link(linkid):
     """Get link with given ID."""
     from waikup.models import Link

@@ -7,10 +7,10 @@ Collaborative news sharing platform.
 WaikUp is an application for teams who want a collaborative platform to share their
 findings around the Web.
 
-## API-centric
+## WebUI + RESTful API
 
-This application is entirely built around a RESTful API, allowing to build any interface
-on top of it, be it a traditionnal WebUI, a browser extension, or a mobile application.
+Additionally to the traditionnal web interface, WaikUp provides a RESTful API to allow
+any other interface (browser extension, mobile application, etc...) to be built upon.
 
 ## Version control workflow
 
@@ -40,10 +40,6 @@ and the `git-flow` utility can be found [here](https://github.com/nvie/gitflow "
 
 ### Users API
 
-* `/api/users/auth` [POST] - Retrieve an authentication token
-    * `username` (required)
-    * `password` (required)
-* `/api/users/deauth` [POST+Auth] - Delete authentication token
 * `/api/users/` [GET+Admin] - Get all users in database
 * `/api/users/<id>` [GET+Admin] - Get user with given ID
 * `/api/users/` [POST+Admin] - Create a new user
@@ -93,6 +89,15 @@ describes the procedure using the Apache web server on a debian based system.
 * Create a `/var/www/waikup/src/waikup/prod_settings.py` file with (at least) the following values defined:
   * `DEBUG = False`
   * `SECRET_KEY = 'some secret key'` (can be generated using `''.join(choice(string.printable) for _ in range(32))`)
+
+* Setup the database schema using the `waikup_manage setupdb` management command.
+
+When setting up the database, an admin user is created with 'admin:admin' credentials, this account is only meant for
+testing purpose, if you are deploying WaikUp in a production environment, immediately create a new admin user using the
+`waikup_manage adduser` command, and delete this one (once logged, this can be done from the admin interface).
+
+An API user is also created which username is 'waikupapi', this account is internal and should not be modified or deleted.
+It is created with a very strong random password, and can not be used as a normal user.
 
 For a list of settings you might wish to change (database, emails), have a look at the `waikup/settings.py` file.
 

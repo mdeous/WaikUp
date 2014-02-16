@@ -108,7 +108,7 @@ class Token(BaseModel):
     no_item_code = 403
     no_item_message = "Forbidden"
     token = CharField(default=lambda: md5(os.urandom(128)).hexdigest())
-    user = ForeignKeyField(User, related_name='tokens', unique=True)
+    user = ForeignKeyField(User, related_name='token', unique=True)
     expiry = DateTimeField(default=lambda: datetime.now()+timedelta(weeks=1))
 
     def __unicode__(self):

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from operator import itemgetter
+
 from flask import Blueprint, request, jsonify
 from peewee import DoesNotExist
 
@@ -14,37 +16,6 @@ users = Blueprint('users', __name__)
 class UserResource(Resource):
     name = 'user'
     fields = ('username', 'first_name', 'last_name', 'email', 'admin', 'active')
-
-
-class TokenResource(Resource):
-    name = 'token'
-    fields = ('token', 'user')
-    fk_map = {'user': 'username'}
-
-
-@users.route('/auth', methods=['POST'])
-@required_fields('username', 'password')
-def auth():
-    """Authenticate an user and reply with its auth token."""
-    from waikup.models import User
-    try:
-        user = User.get(User.username == request.form['username'])
-        if not user.check_password(request.form['password']):
-            raise ApiError("Invalid credentials", status_code=403)
-    except ApiError:
-        raise ApiError("Invalid credentials", status_code=403)
-    token = user.generate_token()
-    data = TokenResource(token).data
-    return jsonify(data)
-
-
-@users.route('/deauth', methods=['POST'])
-def deauth():
-    """Delete given token."""
-    from waikup.models import Token
-    token_str = request.headers['Auth']
-    token = Token.get(Token.token == token_str)
-    return jsonify({"success": True})
 
 
 @users.route('/')
@@ -108,3 +79,13 @@ def delete_user(userid):
     from waikup.models import User
     User.safe_delete(User.id == userid)
     return jsonify({"success": True})
+
+
+@users.route('/top5submitters')
+@g.auth.login_required
+def top_five_submitters():
+    from waikup.models import User
+    all_users = User.select()
+    user_submissions = [(u.full_name, u.links.count()) for u in all_users]
+    top_submitters = sorted(user_submissions, key=itemgetter(1), reverse=True)[:5]
+    return jsonify({"success": True, "submitters": top_submitters})

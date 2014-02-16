@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from operator import itemgetter
-
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
 from waikup.lib import globals as g
@@ -129,12 +127,41 @@ def genmail():
     return render_template('emails/html.jinja2', links=Link.select().where(Link.archived == False))
 
 
+@webui.route('/token')
+@g.auth.login_required
+def token():
+    def generate_token(user):
+        new_token = user.generate_token()
+        flash('New token generated: %s' % new_token.token, category='success')
+
+    def delete_token(user):
+        if user.token.count() == 0:
+            flash('No token to delete', category='danger')
+            return
+        user.delete_token()
+        flash('Token deleted', category='success')
+
+    token_actions = {
+        'generate': generate_token,
+        'delete': delete_token
+    }
+    redirect_to = request.args.get('redir', 'index')
+    redirect_to = url_for('webui.' + redirect_to)
+    action = request.args.get('action')
+    if action is None:
+        flash('No action specified', category='danger')
+        return redirect(redirect_to)
+    if action not in token_actions:
+        flash('Unknown action: %s' % action, category='danger')
+        return redirect(redirect_to)
+    current_user = g.auth.get_logged_in_user()
+    token_actions[action](current_user)
+    return redirect(redirect_to)
+
+
 @webui.route('/stats')
 @g.auth.login_required
 def stats():
-    users = User.select()
-    user_submissions = [(u.full_name, u.links.count()) for u in users]
-    top_five_submitters = list(reversed(sorted(user_submissions, key=itemgetter(1))))[:5]
     return render_template(
         'stats.html',
         page_name="stats"

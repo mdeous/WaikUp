@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import os
+import string
 import sys
 from getpass import getpass
+from random import choice
 
 from flask.ext.mail import Message
 from flask.ext.script import Manager
@@ -64,6 +66,19 @@ def setupdb():
     )
     user.set_password('admin')
     user.save()
+    print "[+] Creating internal API user"
+    api_user = User(
+        username='waikupapi',
+        first_name='WaikUp',
+        last_name='API',
+        email='api@example.org',
+        admin=False,
+        active=True
+    )
+    api_user.set_password(''.join(choice(string.printable) for _ in xrange(64)))
+    api_user.save()
+    print "[+] Assigning new API token to 'waikupapi' user"
+    api_token = api_user.generate_token()
     print "[+] Done"
 
 
