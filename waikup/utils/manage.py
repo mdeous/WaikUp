@@ -28,7 +28,7 @@ manager = Manager(app)
 
 def create_categories():
     for cat in app.config['DEFAULT_CATEGORIES']:
-        if Category.select.where(Category.name == cat).count() == 0:
+        if Category.select().where(Category.name == cat).count() == 0:
             print "[+] Inserting category: %s" % cat
             Category.create(name=cat)
 
