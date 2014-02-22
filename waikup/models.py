@@ -222,7 +222,10 @@ class HybridAuth(Auth):
                     if not test_func(token.user):
                         abort(403)
                 else:
-                    user = self.get_logged_in_user()
+                    try:
+                        user = self.get_logged_in_user()
+                    except ApiError:
+                        user = None
                     if not user or not test_func(user):
                         login_url = url_for('%s.login' % self.blueprint.name, next=get_next())
                         return redirect(login_url)
