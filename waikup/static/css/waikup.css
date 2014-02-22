@@ -30,3 +30,6 @@ table#user-profile>tbody>tr>td {
 a.link-action:hover {
     text-decoration: none;
 }
+table#links-list>tbody>tr:nth-child(even) {
+    border-bottom: 1px solid lightgray;
+}
