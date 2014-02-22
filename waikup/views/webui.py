@@ -166,3 +166,22 @@ def stats():
         'stats.html',
         page_name="stats"
     )
+
+@webui.route('/search', methods=['POST'])
+@g.auth.login_required
+def search():
+    redirect_page = request.args.get('redir', 'index')
+    redirect_to = url_for('webui.' + redirect_page)
+    pattern = request.form.get('pattern')
+    if pattern is None:
+        flash("No pattern given", category='danger')
+        return redirect(redirect_to)
+    archived = redirect_page == 'archives'
+    pattern = "%%%s%%" % pattern
+    links = Link.select().where(Link.archived == archived).where((Link.title % pattern) | (Link.description % pattern))
+    print list(links)
+    return render_template(
+        'links_list.html',
+        page_name=redirect_page,
+        links=links
+    )
