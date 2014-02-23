@@ -5,9 +5,7 @@ Voici les derniers liens sélectionnés par les consultants:
 <ol>
 {% for link in links %}
     <li>
-        [{{ link.category.name }}]&nbsp;
-        <strong>{{ link.title|title }}</strong> - <a href="{{ link.url }}">{{ link.url }}</a>&nbsp;
-        ({{ link.author.full_name }})
+        [{{ link.category.name }}] <a href="{{ link.url }}"><strong>{{ link.title }}</strong></a> ({{ link.author.full_name }})
     </li>
     <p>{{ link.description }}</p>
 {% endfor %}
