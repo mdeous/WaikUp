@@ -33,3 +33,7 @@ a.link-action:hover {
 table#links-list>tbody>tr:nth-child(even) {
     border-bottom: 1px solid lightgray;
 }
+.pagination {
+    padding-left: 25%;
+    margin-top: 0;
+}

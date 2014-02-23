@@ -4,6 +4,7 @@ import os
 from datetime import datetime, timedelta
 from functools import wraps
 from hashlib import md5
+from math import ceil
 
 from flask import url_for, redirect, request, abort
 from flask.ext.peewee.admin import ModelAdmin
@@ -124,7 +125,7 @@ class Category(BaseModel):
 
 class Link(BaseModel):
     class Meta(object):
-        order_by = ('submitted',)
+        order_by = ('-submitted',)
 
     safe_fields = (
         'url',
@@ -229,3 +230,30 @@ class HybridAuth(Auth):
                 return func(*args, **kwargs)
             return inner
         return decorator
+
+
+## PAGINATION HELPER
+
+
+class Paginated(object):
+    def __init__(self, query, page, per_page, count):
+        self.page = page
+        self.per_page = per_page
+        self.count = count
+        self.items = query.paginate(page, per_page)
+
+    def __iter__(self):
+        for item in self.items:
+            yield item
+
+    @property
+    def pages(self):
+        return int(ceil(self.count / float(self.per_page)))
+
+    @property
+    def has_previous(self):
+        return self.page > 1
+
+    @property
+    def has_next(self):
+        return self.page < self.pages

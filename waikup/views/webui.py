@@ -3,47 +3,47 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 
 from waikup.lib import globals as g
-from waikup.models import Link, User, Category
+from waikup.models import Link, Category, Paginated
 from waikup.forms import NewLinkForm, ChangePasswordForm
+
+ITEMS_PER_PAGE = 10
 
 
 webui = Blueprint('webui', __name__)
 
 
-@webui.route('/')
-@g.auth.login_required
-def index():
+def list_links(page_name):
     toggle_link_id = request.args.get('toggle')
+    page_num = request.args.get('page')
+    if (page_num is None) or (not page_num.isdigit()):
+        page_num = 1
+    else:
+        page_num = int(page_num)
     if toggle_link_id is not None:
         result_ok = Link.toggle_archiving(toggle_link_id)
         if result_ok:
             flash("Archived link %s" % toggle_link_id, category="success")
         else:
             flash("Link does not exist: %s" % toggle_link_id, category="danger")
-    links = Link.select().where(Link.archived == False).order_by(Link.submitted.desc())
+    links = Link.select().where(Link.archived == (page_name == 'archives')).order_by(Link.submitted.desc())
+    links = Paginated(links, page_num, ITEMS_PER_PAGE, links.count())
     return render_template(
         'links_list.html',
-        page_name='index',
+        page_name=page_name,
         links=links
     )
+
+
+@webui.route('/')
+@g.auth.login_required
+def index():
+    return list_links('index')
 
 
 @webui.route('/archives')
 @g.auth.login_required
 def archives():
-    toggle_link_id = request.args.get('toggle')
-    if toggle_link_id is not None:
-        result_ok = Link.toggle_archiving(toggle_link_id)
-        if result_ok:
-            flash("Marked link as active: %s" % toggle_link_id, category="success")
-        else:
-            flash("Link does not exist: %s" % toggle_link_id, category="danger")
-    links = Link.select().where(Link.archived == True).order_by(Link.submitted.desc())
-    return render_template(
-        'links_list.html',
-        page_name='archives',
-        links=links
-    )
+    return list_links('archives')
 
 
 @webui.route('/newlink', methods=['POST'])
