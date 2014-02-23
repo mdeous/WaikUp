@@ -109,11 +109,11 @@ def global_variables():
 
 # Setup custom error handlers
 
-@app.errorhandler(ApiError)
-def api_error_handler(error):
-    response = error.json
-    response.status_code = error.status_code
-    return response
+# @app.errorhandler(ApiError)
+# def api_error_handler(error):
+#     response = error.json
+#     response.status_code = error.status_code
+#     return response
 
 
 @app.errorhandler(401)
