@@ -56,7 +56,7 @@ def setupdb():
         print "[+] Creating table: %s..." % table._meta.name
         table.create_table(fail_silently=True)
     create_categories()
-    if User.select(User.username == 'admin').count() == 0:
+    if User.select().where(User.username == 'admin').count() == 0:
         print "[+] Adding default credentials 'admin:admin'..."
         user = User(
             username='admin',
@@ -68,7 +68,7 @@ def setupdb():
         )
         user.set_password('admin')
         user.save()
-    if User.select(User.username == 'waikupapi').count() == 0:
+    if User.select().where(User.username == 'waikupapi').count() == 0:
         print "[+] Creating internal API user"
         api_user = User(
             username='waikupapi',
