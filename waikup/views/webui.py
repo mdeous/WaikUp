@@ -171,6 +171,11 @@ def stats():
 @g.auth.login_required
 def search():
     redirect_page = request.args.get('redir', 'index')
+    page_num = request.args.get('page')
+    if (page_num is None) or (not page_num.isdigit()):
+        page_num = 1
+    else:
+        page_num = int(page_num)
     redirect_to = url_for('webui.' + redirect_page)
     pattern = request.form.get('pattern')
     if pattern is None:
@@ -179,6 +184,7 @@ def search():
     archived = redirect_page == 'archives'
     pattern = "%%%s%%" % pattern
     links = Link.select().where(Link.archived == archived).where((Link.title % pattern) | (Link.description % pattern))
+    links = Paginated(links, page_num, ITEMS_PER_PAGE, links.count())
     print list(links)
     return render_template(
         'links_list.html',
