@@ -47,3 +47,6 @@ nosetests.xml
 ### WaikUp ###
 # Production files
 waikup/prod_settings.py
+# Development files
+.vagrant
+reset.sh
