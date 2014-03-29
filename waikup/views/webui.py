@@ -183,7 +183,7 @@ def search():
         return redirect(redirect_to)
     archived = redirect_page == 'archives'
     pattern = "%%%s%%" % pattern
-    links = Link.select().where(Link.archived == archived).where((Link.title % pattern) | (Link.description % pattern))
+    links = Link.select().where(Link.archived == archived).where((Link.title ** pattern) | (Link.description ** pattern))
     links = Paginated(links, page_num, ITEMS_PER_PAGE, links.count())
     print list(links)
     return render_template(
