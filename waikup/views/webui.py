@@ -185,7 +185,6 @@ def search():
     pattern = "%%%s%%" % pattern
     links = Link.select().where(Link.archived == archived).where((Link.title ** pattern) | (Link.description ** pattern))
     links = Paginated(links, page_num, ITEMS_PER_PAGE, links.count())
-    print list(links)
     return render_template(
         'links_list.html',
         page_name=redirect_page,
