@@ -1,0 +1,3 @@
+CREATE DATABASE waikup;
+CREATE USER waikup PASSWORD 'waikup';
+GRANT ALL PRIVILEGES ON DATABASE waikup TO waikup;
