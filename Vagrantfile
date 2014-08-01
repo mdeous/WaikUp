@@ -13,12 +13,14 @@ source /var/www/waikup/bin/activate
 cp /var/www/waikup/src/waikup_apache.conf /etc/apache2/sites-available/default
 cp /var/www/waikup/src/setupdb.sql /tmp/waikup_setupdb.sql
 chmod 777 /tmp/waikup_setupdb.sql
+cp /var/www/waikup/src/testdb.sql /tmp/waikup_testdb.sql
+chmod 777 /tmp/waikup/waikup_testdb.sql
 su postgres -c "psql --file=/tmp/waikup_setupdb.sql"
+su postgres -c "psql -d waikup --file=/tmp/waikup_testdb.sql"
 cp /var/www/waikup/src/pg_hba.conf /etc/postgresql/9.1/main/
 service postgresql restart
 cd /var/www/waikup/src
 python setup.py install
-waikup_manage setupdb
 touch /var/www/waikup/src/.htaccess
 a2enmod ssl
 service apache2 restart
