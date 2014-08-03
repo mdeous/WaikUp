@@ -2,10 +2,6 @@
     WaikUp Global JavaScript
  */
 
-hasClassName = function(element, cls) {
-    return (' '+element.className+' ').indexOf(' '+cls+' ') > -1;
-}
-
 $('.collapser').click(function() {
     var itemSelector = 'div#'+$(this).attr('id');
     if ($(itemSelector).hasClass('out')) {
@@ -27,17 +23,18 @@ $('#new-link-save').click(function() {
     return true;
 });
 $('#new-link-cancel').click(function() {
-    $('#link-url').val('');
-    $('#link-title').val('');
-    $('#link-desc').val('');
-    return true
+    $('#new-link-url').val('');
+    $('#new-link-title').val('');
+    $('#new-link-description').val('');
+    return true;
 });
 $('#chpasswd-save').click(function() {
     $('#chpasswd-form').submit();
     return true;
 });
 $('#chpasswd-cancel').click(function() {
-    $('#old-password').val('');
-    $('#new-password').val('');
-    $('#confirm-password').val('');
+    $('#chpasswd-old').val('');
+    $('#chpasswd-new').val('');
+    $('#chpasswd-confirm').val('');
+    return true;
 });
