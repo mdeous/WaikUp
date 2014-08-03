@@ -11,7 +11,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/server.
 virtualenv /var/www/waikup
 source /var/www/waikup/bin/activate
 cp /var/www/waikup/src/waikup_apache.conf /etc/apache2/sites-available/default
-cp /var/www/waikup/src/setupdb.sql /tmp/waikup_setupdb.sql
+cp /var/www/waikup/src/setup_testdb.sql /tmp/waikup_setupdb.sql
 chmod 777 /tmp/waikup_setupdb.sql
 cp /var/www/waikup/src/testdb.sql /tmp/waikup_testdb.sql
 chmod 777 /tmp/waikup/waikup_testdb.sql
