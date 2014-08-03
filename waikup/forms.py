@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask.ext.wtf import Form
-from wtforms import TextField, TextAreaField, PasswordField, SelectField
+from wtforms import TextAreaField, PasswordField, SelectField, StringField
 from wtforms.fields.html5 import URLField
 from wtforms.validators import url, required, optional, equal_to, ValidationError
 
@@ -22,7 +22,7 @@ class NewLinkForm(Form):
         'URL:',
         validators=[url(), required()]
     )
-    title = TextField(
+    title = StringField(
         'Title:',
         validators=[required()]
     )
