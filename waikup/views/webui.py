@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 
 from waikup.lib import globals as g
 from waikup.models import Link, Category, Paginated
-from waikup.forms import NewLinkForm, ChangePasswordForm
+from waikup.forms import NewLinkForm, ChangePasswordForm, EditLinkForm
 
 ITEMS_PER_PAGE = 10
 
@@ -191,10 +191,38 @@ def search():
         links=links
     )
 
-@webui.route('/link_modal/<int:linkid>', methods=['GET', 'POST'])
+@webui.route('/edit_link/<int:linkid>', methods=['GET', 'POST'])
 @g.auth.login_required
 def edit_link(linkid):
-    if request.method == 'POST':
-        return redirect(url_for('webui.index'))
+    form = EditLinkForm()
+    form.set_category_choices()
     link = Link.get(Link.id == linkid)
-    return render_template('edit_link_modal_content.html', link=link)
+    redirect_page = request.args.get('redir', 'index')
+    redirect_to = url_for('webui.'+redirect_page)
+    if request.method == 'POST':
+        user = g.auth.get_logged_in_user()
+        if not user.admin and user.username != link.author.username:
+            flash("You are not allowed to edit this link: %d" % link.id, category='danger')
+            return redirect(redirect_to)
+        if form.validate_on_submit():
+            link.title = form.title.data
+            link.url = form.url.data
+            link.description = form.description.data
+            category = Category.get(Category.name == form.category.data)
+            link.category = category
+            link.save()
+            flash("Updated link: %d" % link.id)
+        else:
+            for field_name, field_errors in form.errors.iteritems():
+                for field_error in field_errors:
+                    flash("%s (field: %s)" % (field_error, field_name), category='danger')
+        return redirect(redirect_to)
+    form.title.data = link.title
+    form.url.data = link.url
+    form.description.data = link.description
+    form.category.data = link.category.name
+    return render_template(
+        'edit_link_modal_content.html',
+        edit_link_form=form,
+        link=link
+    )

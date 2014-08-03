@@ -15,7 +15,12 @@ def is_category(form, field):
         raise ValidationError("Not a valid category")
 
 
-class NewLinkForm(Form):
+class FormWithCategory(Form):
+    def set_category_choices(self):
+        self.category.choices = [(c.name, c.name) for c in Category.select()]
+
+
+class NewLinkForm(FormWithCategory):
     name = 'new-link'
     endpoint = 'webui.new_link'
     url = URLField(
@@ -36,9 +41,6 @@ class NewLinkForm(Form):
         default=settings.DEFAULT_CATEGORY
     )
 
-    def set_category_choices(self):
-        self.category.choices = [(c.name, c.name) for c in Category.select()]
-
 
 class ChangePasswordForm(Form):
     name = 'chpasswd'
@@ -54,4 +56,26 @@ class ChangePasswordForm(Form):
     confirm = PasswordField(
         'Confirm password',
         validators=[required(), equal_to('new', message="Passwords don't match")]
+    )
+
+
+class EditLinkForm(FormWithCategory):
+    name = 'edit-link'
+    endpoint = 'webui.edit_link'
+    url = URLField(
+        'URL:',
+        validators=[url(), required()]
+    )
+    title = StringField(
+        'Title:',
+        validators=[required()]
+    )
+    description = TextAreaField(
+        'Description:',
+        validators=[required()]
+    )
+    category = SelectField(
+        'Category:',
+        validators=[optional(), is_category],
+        default=settings.DEFAULT_CATEGORY
     )
