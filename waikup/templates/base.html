@@ -6,7 +6,8 @@
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}"/>
     <meta name="description" content="Collaborative news sharing platform">
     <meta name="keywords" content="RSS,Atom,feeds,collaboration">
-    <meta name="author" content="Atheos">
+    <meta name="author" content="Mathieu D. (MatToufoutu)">
+    <meta name="copyright" content="Mathieu D. (MatToufoutu)">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="charset" content="UTF-8">
@@ -29,9 +30,10 @@
     {% endfor %}
     {% block content -%}{{ lipsum() }}{%- endblock %}
 </div><!-- /.container -->
-{% include 'new_link.html' %}
+{% include 'new_link_modal.html' %}
 {% include 'change_passwd.html' %}
-{% include "user_profile.html" %}
+{% include 'user_profile.html' %}
+{% include 'link_modal.html' %}
 {%- block js -%}
     <script type="text/javascript" src="{{ url_for('static', filename="js/jquery-2.0.3.min.js") }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename="js/bootstrap.min.js") }}"></script>

@@ -34,6 +34,14 @@
                             <span class="glyphicon glyphicon-folder-open"></span>
                         {% endif %}
                     </a>&nbsp;
+                    {% if user.admin or link.author.username == user.username %}
+                        <a data-toggle="modal"
+                           data-target="#link-modal"
+                           href="{{ url_for('webui.link_modal', linkid=link.id) }}"
+                           title="edit link">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                    {% endif %}
                     {% if user.admin %}
                         <a href="{{ url_for('webui.delete_link', redir=page_name, linkid=link.id) }}"
                            class="delete-link link-action"

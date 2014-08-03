@@ -190,3 +190,10 @@ def search():
         page_name=redirect_page,
         links=links
     )
+
+@webui.route('/link_modal/<int:linkid>', methods=['GET', 'POST'])
+@g.auth.login_required
+def link_modal(linkid):
+    redirect_page = url_for('webui.' + request.args.get('redir', 'index'))
+    link = Link.get(Link.id == linkid)
+    return render_template('link_modal_content.html', link=link)
