@@ -193,7 +193,8 @@ def search():
 
 @webui.route('/link_modal/<int:linkid>', methods=['GET', 'POST'])
 @g.auth.login_required
-def link_modal(linkid):
-    redirect_page = url_for('webui.' + request.args.get('redir', 'index'))
+def edit_link(linkid):
+    if request.method == 'POST':
+        return redirect(url_for('webui.index'))
     link = Link.get(Link.id == linkid)
-    return render_template('link_modal_content.html', link=link)
+    return render_template('edit_link_modal_content.html', link=link)
