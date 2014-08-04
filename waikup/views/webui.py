@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 
 from waikup.lib import globals as g
 from waikup.models import Link, Category, Paginated
-from waikup.forms import NewLinkForm, ChangePasswordForm, EditLinkForm
+from waikup.forms import NewLinkForm, ChangePasswordForm, EditLinkForm, SimpleLinkForm, flash_form_errors
 
 ITEMS_PER_PAGE = 10
 
@@ -15,32 +15,38 @@ webui = Blueprint('webui', __name__)
 def list_links(page_name):
     toggle_link_id = request.args.get('toggle')
     page_num = request.args.get('page')
+    toggle_form = SimpleLinkForm()
+    delete_form = SimpleLinkForm()
     if (page_num is None) or (not page_num.isdigit()):
         page_num = 1
     else:
         page_num = int(page_num)
-    if toggle_link_id is not None:
+    if toggle_form.validate_on_submit():
         result_ok = Link.toggle_archiving(toggle_link_id)
         if result_ok:
             flash("Archived link %s" % toggle_link_id, category="success")
         else:
             flash("Link does not exist: %s" % toggle_link_id, category="danger")
+    else:
+        flash_form_errors(toggle_form)
     links = Link.select().where(Link.archived == (page_name == 'archives')).order_by(Link.submitted.desc())
     links = Paginated(links, page_num, ITEMS_PER_PAGE, links.count())
     return render_template(
         'links_list.html',
         page_name=page_name,
-        links=links
+        links=links,
+        toggle_form=toggle_form,
+        delete_form=delete_form
     )
 
 
-@webui.route('/')
+@webui.route('/', methods=['GET', 'POST'])
 @g.auth.login_required
 def index():
     return list_links('index')
 
 
-@webui.route('/archives')
+@webui.route('/archives', methods=['GET', 'POST'])
 @g.auth.login_required
 def archives():
     return list_links('archives')
@@ -93,25 +99,29 @@ def change_password():
     return redirect(redirect_to)
 
 
-@webui.route('/delete')
+@webui.route('/delete', methods=['POST'])
 @g.auth.login_required
 def delete_link():
     redirect_to = request.args.get('redir', 'index')
     redirect_to = url_for('webui.'+redirect_to)
     linkid = request.args.get('linkid')
-    if linkid is None:
-        flash("No link specified", category='danger')
-        return redirect(redirect_to)
-    link = Link.get(Link.id == linkid)
-    if link is None:
-        flash("Link not found: %s" % linkid)
-        return redirect(redirect_to)
-    user = g.auth.get_logged_in_user()
-    if not user.admin or user.username != link.author.username:
-        flash("You are not allowed to delete this link: %s" % linkid, category='danger')
-        return redirect(redirect_to)
-    link.delete_instance()
-    flash("Deleted link: %s" % linkid, category='success')
+    delete_form = SimpleLinkForm()
+    if delete_form.validate_on_submit():
+        if linkid is None:
+            flash("No link specified", category='danger')
+            return redirect(redirect_to)
+        link = Link.get(Link.id == linkid)
+        if link is None:
+            flash("Link not found: %s" % linkid)
+            return redirect(redirect_to)
+        user = g.auth.get_logged_in_user()
+        if (not user.admin) and (user.username != link.author.username):
+            flash("You are not allowed to delete this link: %s" % linkid, category='danger')
+            return redirect(redirect_to)
+        link.delete_instance()
+        flash("Deleted link: %s" % linkid, category='success')
+    else:
+        flash_form_errors(delete_form)
     return redirect(redirect_to)
 
 
@@ -207,7 +217,7 @@ def edit_link(linkid):
         return redirect(redirect_to)
     if request.method == 'POST':
         user = g.auth.get_logged_in_user()
-        if not user.admin and user.username != link.author.username:
+        if (not user.admin) and (user.username != link.author.username):
             flash("You are not allowed to edit this link: %d" % link.id, category='danger')
             return redirect(redirect_to)
         if form.validate_on_submit():
@@ -219,9 +229,7 @@ def edit_link(linkid):
             link.save()
             flash("Updated link: %d" % link.id)
         else:
-            for field_name, field_errors in form.errors.iteritems():
-                for field_error in field_errors:
-                    flash("%s (field: %s)" % (field_error, field_name), category='danger')
+            flash_form_errors(form)
         return redirect(redirect_to)
     form.title.data = link.title
     form.url.data = link.url

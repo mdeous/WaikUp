@@ -42,10 +42,15 @@ $('.edit-link-modal').on('shown.bs.modal', function() {
     var modalID = this.getAttribute('id');
     var tmp_array = modalID.split('-');
     var link_id = tmp_array[tmp_array.length-1];
-    console.log(link_id);
     $('#edit-link-save-'+link_id).click(function() {
-        console.log("button clicked");
         $('#edit-link-form-'+link_id).submit();
         return true;
     });
+});
+$('.link-post-action').click(function() {
+    var aLinkID = $(this).attr('id').split('-')
+    var linkID = aLinkID[aLinkID.length-1];
+    var actionType = aLinkID[0]
+    $('#'+actionType+'-form-'+linkID).submit();
+    return false;
 });

@@ -17,16 +17,16 @@
             <tr>
                 <td>
                     <a id="link{{ link.id }}"
-                       class="collapser link-action"
+                       class="collapser"
                        data-toggle="collapse"
                        data-target="link{{ link.id }}"
                        href="#"
                        title="show description">
                         <span class="glyphicon glyphicon-eye-open"></span>
                     </a>&nbsp;
-                    <a class="toggle-archive link-action"
-                       id="{{ link.url }}"
-                       href="{{ url_for('webui.'+page_name, toggle=link.id) }}"
+                    <a class="toggle-archive link-post-action"
+                       id="toggle-link-{{ link.id }}"
+                       href="#"
                        title="toggle archiving">
                         {% if page_name == 'index' %}
                             <span class="glyphicon glyphicon-folder-close"></span>
@@ -34,6 +34,12 @@
                             <span class="glyphicon glyphicon-folder-open"></span>
                         {% endif %}
                     </a>&nbsp;
+                    <form class="hidden" method="POST"
+                          id="toggle-form-{{ link.id }}"
+                          action="{{ url_for('webui.'+page_name, toggle=link.id) }}">
+                      {{ delete_form.csrf_token }}
+                      {{ delete_form.link_id(value=link.id) }}
+                    </form>
                     {% if user.admin or link.author.username == user.username %}
                         <a data-toggle="modal"
                            data-target="#edit-link-modal-{{ link.id }}"
@@ -41,12 +47,18 @@
                            title="edit link">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </a>
-                        <a href="{{ url_for('webui.delete_link', redir=page_name, linkid=link.id) }}"
-                           class="delete-link link-action"
-                           id="{{ link.url }}"
+                        <a href="#"
+                           class="delete-link link-post-action"
+                           id="delete-link-{{ link.id }}"
                            title="delete">
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
+                        <form class="hidden" method="POST"
+                              id="delete-form-{{ link.id }}"
+                              action="{{ url_for('webui.delete_link', redir=page_name, linkid=link.id) }}">
+                          {{ delete_form.csrf_token }}
+                          {{ delete_form.link_id(value=link.id) }}
+                        </form>
                     {% endif %}
                     &nbsp;&nbsp;<a href="{{ link.url }}" target="_blank">{{ link.title }}
                 </a></td>
@@ -85,19 +97,4 @@
      aria-hidden="true">
     </div>
   {% endfor %}
-
-{% endblock %}
-{% block extra_js %}
-    <script type="text/javascript">
-    $('.link-action').click(function() {
-            var linkURL = $(this).attr('id');
-            var result = false;
-            if ($(this).hasClass('toggle-archive')) {
-                result = confirm("You are about to toggle archiving on a link:\n"+linkURL+"\nAre you sure?");
-            } else if ($(this).hasClass('delete-link')) {
-                result = confirm("You are about to delete a link:\n"+linkURL+"\nAre you sure?");
-            }
-            return result;
-    });
-    </script>
 {% endblock %}

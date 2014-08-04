@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from flask import flash
 from flask.ext.wtf import Form
-from wtforms import TextAreaField, PasswordField, SelectField, StringField
+from wtforms import TextAreaField, PasswordField, SelectField, StringField, IntegerField
 from wtforms.fields.html5 import URLField
 from wtforms.validators import url, required, optional, equal_to, ValidationError
 
@@ -15,9 +16,19 @@ def is_category(form, field):
         raise ValidationError("Not a valid category")
 
 
+def flash_form_errors(form):
+    for field_name, field_errors in form.errors.iteritems():
+        for field_error in field_errors:
+            flash("%s (field: %s)" % (field_error, field_name), category='danger')
+
+
 class FormWithCategory(Form):
     def set_category_choices(self):
         self.category.choices = [(c.name, c.name) for c in Category.select()]
+
+
+class SimpleLinkForm(Form):
+    link_id = IntegerField(validators=[required()])
 
 
 class NewLinkForm(FormWithCategory):
