@@ -41,8 +41,6 @@
                            title="edit link">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </a>
-                    {% endif %}
-                    {% if user.admin %}
                         <a href="{{ url_for('webui.delete_link', redir=page_name, linkid=link.id) }}"
                            class="delete-link link-action"
                            id="{{ link.url }}"

@@ -94,7 +94,7 @@ def change_password():
 
 
 @webui.route('/delete')
-@g.auth.admin_required
+@g.auth.login_required
 def delete_link():
     redirect_to = request.args.get('redir', 'index')
     redirect_to = url_for('webui.'+redirect_to)
@@ -102,11 +102,14 @@ def delete_link():
     if linkid is None:
         flash("No link specified", category='danger')
         return redirect(redirect_to)
-    links = list(Link.select().where(Link.id == linkid))
-    if not links:
-        flash("Link does not exist: %s" % linkid, category='danger')
+    link = Link.get(Link.id == linkid)
+    if link is None:
+        flash("Link not found: %s" % linkid)
         return redirect(redirect_to)
-    link = links[0]
+    user = g.auth.get_logged_in_user()
+    if not user.admin or user.username != link.author.username:
+        flash("You are not allowed to delete this link: %s" % linkid, category='danger')
+        return redirect(redirect_to)
     link.delete_instance()
     flash("Deleted link: %s" % linkid, category='success')
     return redirect(redirect_to)
@@ -199,6 +202,9 @@ def edit_link(linkid):
     link = Link.get(Link.id == linkid)
     redirect_page = request.args.get('redir', 'index')
     redirect_to = url_for('webui.'+redirect_page)
+    if link is None:
+        flash("Link not found: %d" % linkid, category='danger')
+        return redirect(redirect_to)
     if request.method == 'POST':
         user = g.auth.get_logged_in_user()
         if not user.admin and user.username != link.author.username:
