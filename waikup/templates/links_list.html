@@ -89,8 +89,7 @@
 {% endblock %}
 {% block extra_js %}
     <script type="text/javascript">
-    $('.link-action').each(function(index, item) {
-        $(item).click(function() {
+    $('.link-action').click(function() {
             var linkURL = $(this).attr('id');
             var result = false;
             if ($(this).hasClass('toggle-archive')) {
@@ -99,7 +98,6 @@
                 result = confirm("You are about to delete a link:\n"+linkURL+"\nAre you sure?");
             }
             return result;
-        });
     });
     </script>
 {% endblock %}
