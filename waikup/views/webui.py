@@ -24,7 +24,7 @@ def list_links(page_name):
     if toggle_form.validate_on_submit():
         result_ok = Link.toggle_archiving(toggle_link_id)
         if result_ok:
-            flash("Archived link %s" % toggle_link_id, category="success")
+            flash("Toggled archiving for link %s" % toggle_link_id, category="success")
         else:
             flash("Link does not exist: %s" % toggle_link_id, category="danger")
     else:
@@ -242,5 +242,6 @@ def edit_link(linkid):
     return render_template(
         'edit_link_modal_content.html',
         edit_link_form=form,
-        link=link
+        link=link,
+        page_name=redirect_page
     )

@@ -43,7 +43,7 @@
                     {% if user.admin or link.author.username == user.username %}
                         <a data-toggle="modal"
                            data-target="#edit-link-modal-{{ link.id }}"
-                           href="{{ url_for('webui.edit_link', linkid=link.id) }}"
+                           href="{{ url_for('webui.edit_link', linkid=link.id, redir=page_name) }}"
                            title="edit link">
                             <span class="glyphicon glyphicon-pencil"></span>
                         </a>
