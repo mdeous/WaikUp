@@ -12,8 +12,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="charset" content="UTF-8">
     {%- block css -%}
-        <link rel="stylesheet" href="{{ url_for('static', filename="css/bootstrap.min.css") }}"/>
-        <link rel="stylesheet" href="{{ url_for('static', filename="css/bootstrap-theme.min.css") }}"/>
+        <link rel="stylesheet" href="{{ url_for('static', filename="css/bootstrap-3.2.0.min.css") }}"/>
+{#        <link rel="stylesheet" href="{{ url_for('static', filename="css/bootstrap-theme-3.2.0.min.css") }}"/>#}
         <link rel="stylesheet" href="{{ url_for('static', filename="css/waikup.css") }}"/>
         {%- block extra_css -%}{%- endblock -%}
     {%- endblock -%}
@@ -34,8 +34,8 @@
 {% include 'change_passwd.html' %}
 {% include 'user_profile.html' %}
 {%- block js -%}
-    <script type="text/javascript" src="{{ url_for('static', filename="js/jquery-2.0.3.min.js") }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename="js/bootstrap.min.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename="js/jquery-2.1.1.min.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename="js/bootstrap-3.2.0.min.js") }}"></script>
 {#    <script type="text/javascript" src="{{ url_for('static', filename="js/WaikupAPI.js") }}"></script>#}
     <script type="text/javascript" src="{{ url_for('static', filename="js/waikup.js") }}"></script>
     {% block extra_js %}{% endblock %}

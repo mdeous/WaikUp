@@ -8,9 +8,9 @@
 
 # Packages
 *.egg
-*.egg-info
-dist
-build
+*.egg-info/
+dist/
+build/
 eggs
 parts
 sdist
@@ -48,5 +48,5 @@ nosetests.xml
 # Production files
 waikup/prod_settings.py
 # Development files
-.vagrant
+.vagrant/
 reset.sh

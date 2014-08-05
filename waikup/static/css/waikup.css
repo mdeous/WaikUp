@@ -10,6 +10,9 @@ body {
     font-family: 'chintzy',serif;
     font-size: 200%;
 }
+#navbar-search-form {
+    margin-right: 5px;
+}
 #login-form {
     text-align: center;
 }
