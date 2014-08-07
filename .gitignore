@@ -50,3 +50,4 @@ waikup/prod_settings.py
 # Development files
 .vagrant/
 reset.sh
+.htaccess
