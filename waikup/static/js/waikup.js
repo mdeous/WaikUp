@@ -48,9 +48,9 @@ $('.edit-link-modal').on('shown.bs.modal', function() {
     });
 });
 $('.link-post-action').click(function() {
-    var aLinkID = $(this).attr('id').split('-')
+    var aLinkID = $(this).attr('id').split('-');
     var linkID = aLinkID[aLinkID.length-1];
-    var actionType = aLinkID[0]
+    var actionType = aLinkID[0];
     $('#'+actionType+'-form-'+linkID).submit();
     return false;
 });

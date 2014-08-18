@@ -37,7 +37,7 @@
                     <form class="hidden" method="POST"
                           id="toggle-form-{{ link.id }}"
                           action="{{ url_for('webui.'+page_name, toggle=link.id) }}">
-                      {{ delete_form.csrf_token }}
+                      {{ delete_form.csrf_token() }}
                       {{ delete_form.link_id(value=link.id) }}
                     </form>
                     {% if user.admin or link.author.username == user.username %}
@@ -57,7 +57,7 @@
                         <form class="hidden" method="POST"
                               id="delete-form-{{ link.id }}"
                               action="{{ url_for('webui.delete_link', redir=page_name, linkid=link.id) }}">
-                          {{ delete_form.csrf_token }}
+                          {{ delete_form.csrf_token() }}
                           {{ delete_form.link_id(value=link.id) }}
                         </form>
                     {% endif %}
