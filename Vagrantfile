@@ -26,9 +26,9 @@ chmod -R o+w /var/www/waikup
 su vagrant -c "virtualenv /var/www/waikup && \
 source /var/www/waikup/bin/activate && \
 cd /var/www/waikup/src && \
-python setup.py develop"
+python setup.py develop && \
+pip install flask-debugtoolbar"
 SCRIPT
-
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,

@@ -16,7 +16,9 @@ from waikup.lib.errors import ApiError, http_error
 app = Flask(__name__)
 app.config.from_object(settings)
 g.app = app
-
+if app.config.get('DEBUG'):
+    from flask_debugtoolbar import DebugToolbarExtension
+    toolbar = DebugToolbarExtension(app)
 
 # Setup database
 
