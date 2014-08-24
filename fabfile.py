@@ -19,11 +19,6 @@ SERVICES = [
 VIRTUALENV_ACTIVATE = '/var/www/waikup/bin/activate'
 
 
-def start_services():
-    for service in SERVICES:
-        sudo('service %s start' % service)
-
-
 def venv_run(activate, cmd, folder=None):
     virtualenv = 'source %s' % activate
     with prefix(virtualenv):
