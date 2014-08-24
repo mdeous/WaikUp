@@ -12,7 +12,7 @@ ITEMS_PER_PAGE = 10
 webui = Blueprint('webui', __name__)
 
 
-def list_links(page_name):
+def list_links(page_name, links=None):
     toggle_link_id = request.args.get('toggle')
     page_num = request.args.get('page')
     toggle_form = SimpleLinkForm()
@@ -29,7 +29,8 @@ def list_links(page_name):
             flash("Link does not exist: %s" % toggle_link_id, category="danger")
     else:
         flash_form_errors(toggle_form)
-    links = Link.select().where(Link.archived == (page_name == 'archives')).order_by(Link.submitted.desc())
+    if links is None:
+        links = Link.select().where(Link.archived == (page_name == 'archives')).order_by(Link.submitted.desc())
     links = Paginated(links, page_num, ITEMS_PER_PAGE, links.count())
     return render_template(
         'links_list.html',
@@ -194,18 +195,13 @@ def search():
     pattern = request.form.get('pattern')
     if pattern is None:
         flash("No pattern given", category='danger')
-        return redirect(redirect_to)
+        return list_links(redirect_page)
     archived = redirect_page == 'archives'
     pattern = "%%%s%%" % pattern
     links = Link.select().where(Link.archived == archived).where(
         (Link.title ** pattern) | (Link.description ** pattern)
     )
-    links = Paginated(links, page_num, ITEMS_PER_PAGE, links.count())
-    return render_template(
-        'links_list.html',
-        page_name=redirect_page,
-        links=links
-    )
+    return list_links(redirect_page, links=links)
 
 
 @webui.route('/edit_link/<int:linkid>', methods=['GET', 'POST'])
