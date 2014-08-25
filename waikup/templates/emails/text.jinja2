@@ -3,8 +3,9 @@ Bonjour,
 Voici les liens sélectionnés par les consultants durant la semaine dernière:
 
 {% for link in links %}
-    {{ loop.index }}. [{{ link.category.name }}] {{ link.title|title|safe }} - {{ link.url }} ({{ link.author.full_name }})
-       -> {{ link.description|safe }}
+  {{ loop.index }}. [{{ link.category.name }}] {{ link.title|title|safe }} - {{ link.url }} ({{ link.author.full_name }}
+  )
+  -> {{ link.description|safe }}
 {% endfor %}
 
 Bonne lecture!

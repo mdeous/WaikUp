@@ -3,12 +3,13 @@ Bonjour,
 Voici les derniers liens sélectionnés par les consultants:
 <br/>
 <ol>
-{% for link in links %}
+  {% for link in links %}
     <li>
-        [{{ link.category.name }}] <a href="{{ link.url }}"><strong>{{ link.title }}</strong></a> ({{ link.author.full_name }})
+      [{{ link.category.name }}] <a href="{{ link.url }}"><strong>{{ link.title }}</strong></a>
+      ({{ link.author.full_name }})
     </li>
     <p>{{ link.description }}</p>
-{% endfor %}
+  {% endfor %}
 </ol>
 <br/>
 Bonne lecture!

@@ -4,7 +4,8 @@
   <h4 class="modal-title" id="link-modal-label">{{ link.title }}</h4>
 </div>
 <div class="modal-body">
-  <form action="{{ url_for(edit_link_form.endpoint, linkid=link.id, redir=page_name) }}" method="POST" id="{{ edit_link_form.name }}-form-{{ link.id }}">
+  <form action="{{ url_for(edit_link_form.endpoint, linkid=link.id, redir=page_name) }}" method="POST"
+        id="{{ edit_link_form.name }}-form-{{ link.id }}">
     {{ edit_link_form.csrf_token() }}
     {% for field in edit_link_form %}
       {% if field.name != 'csrf_token' %}
