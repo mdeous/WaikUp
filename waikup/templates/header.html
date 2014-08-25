@@ -56,15 +56,17 @@
                 </ul>
                 <form class="navbar-form navbar-right">
                     <button class="btn btn-primary"
+                            type="button"
                             data-toggle="modal"
                             data-target="#new-link-modal"
                     >
                         <span class="glyphicon glyphicon-link"></span>&nbsp;&nbsp;Submit link
                     </button>
                 </form>
-                <form action="{{ url_for('webui.search', redir=page_name) }}" class="navbar-form navbar-right" method="post">
+                <form action="{{ url_for('webui.search') }}" class="navbar-form navbar-right" method="get">
                     <div class="form-group">
                         <input class="form-control" type="text" name="pattern" />
+                        <input type="hidden" name="page" value="{{ page_name }}"/>
                     </div>
                     <button type="submit" class="btn btn-default">Search</button>
                 </form>
