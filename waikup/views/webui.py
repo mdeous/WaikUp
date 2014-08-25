@@ -182,17 +182,18 @@ def stats():
     )
 
 
-@webui.route('/search', methods=['POST'])
+@webui.route('/search', methods=['GET'])
 @g.auth.login_required
 def search():
-    redirect_page = request.args.get('redir', 'index')
+    redirect_page = request.args.get('page', 'index')
     page_num = request.args.get('page')
     if (page_num is None) or (not page_num.isdigit()):
         page_num = 1
     else:
         page_num = int(page_num)
     redirect_to = url_for('webui.' + redirect_page)
-    pattern = request.form.get('pattern')
+    # pattern = request.form.get('pattern')
+    pattern = request.args.get('pattern')
     if pattern is None:
         flash("No pattern given", category='danger')
         return list_links(redirect_page)
