@@ -2,6 +2,12 @@
     WaikUp Global JavaScript
  */
 
+function submitFormLink(aLinkID) {
+    var linkID = aLinkID[aLinkID.length-1];
+    var actionType = aLinkID[0];
+    $('#'+actionType+'-form-'+linkID).submit();
+}
+
 $('.collapser').click(function() {
     var itemSelector = 'div#'+$(this).attr('id');
     if ($(itemSelector).hasClass('out')) {
@@ -47,10 +53,16 @@ $('.edit-link-modal').on('shown.bs.modal', function() {
         return true;
     });
 });
-$('.link-post-action').click(function() {
+$('.delete-link').click(function(e) {
+    var answer = confirm('Are you sure you want to delete this link?');
+    if (answer) {
+        var aLinkID = $(this).attr('id').split('-');
+        submitFormLink(aLinkID);
+    }
+    return false;
+});
+$('.toggle-archive').click(function() {
     var aLinkID = $(this).attr('id').split('-');
-    var linkID = aLinkID[aLinkID.length-1];
-    var actionType = aLinkID[0];
-    $('#'+actionType+'-form-'+linkID).submit();
+    submitFormLink(aLinkID);
     return false;
 });
