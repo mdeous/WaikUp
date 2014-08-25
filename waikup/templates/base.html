@@ -2,43 +2,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>WaikUp - {% block title %}{% endblock %}</title>
-    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}"/>
-    <meta name="description" content="Collaborative news sharing platform">
-    <meta name="keywords" content="RSS,Atom,feeds,collaboration">
-    <meta name="author" content="Mathieu D. (MatToufoutu)">
-    <meta name="copyright" content="Mathieu D. (MatToufoutu)">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="charset" content="UTF-8">
-    {%- block css -%}
-        <link rel="stylesheet" href="{{ url_for('static', filename="css/bootstrap-3.2.0.min.css") }}"/>
-{#        <link rel="stylesheet" href="{{ url_for('static', filename="css/bootstrap-theme-3.2.0.min.css") }}"/>#}
-        <link rel="stylesheet" href="{{ url_for('static', filename="css/waikup.css") }}"/>
-        {%- block extra_css -%}{%- endblock -%}
-    {%- endblock -%}
+  <title>WaikUp - {% block title %}{% endblock %}</title>
+  <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}"/>
+  <meta name="description" content="Collaborative news sharing platform">
+  <meta name="keywords" content="RSS,Atom,feeds,collaboration">
+  <meta name="author" content="Mathieu D. (MatToufoutu)">
+  <meta name="copyright" content="Mathieu D. (MatToufoutu)">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="charset" content="UTF-8">
+  {%- block css -%}
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/bootstrap-3.2.0.min.css") }}"/>
+    {#        <link rel="stylesheet" href="{{ url_for('static', filename="css/bootstrap-theme-3.2.0.min.css") }}"/>#}
+    <link rel="stylesheet" href="{{ url_for('static', filename="css/waikup.css") }}"/>
+    {%- block extra_css -%}{%- endblock -%}
+  {%- endblock -%}
 </head>
 <body>
 {% include "header.html" %}
 <div class="container">
-    {% for category, message in get_flashed_messages(with_categories=true) %}
-        {% set category="info" if category=="message" else category %}
-        <div class="alert alert-dismissable alert-{{ category }} fade in">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong class="underline">{{ ('error' if category == 'danger' else category)|title }}</strong>: {{ message }}
-        </div>
-    {% endfor %}
-    {% block content -%}{{ lipsum() }}{%- endblock %}
-</div><!-- /.container -->
+  {% for category, message in get_flashed_messages(with_categories=true) %}
+    {% set category="info" if category=="message" else category %}
+    <div class="alert alert-dismissable alert-{{ category }} fade in">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong class="underline">{{ ('error' if category == 'danger' else category)|title }}</strong>: {{ message }}
+    </div>
+  {% endfor %}
+  {% block content -%}{{ lipsum() }}{%- endblock %}
+</div>
+<!-- /.container -->
 {% include 'new_link_modal.html' %}
 {% include 'change_passwd.html' %}
 {% include 'user_profile.html' %}
 {%- block js -%}
+  {% if config.DEBUG %}
+    <script type="text/javascript" src="{{ url_for('static', filename="js/jquery-2.1.1.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename="js/bootstrap-3.2.0.js") }}"></script>
+  {% else %}
     <script type="text/javascript" src="{{ url_for('static', filename="js/jquery-2.1.1.min.js") }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename="js/bootstrap-3.2.0.min.js") }}"></script>
-{#    <script type="text/javascript" src="{{ url_for('static', filename="js/WaikupAPI.js") }}"></script>#}
-    <script type="text/javascript" src="{{ url_for('static', filename="js/waikup.js") }}"></script>
-    {% block extra_js %}{% endblock %}
+  {% endif %}
+  {#    <script type="text/javascript" src="{{ url_for('static', filename="js/WaikupAPI.js") }}"></script>#}
+  <script type="text/javascript" src="{{ url_for('static', filename="js/waikup.js") }}"></script>
+  {% block extra_js %}{% endblock %}
 {%- endblock %}
 </body>
 </html>
