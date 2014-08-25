@@ -1,3 +1,4 @@
+{% if links %}
 Bonjour,
 
 Voici les liens sélectionnés par les consultants durant la semaine dernière:
@@ -9,3 +10,11 @@ Voici les liens sélectionnés par les consultants durant la semaine dernière:
 {% endfor %}
 
 Bonne lecture!
+{% else %}
+Bonjour,
+
+Cette semaine, aucun mail n'a été sélectionné par les consultants.
+N'hésitez pas à contribuer!
+
+Bonne journée.
+{% endif %}

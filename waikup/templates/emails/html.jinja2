@@ -1,5 +1,6 @@
 Bonjour,
 <br/><br/>
+{% if links %}
 Voici les derniers liens sélectionnés par les consultants:
 <br/>
 <ol>
@@ -13,4 +14,10 @@ Voici les derniers liens sélectionnés par les consultants:
 </ol>
 <br/>
 Bonne lecture!
+{% else %}
+Cette semaine, aucun mail n'a été sélectionné par les consultants.
+N'hésitez pas à contribuer!
+<br/>
+Bonne journée.
+{% endif %}
 <br/><br/>
