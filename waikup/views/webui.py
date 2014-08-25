@@ -201,7 +201,14 @@ def search():
     links = Link.select().where(Link.archived == archived).where(
         (Link.title ** pattern) | (Link.description ** pattern)
     )
-    return list_links(redirect_page, links=links)
+    links = Paginated(links, page_num, ITEMS_PER_PAGE, links.count())
+    return render_template(
+        'links_list.html',
+        page_name=redirect_page,
+        links=links,
+        toggle_form=SimpleLinkForm(),
+        delete_form=SimpleLinkForm()
+    )
 
 
 @webui.route('/edit_link/<int:linkid>', methods=['GET', 'POST'])
