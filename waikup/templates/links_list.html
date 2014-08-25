@@ -77,20 +77,16 @@
     </tbody>
   </table>
   </div>
-  {% if links.pages > 1 and page_name in ['index', 'archives'] %}
+  {% if links.pages > 1 %}
     <div class="row col-md-4 col-md-offset-4">
       <ul class="pagination" style="text-align: center">
+        {% set previous = links.page - 1 %}
+        {% set next = links.page + 1 %}
         <li{% if not links.has_previous %} class="disabled"{% endif %}><a
-            href="{{ url_for('webui.'+page_name, page=1) }}">&laquo;</a></li>
-        {% set end_range = links.pages + 1 %}
-        {% for page_num in range(1, end_range) %}
-          <li{% if links.page == page_num %} class="active"{% endif %}>
-            <a href="{{ url_for('webui.'+page_name, page=page_num) }}">{{ page_num }}{% if links.page == page_num %}
-              <span class="sr-only">(current)</span>{% endif %}</a>
-          </li>
-        {% endfor %}
+            href="{{ url_for('webui.'+page_name, page=previous) }}"><strong>&laquo;</strong></a></li>
+        <li class="disabled "><a href="#">{{ links.page }} / {{ links.pages }}</a></li>
         <li{% if not links.has_next %} class="disabled" {% endif %}><a
-            href="{{ url_for('webui.'+page_name, page=links.pages) }}">&raquo;</a></li>
+            href="{{ url_for('webui.'+page_name, page=next) }}"><strong>&raquo;</strong></a></li>
       </ul>
     </div>
   {% endif %}
