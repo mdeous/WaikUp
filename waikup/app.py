@@ -36,14 +36,16 @@ g.mail = mail
 # Setup authentication and admin panel
 
 from flask.ext.peewee.admin import Admin
-from waikup.models import HybridAuth
+from waikup.lib.auth import ApiAuth, WebAuth
+# from waikup.models import HybridAuth
 from waikup.models import User, Token, Link, Category
 from waikup.models import UserAdmin, TokenAdmin, LinkAdmin, CategoryAdmin
 
-auth = HybridAuth(app, db)
-g.auth = auth
 
-admin = Admin(app, auth)
+g.api_auth = ApiAuth()
+g.auth = WebAuth(app, db)
+
+admin = Admin(app, g.auth)
 admin.register(User, UserAdmin)
 admin.register(Token, TokenAdmin)
 admin.register(Link, LinkAdmin)
@@ -54,13 +56,11 @@ g.admin = admin
 
 # Setup views
 
-# from waikup.views.api.links import links
-# from waikup.views.api.users import users
+from waikup.views.api import api
 from waikup.views.webui import webui
 
 app.register_blueprint(webui)
-# app.register_blueprint(links, url_prefix='/api/links')
-# app.register_blueprint(users, url_prefix='/api/users')
+app.register_blueprint(api, url_prefix='/api')
 
 
 @app.route('/links.atom')
@@ -99,16 +99,6 @@ def global_forms():
         'new_link_form': newlink_form,
         'chpasswd_form': ChangePasswordForm()
     }
-
-
-# @app.context_processor
-# def global_variables():
-#     from waikup.models import User
-#     api_user = User.get(username='waikupapi')
-#     return {
-#         'internal_api_token': api_user.token.get().token
-#     }
-
 
 # Setup custom error handlers
 

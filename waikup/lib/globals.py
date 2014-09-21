@@ -8,4 +8,5 @@ app = None
 db = None
 admin = None
 mail = None
+api_auth = None
 auth = None

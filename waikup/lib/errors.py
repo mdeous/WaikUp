@@ -15,6 +15,11 @@ class ApiError(Exception):
 
 
 def http_error(error):
-    response = jsonify({"success": False, "message": getattr(error, 'name', 'Unknown error')})
-    response.status_code = getattr(error, 'code', 500)
+    err_code = getattr(error, 'code', 500)
+    response = jsonify({
+        "success": False,
+        "message": getattr(error, 'name', 'Unknown error'),
+        "code": err_code
+    })
+    response.status_code = err_code
     return response

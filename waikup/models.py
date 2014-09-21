@@ -2,14 +2,10 @@
 
 import os
 from datetime import datetime, timedelta
-from functools import wraps
 from hashlib import md5
 from math import ceil
 
-from flask import url_for, redirect, request, abort
 from flask.ext.peewee.admin import ModelAdmin
-from flask.ext.peewee.auth import Auth
-from flask.ext.peewee.utils import get_next
 from peewee import *
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -18,7 +14,7 @@ from waikup.lib import globals as g
 from waikup.lib.errors import ApiError
 
 
-## MODELS
+# MODELS
 
 
 class BaseModel(g.db.Model):
@@ -159,7 +155,7 @@ class Link(BaseModel):
         return True
 
 
-## ADMIN PANEL MODELS
+# ADMIN PANEL MODELS
 
 
 class UserAdmin(ModelAdmin):
@@ -180,59 +176,7 @@ class CategoryAdmin(ModelAdmin):
     columns = ('name',)
 
 
-## AUTHENTICATION SYSTEM
-
-
-class HybridAuth(Auth):
-    @staticmethod
-    def check_token_header():
-        token_str = request.headers.get('Auth')
-        if token_str is None:
-            abort(403)
-        try:
-            token = Token.get(Token.token == token_str)
-            if token.expiry < datetime.now():
-                token.delete_instance()
-                abort(403)
-            return token
-        except DoesNotExist:
-            abort(403)
-
-    def owner_required(self, func):
-        @wraps(func)
-        def wrapper(linkid):
-            token = self.check_token_header()
-            link = Link.get(Link.id == linkid)
-            if (link.author != token.user) or (not token.user.admin):
-                abort(403)
-            return func(linkid)
-        return wrapper
-
-    def get_user_model(self):
-        return User
-
-    def get_model_admin(self, model_admin=None):
-        return UserAdmin
-
-    def test_user(self, test_func):
-        def decorator(func):
-            @wraps(func)
-            def inner(*args, **kwargs):
-                if request.blueprint in ('links', 'users'):
-                    token = self.check_token_header()
-                    if not test_func(token.user):
-                        abort(403)
-                else:
-                    user = self.get_logged_in_user()
-                    if not user or not test_func(user):
-                        login_url = url_for('%s.login' % self.blueprint.name, next=get_next())
-                        return redirect(login_url)
-                return func(*args, **kwargs)
-            return inner
-        return decorator
-
-
-## PAGINATION HELPER
+# PAGINATION HELPER
 
 
 class Paginated(object):
