@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
+from math import ceil
 
 from flask import request
 
@@ -30,3 +31,27 @@ class required_fields(object):
                     raise ApiError("Missing field: %s" % field)
             return func(*args, **kwargs)
         return wrapper
+
+
+class Paginated(object):
+    def __init__(self, query, page, per_page, count):
+        self.page = page
+        self.per_page = per_page
+        self.count = count
+        self.items = query.paginate(page, per_page)
+
+    def __iter__(self):
+        for item in self.items:
+            yield item
+
+    @property
+    def pages(self):
+        return int(ceil(self.count / float(self.per_page)))
+
+    @property
+    def has_previous(self):
+        return self.page > 1
+
+    @property
+    def has_next(self):
+        return self.page < self.pages
