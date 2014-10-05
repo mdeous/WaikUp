@@ -11,6 +11,7 @@ api = Blueprint('api', __name__)
 
 class Resource(object):
     name = ''
+    plural = None
     fields = ()
     fk_map = {}
 
@@ -34,7 +35,7 @@ class Resource(object):
 
 class ResourceSet(object):
     def __init__(self, resource_cls, objs):
-        self.name = resource_cls.name + 's'
+        self.name = (resource_cls.name + 's') if resource_cls.plural is None else resource_cls.plural
         self.resources = []
         for obj in objs:
             self.resources.append(resource_cls(obj))
@@ -53,12 +54,17 @@ class LinkResource(Resource):
     fk_map = {'author': 'username'}
 
 
+class CategoryResource(Resource):
+    name = 'category'
+    plural = 'categories'
+    fields = ('id', 'name')
+
+
 @api.route('/links', methods=['GET'])
 @g.api_auth.login_required
 def list_links():
     """Get all links in database."""
     from waikup.models import Link
-
     link_objs = list(Link.select())
     data = ResourceSet(LinkResource, link_objs).data
     return jsonify(data)
@@ -115,3 +121,13 @@ def delete_link(linkid):
         abort(403)
     link.delete_instance()
     return jsonify({"success": True})
+
+
+@api.route('/categories', methods=['GET'])
+@g.api_auth.login_required
+def list_categories():
+    """Get available links categories."""
+    from waikup.models import Category
+    categories = list(Category.select())
+    data = ResourceSet(CategoryResource, categories).data
+    return jsonify(data)
