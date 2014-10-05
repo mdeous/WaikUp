@@ -24,7 +24,6 @@ setup(
         'waikup.utils.migrations',
         'waikup.lib',
         'waikup.views',
-        'waikup.views.api'
     ],
     package_data={
         'waikup': [
