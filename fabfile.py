@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from fabric.api import *
+from fabtools.vagrant import vagrant
 
 DEB_REQUIREMENTS = [
     'apache2',
@@ -69,9 +70,16 @@ def setup_waikup():
     venv_run(VIRTUALENV_ACTIVATE, 'pip install flask-debugtoolbar')
 
 
+@task
+def restart_services():
+    for service in SERVICES:
+        sudo('service %s restart' % service)
+
+
 @task(default=True)
 def setup_all():
     execute(prepare_system)
     execute(setup_database)
     execute(setup_apache)
     execute(setup_waikup)
+    execute(restart_services)
