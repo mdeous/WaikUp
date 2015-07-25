@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from fabric.api import *
-from fabtools.vagrant import vagrant
 
 DEB_REQUIREMENTS = [
     'apache2',
