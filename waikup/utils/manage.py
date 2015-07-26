@@ -68,20 +68,6 @@ def setupdb():
         )
         user.set_password('admin')
         user.save()
-    if User.select().where(User.username == 'waikupapi').count() == 0:
-        print "[+] Creating internal API user"
-        api_user = User(
-            username='waikupapi',
-            first_name='WaikUp',
-            last_name='API',
-            email='api@example.org',
-            admin=False,
-            active=True
-        )
-        api_user.set_password(''.join(choice(string.printable) for _ in xrange(64)))
-        api_user.save()
-        print "[+] Assigning new API token to 'waikupapi' user"
-        api_token = api_user.generate_token()
     print "[+] Done"
 
 
@@ -215,7 +201,7 @@ def chpasswd(username):
 
 @manager.command
 def sendmail():
-    """Sends an email containing lastly submitted links."""
+    """Sends an email containing last submitted links."""
     links = Link.select().where(Link.archived == False)
     print "[+] Loading and populating email templates..."
     env = Environment(loader=PackageLoader('waikup', 'templates/emails'))
