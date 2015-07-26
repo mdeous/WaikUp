@@ -80,7 +80,7 @@ def init_dev():
 
 @task
 def init_prod():
-    run("echo 'DEBUG = False' > ")
+    venv_run(VIRTUALENV_ACTIVATE, 'waikup_manage setupdb')
 
 
 @task(default=True)
