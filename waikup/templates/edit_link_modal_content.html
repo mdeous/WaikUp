@@ -1,20 +1,17 @@
-{% from "macros/bootstrap.html" import wtfield %}
+{% from "bootstrap/wtf.html" import quick_form %}
+
 <div class="modal-header">
   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
   <h4 class="modal-title" id="link-modal-label">{{ link.title }}</h4>
 </div>
 <div class="modal-body">
-  <form action="{{ url_for(edit_link_form.endpoint, linkid=link.id, redir=page_name) }}" method="POST"
-        id="{{ edit_link_form.name }}-form-{{ link.id }}">
-    {{ edit_link_form.csrf_token() }}
-    {% for field in edit_link_form %}
-      {% if field.name != 'csrf_token' %}
-        {{ wtfield(field, edit_link_form.name) }}
-      {% endif %}
-    {% endfor %}
-  </form>
+  {{ quick_form(edit_link_form,
+                form_type='horizontal',
+                id=edit_link_form.name + '-form-' + (link.id|string),
+                action=url_for(edit_link_form.endpoint, linkid=link.id, redir=page_name)
+  ) }}
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-default" data-dismiss="modal" id="edit-link-cancel-{{ link.id }}">Cancel</button>
   <button type="button" class="btn btn-primary" id="edit-link-save-{{ link.id }}">Save changes</button>
-</div>
+</div>1

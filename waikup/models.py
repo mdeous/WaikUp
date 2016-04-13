@@ -1,20 +1,14 @@
 # -*- coding: utf-8 -*-
 
-import os
-from datetime import datetime, timedelta
-from hashlib import md5
+from datetime import datetime
 
-from flask.ext.peewee.admin import ModelAdmin
+from flask.ext.security import UserMixin, RoleMixin
+from flask.ext.security.utils import verify_password, encrypt_password
 from peewee import *
-
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from waikup import settings
 from waikup.lib import globals as g
 from waikup.lib.errors import ApiError
-
-
-# MODELS
 
 
 class BaseModel(g.db.Model):
@@ -59,7 +53,7 @@ class BaseModel(g.db.Model):
         return result
 
 
-class User(BaseModel):
+class User(BaseModel, UserMixin):
     safe_fields = (
         'first_name',
         'last_name',
@@ -78,38 +72,44 @@ class User(BaseModel):
         return u'%s %s' % (self.first_name, self.last_name)
 
     @property
+    def is_active(self):
+        return self.active
+
+    def get_id(self):
+        return unicode(self.id)
+
+    @property
+    def is_admin(self):
+        return self.admin
+
+    @property
     def full_name(self):
         return "%s %s" % (self.first_name, self.last_name)
 
-    @classmethod
-    def from_token(cls, token):
-        token_obj = Token.get(Token.token == token)
-        return token_obj.user
-
     def set_password(self, password):
-        self.password = generate_password_hash(password, settings.HASH_METHOD, settings.HASH_SALT_LEN)
+        self.password = encrypt_password(password)
 
     def check_password(self, password):
-        return check_password_hash(self.password, password)
-
-    def generate_token(self):
-        self.delete_token()
-        return Token.create(user=self)
-
-    def delete_token(self):
-        delete_query = Token.delete().where(Token.user == self)
-        return delete_query.execute()
+        return verify_password(password, self.password)
 
 
-class Token(BaseModel):
-    no_item_code = 403
-    no_item_message = "Forbidden"
-    token = CharField(default=lambda: md5(os.urandom(128)).hexdigest())
-    user = ForeignKeyField(User, related_name='token', unique=True)
-    expiry = DateTimeField(default=lambda: datetime.now()+timedelta(weeks=1))
+class Role(BaseModel, RoleMixin):
+    name = CharField(unique=True)
+    description = TextField(null=True)
 
-    def __unicode__(self):
-        return u'%s' % self.token
+
+class UserRole(BaseModel):
+    user = ForeignKeyField(User, related_name='roles')
+    role = ForeignKeyField(Role, related_name='users')
+
+    @property
+    def name(self):
+        return self.role.name
+
+    @property
+    def description(self):
+        assert isinstance(self.role, Role)
+        return self.role.description
 
 
 class Category(BaseModel):
@@ -153,24 +153,3 @@ class Link(BaseModel):
         link.archived = not link.archived
         link.save()
         return True
-
-
-# ADMIN PANEL MODELS
-
-
-class UserAdmin(ModelAdmin):
-    columns = ('username', 'first_name', 'last_name', 'email')
-
-
-class TokenAdmin(ModelAdmin):
-    columns = ('token', 'user')
-    foreign_key_lookups = {'user': 'username'}
-
-
-class LinkAdmin(ModelAdmin):
-    columns = ('title', 'category', 'author', 'archived')
-    foreign_key_lookups = {'author': 'username', 'category': 'name'}
-
-
-class CategoryAdmin(ModelAdmin):
-    columns = ('name',)

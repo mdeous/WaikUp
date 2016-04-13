@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 CURRENT_DIR = os.path.realpath(os.path.dirname(__file__))
@@ -17,14 +17,7 @@ setup(
     description='Collaborative news sharing platform.',
     long_description=README,
     author='Mathieu D. (MatToufoutu)',
-    packages=[
-        'waikup',
-        'waikup.lib',
-        'waikup.utils',
-        'waikup.utils.migrations',
-        'waikup.lib',
-        'waikup.views',
-    ],
+    packages=find_packages('.'),
     package_data={
         'waikup': [
             'static/css/*',

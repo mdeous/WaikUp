@@ -4,9 +4,6 @@
 # IT IS USED AS A GLOBAL OBJECTS CONTAINER
 #
 
-app = None
 db = None
-admin = None
 mail = None
-api_auth = None
-auth = None
+user_datastore = None

@@ -1,5 +1,6 @@
-{% from "macros/bootstrap.html" import wtform %}
-{% if user %}
+{% from "bootstrap/wtf.html" import quick_form %}
+
+{% if current_user.is_authenticated %}
   <div class="modal fade"
        id="chpasswd-modal"
        tabindex="-1"
@@ -15,7 +16,11 @@
         </div>
         <!-- /.modal-header -->
         <div class="modal-body">
-          {{ wtform(chpasswd_form) }}
+          {{ quick_form(chpasswd_form,
+                        form_type='horizontal',
+                        action=url_for(chpasswd_form.endpoint),
+                        id=chpasswd_form.name+'-form'
+          ) }}
         </div>
         <!-- /.modal-body -->
         <div class="modal-footer">

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+
 {% block title %}{{ page_name|title }}{% endblock %}
-{% block content %}
+
+{% block container %}
   &nbsp;<a href="#" title="expand all"><span class="glyphicon glyphicon-zoom-in expand-all"></span></a>
   &nbsp;<a href="#" title="collapse all"><span class="glyphicon glyphicon-zoom-out collapse-all"></span></a>
   <div class="table-responsive">
@@ -37,11 +39,11 @@
           </a>&nbsp;
           <form class="hidden" method="POST"
                 id="toggle-form-{{ link.id }}"
-                action="{{ url_for('webui.'+page_name, toggle=link.id) }}">
+                action="{{ url_for('webui.'+page_name) }}">
             {{ delete_form.csrf_token() }}
             {{ delete_form.link_id(value=link.id) }}
           </form>
-          {% if user.admin or link.author.username == user.username %}
+          {% if current_user.is_admin or link.author.username == current_user.username %}
             <a data-toggle="modal"
                class="btn btn-default btn-xs link-action"
                data-target="#edit-link-modal-{{ link.id }}"

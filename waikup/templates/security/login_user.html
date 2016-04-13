@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% from "bootstrap/wtf.html" import quick_form %}
+
+{% block title %}Log in{% endblock %}
+
+{% block container %}
+  <br><br>
+  <div class="col-md-4 col-md-offset-4">
+    {{ super() }}
+    <form id="login-form" method="post" action="">
+      {{ quick_form(login_user_form) }}
+    </form>
+  </div>
+{% endblock %}

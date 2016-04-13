@@ -2,16 +2,15 @@
 
 DEBUG = True
 SECRET_KEY = "PLEASE CHANGE ME"
-DB_STRING = "dbname=waikup user=waikup password=waikup"
-HASH_METHOD = 'pbkdf2:sha256:2000'
-HASH_SALT_LEN = 16
+SECURITY_URL_PREFIX = '/user'
+SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
+SECURITY_PASSWORD_SALT = 'MTc2\x0cR=\x0c8`\r! t)A4L;\n)R6\x0b\\":_Jr}\t'
 DATABASE = {
     "name": "waikup",
     "user": "waikup",
     "password": "waikup",
     "engine": "peewee.PostgresqlDatabase"
 }
-DB_VERSION_FILE = '~/.waikup-db-version'
 DEFAULT_CATEGORIES = [
     'Web',
     'Forensics',
@@ -25,6 +24,7 @@ DEFAULT_CATEGORIES = [
     'Other'
 ]
 DEFAULT_CATEGORY = 'Other'
+ITEMS_PER_PAGE = 10
 ATOM_LINKS_COUNT = 50
 DATETIME_FORMAT = '%b %d %Y at %H:%M:%S'
 MAIL_SERVER = 'localhost'
@@ -34,7 +34,7 @@ MAIL_USE_SSL = False
 MAIL_USERNAME = 'username'
 MAIL_PASSWORD = 'password'
 MAIL_DEFAULT_SENDER = 'sender@example.com'
-MAIL_TITLE = "Veille - en vrac"
+MAIL_TITLE = "[WaikUp] Latest selected links"
 MAIL_RECIPIENTS = []
 
 

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import sys
 from functools import wraps
 from math import ceil
 
@@ -17,20 +18,6 @@ class Singleton(type):
         if cls.__instance is None:
             cls.__instance = super(Singleton, cls).__call__(*args, **kwargs)
         return cls.__instance
-
-
-class required_fields(object):
-    def __init__(self, *fields):
-        self.fields = fields
-
-    def __call__(self, func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            for field in self.fields:
-                if field not in request.form:
-                    raise ApiError("Missing field: %s" % field)
-            return func(*args, **kwargs)
-        return wrapper
 
 
 class Paginated(object):
@@ -55,3 +42,24 @@ class Paginated(object):
     @property
     def has_next(self):
         return self.page < self.pages
+
+
+class required_fields(object):
+    def __init__(self, *fields):
+        self.fields = fields
+
+    def __call__(self, func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            for field in self.fields:
+                if field not in request.form:
+                    raise ApiError("Missing field: %s" % field)
+            return func(*args, **kwargs)
+        return wrapper
+
+
+def load_class(cls):
+    path, klass = cls.rsplit('.', 1)
+    __import__(path)
+    mod = sys.modules[path]
+    return getattr(mod, klass)

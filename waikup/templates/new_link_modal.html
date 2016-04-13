@@ -1,5 +1,6 @@
-{% from "macros/bootstrap.html" import wtform %}
-{% if user %}
+{% from "bootstrap/wtf.html" import quick_form %}
+
+{% if current_user.is_authenticated %}
   <div class="modal fade"
        id="new-link-modal"
        tabindex="-1"
@@ -15,7 +16,7 @@
         </div>
         <!-- /.modal-header -->
         <div class="modal-body">
-          {{ wtform(new_link_form) }}
+          {{ quick_form(new_link_form, form_type='horizontal', id='new-link-form', action=url_for(new_link_form.endpoint)) }}
         </div>
         <!-- /.modal-body -->
         <div class="modal-footer">

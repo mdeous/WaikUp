@@ -2,27 +2,24 @@
 # -*- coding: utf-8 -*-
 
 import os
-import string
 import sys
 from getpass import getpass
-from random import choice
 
 from flask.ext.mail import Message
+from flask.ext.security import PeeweeUserDatastore
 from flask.ext.script import Manager
 from jinja2 import Environment, PackageLoader
-from peewee import IntegrityError, PeeweeException
 
 from waikup.app import app, db, mail
 from waikup.lib.errors import ApiError
-from waikup.models import User, Token, Link, Category
-from waikup.utils import migrations
+from waikup.models import BaseModel, Category, User, Role, UserRole, Link
 
 try:
     import simplejson as json
 except ImportError:
     import json
 
-TABLES = [User, Token, Category, Link]
+TABLES = BaseModel.__subclasses__()
 manager = Manager(app)
 
 
@@ -56,18 +53,6 @@ def setupdb():
         print "[+] Creating table: %s..." % table._meta.name
         table.create_table(fail_silently=True)
     create_categories()
-    if User.select().where(User.username == 'admin').count() == 0:
-        print "[+] Adding default credentials 'admin:admin'..."
-        user = User(
-            username='admin',
-            first_name='WaikUp',
-            last_name='Admin',
-            email='admin@example.org',
-            admin=True,
-            active=True
-        )
-        user.set_password('admin')
-        user.save()
     print "[+] Done"
 
 
@@ -82,81 +67,9 @@ def resetdb():
 
 
 @manager.command
-def importdb(model_name, data_file):
-    """Imports a JSON file previously generated with admin interface export command."""
-    # handle arguments errors
-    print "[+] Importing %s data from %s" % (model_name, data_file)
-    created_objects = 0
-    table_names = [t._meta.name.lower() for t in TABLES]
-    if model_name.lower() not in table_names:
-        print "[!] Unknown model name: %s" % model_name
-        sys.exit(1)
-    model_class = TABLES[table_names.index(model_name.lower())]
-    if not os.path.exists(data_file) and not os.path.isfile(data_file):
-        print "[!] File not found: %s" % data_file
-        sys.exit(2)
-    with open(data_file) as inf:
-        data = json.load(inf)
-        for item in data:
-            # remove the 'id' field (will be automatically generated)
-            if 'id' in item:
-                del item['id']
-            # handle item's foreign keys
-            fk_names = [f for f in item if isinstance(item[f], dict)]
-            for fk_name in fk_names:
-                if ('id' in item[fk_name]) and (len(item[fk_name].keys()) > 1):
-                    del item[fk_name]['id']
-                if fk_name not in model_class._meta.fields:
-                    print "[!] Unexpected foreign key field: %s" % fk_name
-                    sys.exit(3)
-                fk_model_cls = model_class._meta.fields[fk_name].rel_model
-                # get item with given criteria from db (or create it)
-                item[fk_name] = fk_model_cls.get_or_create(**item[fk_name])
-            # create a model object from the JSON item
-            model_obj = model_class()
-            for field in item:
-                setattr(model_obj, field, item[field])
-            try:
-                model_obj.save()
-                created_objects += 1
-            except IntegrityError:
-                db.database.rollback()
-                continue
-    print "[+] Created %d %s objects" % (created_objects, model_name)
-    print "[+] Done"
-
-
-@manager.command
-@manager.option('-v', '--version', dest='version', default=None, help='Schema version to upgrade to')
-def migratedb(version=None):
-    """Applies database schema migrations."""
-    current_version = read_db_version()
-    max_version = version or len(migrations.modules)
-    highest_version = len(migrations.modules)
-    if max_version == current_version:
-        print "[+] No schema migration to apply"
-        sys.exit(0)
-    elif max_version > highest_version:
-        print "[!] Can't apply version %d, max version is %d" % (max_version, highest_version)
-        sys.exit(1)
-    for migration in migrations.modules[current_version:]:
-        vernum = migrations.modules.index(migration)+1
-        if vernum > max_version:
-            break
-        try:
-            migration.migrate()
-            print "[!] Applied schema migration: %d"
-        except PeeweeException as err:
-            print "[!] Error: %s" % err.message
-            sys.exit(3)
-        write_db_version(vernum)
-    print "[+] Done"
-    pass
-
-
-@manager.command
 def adduser(admin=False, inactive=False):
     """Adds a new user."""
+    user_datastore = PeeweeUserDatastore(db, User, Role, UserRole)
     print "[+] Creating new user (admin=%r, inactive=%r)" % (admin, inactive)
     username = raw_input("[>] Username: ")
     first_name = raw_input("[>] First name: ")
@@ -167,16 +80,15 @@ def adduser(admin=False, inactive=False):
     if password1 != password2:
         print "[!] Passwords don't match!"
         sys.exit(1)
-    user = User(
+    user_datastore.create_user(
         username=username,
         first_name=first_name,
         last_name=last_name,
         email=email,
         admin=admin,
-        active=not inactive
+        active=not inactive,
+        password=password1
     )
-    user.set_password(password1)
-    user.save()
     print "[+] Done"
 
 

@@ -23,6 +23,12 @@ def flash_form_errors(form):
 
 
 class FormWithCategory(Form):
+    category = SelectField(
+        'Category',
+        validators=[optional(), is_category],
+        default=settings.DEFAULT_CATEGORY
+    )
+
     def set_category_choices(self):
         self.category.choices = [(c.name, c.name) for c in Category.select()]
 
@@ -35,33 +41,29 @@ class NewLinkForm(FormWithCategory):
     name = 'new-link'
     endpoint = 'webui.new_link'
     url = URLField(
-        'URL:',
+        'URL',
         validators=[url(), required()]
     )
     title = StringField(
-        'Title:',
+        'Title',
         validators=[required()]
     )
     description = TextAreaField(
-        'Description:',
+        'Description',
         validators=[required()]
     )
-    category = SelectField(
-        'Category:',
-        validators=[optional(), is_category],
-        default=settings.DEFAULT_CATEGORY
-    )
+
 
 
 class ChangePasswordForm(Form):
     name = 'chpasswd'
     endpoint = 'webui.change_password'
-    old = PasswordField(
-        'Old password:',
+    current = PasswordField(
+        'Current password',
         validators=[required()]
     )
     new = PasswordField(
-        'New password:',
+        'New password',
         validators=[required()]
     )
     confirm = PasswordField(
@@ -74,19 +76,14 @@ class EditLinkForm(FormWithCategory):
     name = 'edit-link'
     endpoint = 'webui.edit_link'
     url = URLField(
-        'URL:',
+        'URL',
         validators=[url(), required()]
     )
     title = StringField(
-        'Title:',
+        'Title',
         validators=[required()]
     )
     description = TextAreaField(
-        'Description:',
+        'Description',
         validators=[required()]
-    )
-    category = SelectField(
-        'Category:',
-        validators=[optional(), is_category],
-        default=settings.DEFAULT_CATEGORY
     )

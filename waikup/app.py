@@ -1,29 +1,30 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request
+from flask.ext.bootstrap import Bootstrap
 from flask.ext.mail import Mail
-from flask.ext.peewee.db import Database
+from flask.ext.security import Security, PeeweeUserDatastore
 from peewee import fn
 from werkzeug.contrib.atom import AtomFeed
 
 from waikup import settings
 from waikup.lib import globals as g
-from waikup.lib.errors import ApiError, http_error
+from waikup.lib.db import WaikupDB
 
 
 # Setup application
 
 app = Flask(__name__)
 app.config.from_object(settings)
-g.app = app
-if app.config.get('DEBUG'):
+if app.config['DEBUG'] and app.config.get('DEBUG_TB_ENABLED', False):
     from flask_debugtoolbar import DebugToolbarExtension
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     toolbar = DebugToolbarExtension(app)
+Bootstrap(app)
 
 # Setup database
 
-db = Database(app)
+db = WaikupDB(app)
 g.db = db
 
 
@@ -35,33 +36,22 @@ g.mail = mail
 
 # Setup authentication and admin panel
 
-from flask.ext.peewee.admin import Admin
-from waikup.lib.auth import ApiAuth, WebAuth
-# from waikup.models import HybridAuth
-from waikup.models import User, Token, Link, Category
-from waikup.models import UserAdmin, TokenAdmin, LinkAdmin, CategoryAdmin
-
-
-g.api_auth = ApiAuth()
-g.auth = WebAuth(app, db)
-
-admin = Admin(app, g.auth)
-admin.register(User, UserAdmin)
-admin.register(Token, TokenAdmin)
-admin.register(Link, LinkAdmin)
-admin.register(Category, CategoryAdmin)
-admin.setup()
-g.admin = admin
+from waikup.models import Category, Link, User, Role, UserRole
+user_datastore = PeeweeUserDatastore(g.db, User, Role, UserRole)
+g.user_datastore = user_datastore
+login_manager = Security(app, user_datastore)
 
 
 # Setup views
 
-from waikup.views.api import api
+# from waikup.views.api import api
 from waikup.views.webui import webui
 
 app.register_blueprint(webui)
-app.register_blueprint(api, url_prefix='/api')
+# app.register_blueprint(api, url_prefix='/api')
 
+
+# Atom feed
 
 @app.route('/links.atom')
 def links_feed():
@@ -90,6 +80,8 @@ def links_feed():
     return feed.get_response()
 
 
+# Context processors
+
 @app.context_processor
 def global_forms():
     from waikup.forms import NewLinkForm, ChangePasswordForm
@@ -99,36 +91,3 @@ def global_forms():
         'new_link_form': newlink_form,
         'chpasswd_form': ChangePasswordForm()
     }
-
-# Setup custom error handlers
-
-@app.errorhandler(ApiError)
-def api_error_handler(error):
-    response = error.json
-    response.status_code = error.status_code
-    return response
-
-
-@app.errorhandler(401)
-def unauthorized_handler(error):
-    return http_error(error)
-
-
-@app.errorhandler(403)
-def forbidden_error(error):
-    return http_error(error)
-
-
-@app.errorhandler(404)
-def not_found_handler(error):
-    return http_error(error)
-
-
-@app.errorhandler(410)
-def gone_handler(error):
-    return http_error(error)
-
-
-@app.errorhandler(500)
-def server_error_handler(error):
-    return http_error(error)
