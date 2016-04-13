@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request
+from flask.ext.admin import Admin
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.mail import Mail
 from flask.ext.security import Security, PeeweeUserDatastore
@@ -10,6 +11,7 @@ from werkzeug.contrib.atom import AtomFeed
 from waikup import settings
 from waikup.lib import globals as g
 from waikup.lib.db import WaikupDB
+from waikup.views.admin import CategoryModelView, LinkModelView, RoleModelView, UserModelView
 
 
 # Setup application
@@ -34,13 +36,21 @@ mail = Mail(app)
 g.mail = mail
 
 
-# Setup authentication and admin panel
+# Setup authentication
 
 from waikup.models import Category, Link, User, Role, UserRole
 user_datastore = PeeweeUserDatastore(g.db, User, Role, UserRole)
 g.user_datastore = user_datastore
 login_manager = Security(app, user_datastore)
 
+
+# Setup admin panel
+
+admin = Admin(app, name='WaikUp', template_mode='bootstrap3')
+admin.add_view(UserModelView(User))
+admin.add_view(RoleModelView(Role))
+admin.add_view(CategoryModelView(Category))
+admin.add_view(LinkModelView(Link))
 
 # Setup views
 
