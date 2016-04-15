@@ -1,20 +1,19 @@
 {% if links %}
-Bonjour,
+Hello,
 
-Voici les liens sélectionnés par les consultants durant la semaine dernière:
+Here are the latest selected links:
 
 {% for link in links %}
-  {{ loop.index }}. [{{ link.category.name }}] {{ link.title|title|safe }} - {{ link.url }} ({{ link.author.full_name }}
-  )
-  -> {{ link.description|safe }}
+  {{ loop.index }}. [{{ link.category.name }}] {{ link.title|title }} - {{ link.url }} ({{ link.author.full_name }})
+
+  {{ link.description }}
+
 {% endfor %}
 
-Bonne lecture!
+Happy reading!
 {% else %}
-Bonjour,
+Hello,
 
-Cette semaine, aucun mail n'a été sélectionné par les consultants.
-N'hésitez pas à contribuer!
-
-Bonne journée.
+There are no new links this time, sorry.
+Feel free to contribute!
 {% endif %}
