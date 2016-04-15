@@ -55,9 +55,9 @@ admin.add_view(LinkModelView(Link))
 # Setup views
 
 # from waikup.views.api import api
-from waikup.views.webui import webui
+from waikup.views.main import main
 
-app.register_blueprint(webui)
+app.register_blueprint(main)
 # app.register_blueprint(api, url_prefix='/api')
 
 

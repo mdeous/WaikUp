@@ -14,17 +14,17 @@
       {% if current_user.is_authenticated %}
         <ul class="nav navbar-nav">
           <li class="nav-divider"></li>
-          <li{% if page_name == 'index' %} class="active"{% endif %}><a href="{{ url_for('webui.index') }}">
+          <li{% if page_name == 'index' %} class="active"{% endif %}><a href="{{ url_for('main.index') }}">
             <span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;Links
           </a></li>
-          <li{% if page_name == 'archives' %} class="active"{% endif %}><a href="{{ url_for('webui.archives') }}">
+          <li{% if page_name == 'archives' %} class="active"{% endif %}><a href="{{ url_for('main.archives') }}">
             <span class="glyphicon glyphicon-folder-close"></span>&nbsp;&nbsp;Archives
           </a></li>
-{#          <li{% if page_name == 'stats' %} class="active"{% endif %}><a href="{{ url_for('webui.stats') }}">#}
+{#          <li{% if page_name == 'stats' %} class="active"{% endif %}><a href="{{ url_for('main.stats') }}">#}
 {#              <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;Stats#}
 {#          </a></li>#}
           {% if current_user.is_admin %}
-            <li><a href="{{ url_for('webui.genmail') }}">
+            <li><a href="{{ url_for('main.genmail') }}">
               <span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;Generate Email
             </a></li>
           {% endif %}
@@ -64,7 +64,7 @@
             <span class="glyphicon glyphicon-link"></span>&nbsp;&nbsp;Submit link
           </button>
         </form>
-        <form action="{{ url_for('webui.search') }}" class="navbar-form navbar-right" method="get">
+        <form action="{{ url_for('main.search') }}" class="navbar-form navbar-right" method="get">
           <div class="form-group">
             <input class="form-control" type="text" name="pattern"/>
             <input type="hidden" name="page" value="{{ page_name }}"/>

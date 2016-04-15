@@ -7,7 +7,7 @@ from waikup.lib.helpers import Paginated
 from waikup.models import Link, Category
 from waikup.forms import NewLinkForm, ChangePasswordForm, EditLinkForm, SimpleLinkForm, flash_form_errors
 
-webui = Blueprint('webui', __name__)
+main = Blueprint('main', __name__)
 
 
 def list_links(page_name, links=None):
@@ -39,19 +39,19 @@ def list_links(page_name, links=None):
     )
 
 
-@webui.route('/', methods=['GET', 'POST'])
+@main.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
     return list_links('index')
 
 
-@webui.route('/archives', methods=['GET', 'POST'])
+@main.route('/archives', methods=['GET', 'POST'])
 @login_required
 def archives():
     return list_links('archives')
 
 
-@webui.route('/newlink', methods=['POST'])
+@main.route('/newlink', methods=['POST'])
 @login_required
 def new_link():
     redirect_to = request.args.get('redir', 'index')
@@ -75,7 +75,7 @@ def new_link():
     return redirect(redirect_to)
 
 
-@webui.route('/chpasswd', methods=['POST'])
+@main.route('/chpasswd', methods=['POST'])
 @login_required
 def change_password():
     redirect_to = request.args.get('redir', 'index')
@@ -95,7 +95,7 @@ def change_password():
     return redirect(redirect_to)
 
 
-@webui.route('/delete', methods=['POST'])
+@main.route('/delete', methods=['POST'])
 @login_required
 def delete_link():
     redirect_to = request.args.get('redir', 'index')
@@ -120,7 +120,7 @@ def delete_link():
     return redirect(redirect_to)
 
 
-@webui.route('/genmail')
+@main.route('/genmail')
 @login_required
 def genmail():
     if current_user.is_admin:
@@ -128,7 +128,7 @@ def genmail():
     abort(403)
 
 
-@webui.route('/search', methods=['GET'])
+@main.route('/search', methods=['GET'])
 @login_required
 def search():
     redirect_page = request.args.get('page', 'index')
@@ -156,7 +156,7 @@ def search():
     )
 
 
-@webui.route('/edit_link/<int:linkid>', methods=['GET', 'POST'])
+@main.route('/edit_link/<int:linkid>', methods=['GET', 'POST'])
 @login_required
 def edit_link(linkid):
     form = EditLinkForm()

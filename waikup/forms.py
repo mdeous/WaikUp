@@ -39,7 +39,7 @@ class SimpleLinkForm(Form):
 
 class NewLinkForm(FormWithCategory):
     name = 'new-link'
-    endpoint = 'webui.new_link'
+    endpoint = 'main.new_link'
     url = URLField(
         'URL',
         validators=[url(), required()]
@@ -57,7 +57,7 @@ class NewLinkForm(FormWithCategory):
 
 class ChangePasswordForm(Form):
     name = 'chpasswd'
-    endpoint = 'webui.change_password'
+    endpoint = 'main.change_password'
     current = PasswordField(
         'Current password',
         validators=[required()]
@@ -74,7 +74,7 @@ class ChangePasswordForm(Form):
 
 class EditLinkForm(FormWithCategory):
     name = 'edit-link'
-    endpoint = 'webui.edit_link'
+    endpoint = 'main.edit_link'
     url = URLField(
         'URL',
         validators=[url(), required()]
