@@ -52,7 +52,7 @@ login_manager = Security(
 
 admin = Admin(
     app,
-    name='WaikUp',
+    name='WaikUp Admin',
     template_mode='bootstrap3',
     index_view=RestrictedAdminIndexView()
 )
