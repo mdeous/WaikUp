@@ -120,14 +120,6 @@ def delete_link():
     return redirect(redirect_to)
 
 
-@main.route('/genmail')
-@login_required
-def genmail():
-    if current_user.is_admin:
-        return render_template('emails/html.jinja2', links=Link.select().where(Link.archived == False))
-    abort(403)
-
-
 @main.route('/search', methods=['GET'])
 @login_required
 def search():

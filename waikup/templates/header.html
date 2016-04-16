@@ -20,14 +20,6 @@
           <li{% if page_name == 'archives' %} class="active"{% endif %}><a href="{{ url_for('main.archives') }}">
             <span class="glyphicon glyphicon-folder-close"></span>&nbsp;&nbsp;Archives
           </a></li>
-{#          <li{% if page_name == 'stats' %} class="active"{% endif %}><a href="{{ url_for('main.stats') }}">#}
-{#              <span class="glyphicon glyphicon-dashboard"></span>&nbsp;&nbsp;Stats#}
-{#          </a></li>#}
-          {% if current_user.is_admin %}
-            <li><a href="{{ url_for('main.genmail') }}">
-              <span class="glyphicon glyphicon-envelope"></span>&nbsp;&nbsp;Generate Email
-            </a></li>
-          {% endif %}
           <li class="nav-divider"></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
