@@ -2,7 +2,7 @@
 
 from datetime import datetime
 
-from flask.ext.security import UserMixin, RoleMixin
+from flask.ext.security import UserMixin, RoleMixin, AnonymousUser
 from flask.ext.security.utils import verify_password, encrypt_password
 from peewee import *
 
@@ -153,3 +153,9 @@ class Link(BaseModel):
         link.archived = not link.archived
         link.save()
         return True
+
+
+class WaikUpAnonymousUser(AnonymousUser):
+    @property
+    def is_admin(self):
+        return False

@@ -1,16 +1,25 @@
 # -*- coding: utf-8 -*-
 
 from flask import redirect, url_for, request
+from flask.ext.admin import AdminIndexView
 from flask.ext.admin.contrib.peewee import ModelView
 from flask.ext.security import current_user
 
 
-class BaseModelView(ModelView):
+class RestrictedViewMixin:
     def is_accessible(self):
         return current_user.is_admin
 
-    def inaccessible_callback(self, name, **kwargs):
+    def inaccessible_callback(self, *args, **kwargs):
         return redirect(url_for('security.login', next=request.url))
+
+
+class BaseModelView(RestrictedViewMixin, ModelView):
+    pass
+
+
+class RestrictedAdminIndexView(RestrictedViewMixin, AdminIndexView):
+    pass
 
 
 class ReadOnlyModelView(BaseModelView):
