@@ -4,7 +4,7 @@ DEBUG = True
 SECRET_KEY = "PLEASE CHANGE ME"
 SECURITY_URL_PREFIX = '/user'
 SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
-SECURITY_PASSWORD_SALT = 'MTc2\x0cR=\x0c8`\r! t)A4L;\n)R6\x0b\\":_Jr}\t'
+SECURITY_PASSWORD_SALT = 'PLEASE CHANGE ME'
 DATABASE = {
     "name": "waikup",
     "user": "waikup",
