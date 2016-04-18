@@ -44,3 +44,8 @@ class CategoryModelView(BaseModelView):
 class LinkModelView(BaseModelView):
     column_searchable_list = ['url', 'title', 'description']
     column_filters = ['archived']
+
+
+class EMailModelView(BaseModelView):
+    column_searchable_list = ['address']
+    column_filters = ['disabled']

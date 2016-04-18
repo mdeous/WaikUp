@@ -11,6 +11,12 @@ from waikup.lib import globals as g
 from waikup.lib.errors import ApiError
 
 
+class WaikUpAnonymousUser(AnonymousUser):
+    @property
+    def is_admin(self):
+        return False
+
+
 class BaseModel(g.db.Model):
     safe_fields = ()
     id = PrimaryKeyField()
@@ -155,7 +161,6 @@ class Link(BaseModel):
         return True
 
 
-class WaikUpAnonymousUser(AnonymousUser):
-    @property
-    def is_admin(self):
-        return False
+class EMail(g.db.Model):
+    address = CharField(unique=True)
+    disabled = BooleanField(default=False)

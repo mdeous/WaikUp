@@ -11,7 +11,8 @@ from werkzeug.contrib.atom import AtomFeed
 from waikup import settings
 from waikup.lib import globals as g
 from waikup.lib.db import WaikupDB
-from waikup.views.admin import CategoryModelView, LinkModelView, RoleModelView, UserModelView, RestrictedAdminIndexView
+from waikup.views.admin import CategoryModelView, LinkModelView, RoleModelView, UserModelView, \
+    RestrictedAdminIndexView, EMailModelView
 
 
 # Setup application
@@ -38,7 +39,7 @@ g.mail = mail
 
 # Setup authentication
 
-from waikup.models import Category, Link, User, Role, UserRole, WaikUpAnonymousUser
+from waikup.models import Category, Link, User, Role, UserRole, WaikUpAnonymousUser, EMail
 user_datastore = PeeweeUserDatastore(g.db, User, Role, UserRole)
 g.user_datastore = user_datastore
 login_manager = Security(
@@ -60,6 +61,7 @@ admin.add_view(UserModelView(User))
 admin.add_view(RoleModelView(Role))
 admin.add_view(CategoryModelView(Category))
 admin.add_view(LinkModelView(Link))
+admin.add_view(EMailModelView(EMail))
 
 # Setup views
 
