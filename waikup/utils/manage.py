@@ -121,7 +121,7 @@ def sendmail():
     env = Environment(loader=PackageLoader('waikup', 'templates/emails'))
     html = env.get_template('html.jinja2').render(links=links)
     text = env.get_template('text.jinja2').render(links=links)
-    recipients = EMail.select()
+    recipients = EMail.select().where(EMail.disabled == False)
     for recipient in recipients:
         print "[+] Sending email to %s..." % recipient.address
         msg = Message(recipients=recipient.address)
@@ -129,7 +129,6 @@ def sendmail():
         msg.body = text
         msg.html = html
         mail.send(msg)
-        print msg
     print "[+] Archiving links..."
     for link in links:
         link.archived = True
