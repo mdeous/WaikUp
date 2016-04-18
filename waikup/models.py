@@ -18,11 +18,10 @@ class WaikUpAnonymousUser(AnonymousUser):
 
 class User(UserMixin, g.db.Model):
     id = PrimaryKeyField()
-    username = CharField(unique=True)
     first_name = CharField()
     last_name = CharField()
     password = CharField()
-    email = CharField()
+    email = CharField(unique=True)
     admin = BooleanField(default=False)
     active = BooleanField(default=True)
 
