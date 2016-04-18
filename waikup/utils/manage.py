@@ -70,7 +70,6 @@ def adduser(admin=False, inactive=False):
     """Adds a new user."""
     user_datastore = PeeweeUserDatastore(db, User, Role, UserRole)
     print "[+] Creating new user (admin=%r, inactive=%r)" % (admin, inactive)
-    username = raw_input("[>] Username: ")
     first_name = raw_input("[>] First name: ")
     last_name = raw_input("[>] Last name: ")
     email = raw_input("[>] Email: ")
