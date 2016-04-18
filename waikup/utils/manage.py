@@ -11,15 +11,14 @@ from flask.ext.script import Manager
 from jinja2 import Environment, PackageLoader
 
 from waikup.app import app, db, mail
-from waikup.lib.errors import ApiError
-from waikup.models import BaseModel, Category, User, Role, UserRole, Link
+from waikup.models import *
 
 try:
     import simplejson as json
 except ImportError:
     import json
 
-TABLES = BaseModel.__subclasses__()
+TABLES = g.db.Model.__subclasses__()
 manager = Manager(app)
 
 
@@ -59,8 +58,8 @@ def setupdb():
 @manager.command
 def resetdb():
     """Resets database content."""
-    for table in reversed(TABLES):
-        print "[+] Resetting table: %s..." % table._meta.name
+    for table in TABLES:
+        print "[+] Deleting table: %s..." % table._meta.name
         table.delete().execute()
         db.database.execute_sql(*db.database.compiler().drop_table(table, cascade=True))
     setupdb()
@@ -115,16 +114,22 @@ def chpasswd(username):
 def sendmail():
     """Sends an email containing last submitted links."""
     links = Link.select().where(Link.archived == False)
+    if not links:
+        print "[+] No new links, nothing to do"
+        return
     print "[+] Loading and populating email templates..."
     env = Environment(loader=PackageLoader('waikup', 'templates/emails'))
     html = env.get_template('html.jinja2').render(links=links)
     text = env.get_template('text.jinja2').render(links=links)
-    print "[+] Sending email..."
-    msg = Message(recipients=app.config['MAIL_RECIPIENTS'])
-    msg.subject = app.config['MAIL_TITLE']
-    msg.body = text
-    msg.html = html
-    mail.send(msg)
+    recipients = EMail.select()
+    for recipient in recipients:
+        print "[+] Sending email to %s..." % recipient.address
+        msg = Message(recipients=recipient.address)
+        msg.subject = app.config['MAIL_TITLE']
+        msg.body = text
+        msg.html = html
+        mail.send(msg)
+        print msg
     print "[+] Archiving links..."
     for link in links:
         link.archived = True
