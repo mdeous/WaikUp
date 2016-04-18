@@ -8,7 +8,6 @@ from peewee import *
 
 from waikup import settings
 from waikup.lib import globals as g
-from waikup.lib.errors import ApiError
 
 
 class WaikUpAnonymousUser(AnonymousUser):
@@ -17,55 +16,8 @@ class WaikUpAnonymousUser(AnonymousUser):
         return False
 
 
-class BaseModel(g.db.Model):
-    safe_fields = ()
+class User(UserMixin, g.db.Model):
     id = PrimaryKeyField()
-    no_item_code = 404
-    no_item_message = "Item does not exist"
-
-    def safe_update(self, data):
-        for field in self.safe_fields:
-            if (field in data) and (data[field] is not None):
-                setattr(self, field, data[field])
-        try:
-            result = self.save()
-        except IntegrityError:
-            raise ApiError("Item values overlap with an existing one")
-        return result
-
-    @classmethod
-    def get(cls, *args, **kwargs):
-        try:
-            obj = super(BaseModel, cls).get(*args, **kwargs)
-        except DoesNotExist:
-            raise ApiError(cls.no_item_message, status_code=cls.no_item_code)
-        return obj
-
-    @classmethod
-    def create(cls, *args, **kwargs):
-        try:
-            result = super(BaseModel, cls).create(*args, **kwargs)
-        except IntegrityError:
-            raise ApiError("Item already exists")
-        return result
-
-    @classmethod
-    def safe_delete(cls, *args, **kwargs):
-        try:
-            delete_query = cls.delete().where(*args, **kwargs)
-            result = delete_query.execute()
-        except DoesNotExist:
-            raise ApiError(cls.no_item_message, status_code=cls.no_item_code)
-        return result
-
-
-class User(BaseModel, UserMixin):
-    safe_fields = (
-        'first_name',
-        'last_name',
-        'email'
-    )
-    no_item_message = "User does not exist"
     username = CharField(unique=True)
     first_name = CharField()
     last_name = CharField()
@@ -76,13 +28,6 @@ class User(BaseModel, UserMixin):
 
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
-
-    @property
-    def is_active(self):
-        return self.active
-
-    def get_id(self):
-        return unicode(self.id)
 
     @property
     def is_admin(self):
@@ -99,12 +44,14 @@ class User(BaseModel, UserMixin):
         return verify_password(password, self.password)
 
 
-class Role(BaseModel, RoleMixin):
+class Role(RoleMixin, g.db.Model):
+    id = PrimaryKeyField()
     name = CharField(unique=True)
     description = TextField(null=True)
 
 
-class UserRole(BaseModel):
+class UserRole(g.db.Model):
+    id = PrimaryKeyField()
     user = ForeignKeyField(User, related_name='roles')
     role = ForeignKeyField(Role, related_name='users')
 
@@ -118,23 +65,19 @@ class UserRole(BaseModel):
         return self.role.description
 
 
-class Category(BaseModel):
+class Category(g.db.Model):
+    id = PrimaryKeyField()
     name = CharField(unique=True, default=settings.DEFAULT_CATEGORY)
 
     def __unicode__(self):
         return u'%s' % self.name
 
 
-class Link(BaseModel):
+class Link(g.db.Model):
     class Meta(object):
         order_by = ('-submitted',)
 
-    safe_fields = (
-        'url',
-        'title',
-        'description',
-        'archived'
-    )
+    id = PrimaryKeyField()
     url = CharField(unique=True)
     title = CharField()
     description = TextField(default='No description')
@@ -162,5 +105,6 @@ class Link(BaseModel):
 
 
 class EMail(g.db.Model):
+    id = PrimaryKeyField()
     address = CharField(unique=True)
     disabled = BooleanField(default=False)
