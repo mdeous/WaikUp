@@ -55,7 +55,7 @@ def archives():
 @login_required
 def new_link():
     redirect_to = request.args.get('redir', 'index')
-    redirect_to = url_for('webui.'+redirect_to)
+    redirect_to = url_for('main.'+redirect_to)
     form = NewLinkForm()
     form.set_category_choices()
     if form.validate_on_submit():
@@ -79,7 +79,7 @@ def new_link():
 @login_required
 def change_password():
     redirect_to = request.args.get('redir', 'index')
-    redirect_to = url_for('webui.'+redirect_to)
+    redirect_to = url_for('main.'+redirect_to)
     form = ChangePasswordForm()
     if form.validate_on_submit():
         if not current_user.check_password(form.current.data):
@@ -99,7 +99,7 @@ def change_password():
 @login_required
 def delete_link():
     redirect_to = request.args.get('redir', 'index')
-    redirect_to = url_for('webui.'+redirect_to)
+    redirect_to = url_for('main.'+redirect_to)
     linkid = request.form.get('link_id')
     delete_form = SimpleLinkForm()
     if delete_form.validate_on_submit():
@@ -155,7 +155,7 @@ def edit_link(linkid):
     form.set_category_choices()
     link = Link.get(Link.id == linkid)
     redirect_page = request.args.get('redir', 'index')
-    redirect_to = url_for('webui.'+redirect_page)
+    redirect_to = url_for('main.'+redirect_page)
     if link is None:
         flash("Link not found: %d" % linkid, category='error')
         return redirect(redirect_to)
@@ -186,7 +186,7 @@ def edit_link(linkid):
     )
 
 
-# @webui.route('/stats')
+# @main.route('/stats')
 # @login_required
 # def stats():
 #     return render_template(

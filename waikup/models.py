@@ -66,7 +66,7 @@ class UserRole(g.db.Model):
 
 class Category(g.db.Model):
     id = PrimaryKeyField()
-    name = CharField(unique=True, default=settings.DEFAULT_CATEGORY)
+    name = CharField(unique=True)
 
     def __unicode__(self):
         return u'%s' % self.name

@@ -29,7 +29,7 @@ class ReadOnlyModelView(BaseModelView):
 
 class UserModelView(ReadOnlyModelView):
     column_exclude_list = ['password']
-    column_searchable_list = ['username', 'first_name', 'last_name', 'email']
+    column_searchable_list = ['first_name', 'last_name', 'email']
     column_filters = ['admin', 'active']
 
 

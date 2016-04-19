@@ -79,7 +79,6 @@ def adduser(admin=False, inactive=False):
         print "[!] Passwords don't match!"
         sys.exit(1)
     user_datastore.create_user(
-        username=username,
         first_name=first_name,
         last_name=last_name,
         email=email,
