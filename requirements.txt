@@ -3,6 +3,7 @@ Flask-Script
 Flask-WTF
 Flask-Mail
 Flask-Security
+Flask-RESTful
 peewee
 psycopg2
 simplejson

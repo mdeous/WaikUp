@@ -4,6 +4,7 @@ from flask import Flask, request
 from flask.ext.admin import Admin
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.mail import Mail
+from flask.ext.restful import Api
 from flask.ext.security import Security, PeeweeUserDatastore
 from peewee import fn
 from werkzeug.contrib.atom import AtomFeed
@@ -65,11 +66,19 @@ admin.add_view(EMailModelView(EMail))
 
 # Setup views
 
-# from waikup.views.api import api
 from waikup.views.main import main
 
 app.register_blueprint(main)
-# app.register_blueprint(api, url_prefix='/api')
+
+
+# Setup API
+
+from waikup.views.api import api as api_bp, LinkListResource, LinkResource
+
+api = Api(api_bp)
+api.add_resource(LinkListResource, '/links')
+api.add_resource(LinkResource, '/links/<int:linkid>')
+app.register_blueprint(api_bp, url_prefix='/api')
 
 
 # Atom feed
