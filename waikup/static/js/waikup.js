@@ -64,3 +64,5 @@ $('.toggle-archive').click(function () {
   $('#' + linkInfo.action + '-form-' + linkInfo.id).submit();
   return false;
 });
+$('[data-toggle="tooltip"]').tooltip();
+var clipboard = new Clipboard('[data-clipboard-btn]');
