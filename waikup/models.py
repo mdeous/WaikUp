@@ -6,7 +6,6 @@ from flask.ext.security import UserMixin, RoleMixin, AnonymousUser
 from flask.ext.security.utils import verify_password, encrypt_password
 from peewee import *
 
-from waikup import settings
 from waikup.lib import globals as g
 
 
