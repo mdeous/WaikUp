@@ -4,17 +4,6 @@ import sys
 from math import ceil
 
 
-class Singleton(type):
-    def __init__(cls, name, bases, attr_dict):
-        super(Singleton, cls).__init__(name, bases, attr_dict)
-        cls.__instance = None
-
-    def __call__(cls, *args, **kwargs):
-        if cls.__instance is None:
-            cls.__instance = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls.__instance
-
-
 class Paginated(object):
     def __init__(self, query, page, per_page, count):
         self.page = page
