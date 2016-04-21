@@ -94,7 +94,7 @@ def chpasswd(username):
     """Change given user's password."""
     try:
         user = User.get(User.username == username)
-    except ApiError:
+    except User.DoesNotExist:
         print "[!] Unknown user: %s" % username
         sys.exit(1)
     password1 = getpass("[>] Password: ")
