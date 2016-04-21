@@ -32,12 +32,11 @@ server. Create a `/var/www/waikup` folder on your server, then clone WaikUp's re
 the previously created one. Transfer the `/var/www/waikup/src/deploy/fabfile.py` file to your local machine, and run:
 
 
-    fab -i <ssh_private_key> -H <remote_host> setup_all
-    fab -i <ssh_private_key> -H <remote_host> init_prod
+    fab -i <ssh_private_key> -H <host> setup_all
+    fab -i <ssh_private_key> -H <host> init_prod
   
 
-You can now replace the auto-generated Apache certificate for a signed one, change the default users credentials
-using the management utility, and you're good to go!
+You can now replace the auto-generated Apache's certificates for a signed one, and you're good to go!
 
 
 ## The manual way
@@ -48,7 +47,7 @@ using the management utility, and you're good to go!
     * `postgresql`
     * `libpq-dev`
 
-* Enable SSL using `a2enmod ssl` and generate the appropriate certificates in `/etc/apache2`.
+* Enable Apache's SSL module using `a2enmod ssl` and generate the appropriate certificates in `/etc/apache2`.
 * Create a new virtualenv in `/var/www`, and clone the repository into the virtualenv's `src` folder:
 
 
@@ -70,16 +69,14 @@ using the management utility, and you're good to go!
 * Configure Apache using the settings provided in the `waikup.wsgi` file.
 * Create a `/var/www/waikup/src/waikup/prod_settings.py` file with (at least) the following values defined:
   * `DEBUG = False`
-  * `SECRET_KEY = 'some secret key'` (can be generated using `''.join(choice(string.printable) for _ in range(32))`)
+  * `SECRET_KEY = 'some complicated secret key'` (can be generated using `''.join(choice(string.printable) for _ in range(32))`)
+  * `SECURITY_PASSWORD_SALT = 'some complicated salt to be used when hashing passwords'` 
 
+(safe values for `SECRET_KEY` and `SECURITY_PASSWORD_SALT` can be generated using 
+`''.join(choice(string.printable) for _ in range(32))`)
+ 
 * Setup the database schema using the `waikup_manage setupdb` management command.
-
-When setting up the database, an admin user is created with 'admin:admin' credentials, this account is only meant for
-testing purpose, if you are deploying WaikUp in a production environment, immediately create a new admin user using the
-`waikup_manage adduser` command, and delete this one (once logged, this can be done from the admin interface).
-
-An API user is also created which username is 'waikupapi', this account is internal and should not be modified or deleted.
-It is created with a very strong random password, and can not be used as a normal user.
+* Create a new user using the `waikup_manage adduser` command
 
 For a list of settings you might wish to change (database, emails), have a look at the `waikup/settings.py` file.
 

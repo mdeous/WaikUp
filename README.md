@@ -2,20 +2,23 @@
 
 Collaborative news sharing platform.
 
+
 ## Introduction
 
 WaikUp is an application for teams who want a collaborative platform to share their findings around the Web.
 
-Additionally to the traditionnal web interface, WaikUp provides a RESTful API to allow any other interface 
+Additionally to the traditionnal web interface, WaikUp provides a RESTful API that allows other interfaces 
 (browser extension, mobile application, etc...) to be built upon it.
 
 
 ## Development status
 
 * Web UI: OK
-* Users management: OK (misses reader/contributor roles)
-* API: NOT USABLE YET
-* Database migration: NOT USABLE YET
+* Users management: usable (yet to take advantage of flask-security roles)
+* API: OK
+* API Documentation: OK
+* Database migration: TODO
+* Deployment documentation: OK
 
 
 ## Management utility
@@ -49,7 +52,6 @@ separated from the stable (`master`) branch, and stable code remains, well... st
 The complete workflow is explained in details on
 [this page](http://nvie.com/posts/a-successful-git-branching-model/ "A successful branching model"),
 and the `git-flow` utility can be found [here](https://github.com/nvie/gitflow "Git-Flow").
-
 
 
 ## Licensing
