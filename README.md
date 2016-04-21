@@ -14,7 +14,7 @@ Additionally to the traditionnal web interface, WaikUp provides a RESTful API th
 ## Development status
 
 * Web UI: OK
-* Users management: usable (yet to take advantage of flask-security roles)
+* Users management: OK
 * API: OK
 * API Documentation: OK
 * Database migration: TODO
