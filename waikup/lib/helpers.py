@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from functools import wraps
 from math import ceil
-
-from flask import request
-
-from waikup.lib.errors import ApiError
 
 
 class Singleton(type):
@@ -42,20 +37,6 @@ class Paginated(object):
     @property
     def has_next(self):
         return self.page < self.pages
-
-
-class required_fields(object):
-    def __init__(self, *fields):
-        self.fields = fields
-
-    def __call__(self, func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            for field in self.fields:
-                if field not in request.form:
-                    raise ApiError("Missing field: %s" % field)
-            return func(*args, **kwargs)
-        return wrapper
 
 
 def load_class(cls):
