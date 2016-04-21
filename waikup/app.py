@@ -59,7 +59,7 @@ admin = Admin(
     index_view=RestrictedAdminIndexView()
 )
 admin.add_view(UserModelView(User))
-admin.add_view(RoleModelView(Role))
+# admin.add_view(RoleModelView(Role))
 admin.add_view(CategoryModelView(Category))
 admin.add_view(LinkModelView(Link))
 admin.add_view(EMailModelView(EMail))
