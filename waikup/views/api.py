@@ -51,8 +51,10 @@ class LinkResource(BaseResource):
         except Link.DoesNotExist:
             abort(404, success=False, message='No link with this id: %d' % linkid)
         else:
-            link.delete()
-            return {'success': True, 'linkid': linkid}
+            if (current_user == Link.author) or current_user.is_admin:
+                link.delete()
+                return {'success': True, 'linkid': linkid}
+            abort(403, success=False, message='Unauthorized to delete this link: %d' % linkid)
 
 
 class LinkListResource(BaseResource):
