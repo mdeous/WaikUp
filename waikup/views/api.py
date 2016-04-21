@@ -41,7 +41,7 @@ class LinkResource(BaseResource):
         try:
             link = Link.get(Link.id == linkid)
         except Link.DoesNotExist:
-            abort(404, success=False, message='No link with id %d' % linkid)
+            abort(404, success=False, message='No link with this id: %d' % linkid)
         else:
             return {'success': True, 'link': link}
 
@@ -49,7 +49,7 @@ class LinkResource(BaseResource):
         try:
             link = Link.get(Link.id == linkid)
         except Link.DoesNotExist:
-            abort(404, success=False, message='No link with id %d' % linkid)
+            abort(404, success=False, message='No link with this id: %d' % linkid)
         else:
             link.delete()
             return {'success': True, 'linkid': linkid}
@@ -58,32 +58,36 @@ class LinkResource(BaseResource):
 class LinkListResource(BaseResource):
     @marshal_with(link_list_message)
     def get(self):
-        return {'success': True, 'links': Link.select()}
+        return {'success': True, 'links': Link.select().order_by(Link.id.asc())}
 
     def post(self):
-        parser = RequestParser()
-        parser.add_argument(
+        post_parser = RequestParser()
+        post_parser.add_argument(
             'url',
             dest='url',
-            required=True
+            required=True,
+            location='form'
         )
-        parser.add_argument(
+        post_parser.add_argument(
             'title',
             dest='title',
-            required=True
+            required=True,
+            location='form'
         )
-        parser.add_argument(
+        post_parser.add_argument(
             'description',
             dest='description',
-            default='No description'
+            default='No description',
+            location='form'
         )
-        parser.add_argument(
+        post_parser.add_argument(
             'category',
             dest='category',
             choices=[cat.name for cat in Category.select()],
-            default=current_app.config['DEFAULT_CATEGORY']
+            default=current_app.config['DEFAULT_CATEGORY'],
+            location='form'
         )
-        args = parser.parse_args()
+        args = post_parser.parse_args()
         category = Category.select().where(Category.name == args.category)
         try:
             link = Link.create(
