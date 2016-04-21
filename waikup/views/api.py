@@ -60,7 +60,30 @@ class LinkResource(BaseResource):
 class LinkListResource(BaseResource):
     @marshal_with(link_list_message)
     def get(self):
-        return {'success': True, 'links': Link.select().order_by(Link.id.asc())}
+        get_parser = RequestParser()
+        get_parser.add_argument(
+            'archived',
+            dest='archived',
+            type=int,
+            choices=(0, 1),
+            default=0,
+            location='args'
+        )
+        get_parser.add_argument(
+            'search',
+            dest='search',
+            location='args'
+        )
+        args = get_parser.parse_args()
+        links = Link.select().where(Link.archived == bool(args.archived))
+        if args.search is not None:
+            pattern = '%%%s%%' % args.search
+            links = links.where(
+                (Link.url ** pattern) |
+                (Link.title ** pattern) |
+                (Link.description ** pattern)
+            )
+        return {'success': True, 'links': links.order_by(Link.id.asc())}
 
     def post(self):
         post_parser = RequestParser()

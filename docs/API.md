@@ -16,7 +16,10 @@ on your user information page.
 
 ## Endpoints
 
-* `GET /api/links` - fetch all links
+* `GET /api/links?search=<search>&archived=<archived>` - fetch all links
+    * `search` (optional, defaults to: return all links) - search for a string in links url, title, and 
+    description fields
+    * `archived` - (optional, defaults to: 0) - fetch only (un)archived links (possible values: 0,1)
 
 ```json
 {
