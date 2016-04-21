@@ -12,7 +12,7 @@ from werkzeug.contrib.atom import AtomFeed
 from waikup import settings
 from waikup.lib import globals as g
 from waikup.lib.db import WaikupDB
-from waikup.views.admin import CategoryModelView, LinkModelView, RoleModelView, UserModelView, \
+from waikup.views.admin import CategoryModelView, LinkModelView, UserModelView, \
     RestrictedAdminIndexView, EMailModelView
 
 
@@ -59,7 +59,6 @@ admin = Admin(
     index_view=RestrictedAdminIndexView()
 )
 admin.add_view(UserModelView(User))
-# admin.add_view(RoleModelView(Role))
 admin.add_view(CategoryModelView(Category))
 admin.add_view(LinkModelView(Link))
 admin.add_view(EMailModelView(EMail))
