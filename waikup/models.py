@@ -85,7 +85,7 @@ class Link(g.db.Model):
     category = ForeignKeyField(
         Category,
         related_name='links',
-        null=True,
+        null=False,
     )
 
     def __unicode__(self):
