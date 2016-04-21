@@ -4,9 +4,10 @@ from flask import Blueprint, current_app
 from flask.ext.restful import Resource, marshal_with, abort
 from flask.ext.restful.fields import Integer, String, DateTime, Boolean, List, Nested
 from flask.ext.restful.reqparse import RequestParser
-from peewee import DoesNotExist, IntegrityError
+from flask.ext.security import current_user, auth_token_required
+from peewee import IntegrityError
 
-from waikup.models import Link, Category, User
+from waikup.models import Link, Category
 
 api = Blueprint('api', __name__)
 
@@ -30,25 +31,31 @@ link_list_message = {
 }
 
 
-class LinkResource(Resource):
+class BaseResource(Resource):
+    method_decorators = [auth_token_required]
+
+
+class LinkResource(BaseResource):
     @marshal_with(link_message)
     def get(self, linkid):
         try:
-            return {'success': True, 'link': Link.get(Link.id == linkid)}
-        except DoesNotExist:
+            link = Link.get(Link.id == linkid)
+        except Link.DoesNotExist:
             abort(404, success=False, message='No link with id %d' % linkid)
+        else:
+            return {'success': True, 'link': link}
 
     def delete(self, linkid):
         try:
             link = Link.get(Link.id == linkid)
-        except DoesNotExist:
+        except Link.DoesNotExist:
             abort(404, success=False, message='No link with id %d' % linkid)
         else:
             link.delete()
             return {'success': True, 'linkid': linkid}
 
 
-class LinkListResource(Resource):
+class LinkListResource(BaseResource):
     @marshal_with(link_list_message)
     def get(self):
         return {'success': True, 'links': Link.select()}
@@ -84,7 +91,7 @@ class LinkListResource(Resource):
                 title=args.title,
                 description=args.description,
                 category=category,
-                author=User.get(User.id == 1)
+                author=current_user
             )
         except IntegrityError:
             abort(409, success=False, message='link already exists: %s' % args.url)
