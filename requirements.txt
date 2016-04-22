@@ -4,6 +4,9 @@ Flask-WTF
 Flask-Mail
 Flask-Security
 Flask-RESTful
+Flask-Admin
+Flask-Bootstrap
 peewee
+wtf-peewee
 psycopg2
 simplejson
