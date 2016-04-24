@@ -21,11 +21,12 @@ The application can then be fully deployed using a single command:
 
 ## Production
 
-Deploying the application for production use requires to use a standalone Web server. This documentation
-describes the procedure using the Apache web server on a debian based system.
+While Flask's built-in server is perfect during development, deploying the application for production use requires to 
+use a standalone Web server. This documentation describes the procedure using the Apache web server on a debian based 
+system.
 
 
-## The lazy way
+### The lazy way
 
 As the Vagrantfile uses Fabric for provisioning, it is as well possible to use Fabric to deploy to your production
 server. Create a `/var/www/waikup` folder on your server, then clone WaikUp's repository to an `src` folder inside
@@ -46,7 +47,7 @@ Once the deployment is finished, ssh to your server and create a new admin user 
 You can now replace the auto-generated Apache's certificates for a signed one, and you're good to go!
 
 
-## The manual way
+### The manual way
 
 * Make sure that the following packages are installed on the system:
     * `apache2`
@@ -74,6 +75,13 @@ You can now replace the auto-generated Apache's certificates for a signed one, a
 
 
 * Configure Apache using the settings provided in the `waikup.wsgi` file.
+* Setup the database schema using the `waikup_manage setupdb` management command.
+
+
+## Post-install
+
+### Settings
+
 * Create a `/var/www/waikup/src/waikup/prod_settings.py` file with (at least) the following values defined:
   * `DEBUG = False`
   * `SECRET_KEY = 'some complicated secret key'` (can be generated using `''.join(choice(string.printable) for _ in range(32))`)
@@ -81,11 +89,13 @@ You can now replace the auto-generated Apache's certificates for a signed one, a
 
 (safe values for `SECRET_KEY` and `SECURITY_PASSWORD_SALT` can be generated using 
 `''.join(choice(string.printable) for _ in range(32))`)
+
+For a list of other settings you might wish to change (database, emails), have a look at the `waikup/settings.py` file.
  
-* Setup the database schema using the `waikup_manage setupdb` management command.
 * Create a new admin user using the `waikup_manage adduser -a` command (you can create more users later from the WebUI).
 
-For a list of settings you might wish to change (database, emails), have a look at the `waikup/settings.py` file.
+
+### Sending emails
 
 Emails can be sent using the `waikup_manage sendmail` command, if you want to automate this, just set a `crontab` entry
 to run this command periodically (make sure to run it using the virtualenv's Python interpreter, which is located at
