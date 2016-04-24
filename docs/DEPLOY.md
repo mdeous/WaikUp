@@ -34,6 +34,13 @@ the previously created one. Transfer the `/var/www/waikup/src/deploy/fabfile.py`
 
     fab -i <ssh_private_key> -H <host> setup_all
     fab -i <ssh_private_key> -H <host> init_prod
+
+
+Once the deployment is finished, ssh to your server and create a new admin user using the `waikup_manage` utility:
+
+
+    source /var/www/waikup/bin/activate
+    waikup_manage adduser -a
   
 
 You can now replace the auto-generated Apache's certificates for a signed one, and you're good to go!
@@ -76,9 +83,10 @@ You can now replace the auto-generated Apache's certificates for a signed one, a
 `''.join(choice(string.printable) for _ in range(32))`)
  
 * Setup the database schema using the `waikup_manage setupdb` management command.
-* Create a new user using the `waikup_manage adduser` command
+* Create a new admin user using the `waikup_manage adduser -a` command (you can create more users later from the WebUI).
 
 For a list of settings you might wish to change (database, emails), have a look at the `waikup/settings.py` file.
 
 Emails can be sent using the `waikup_manage sendmail` command, if you want to automate this, just set a `crontab` entry
-to run this command periodically. When running this command, all active emails will be archived.
+to run this command periodically (make sure to run it using the virtualenv's Python interpreter, which is located at
+`/var/www/waikup/bin/python`.) When running this command, all active emails will be archived.
