@@ -1,11 +1,20 @@
 # -*- coding: utf-8 -*-
 
 DEBUG = True
+
+#
+# Security
+#
 SECRET_KEY = "PLEASE CHANGE ME"
 SECURITY_URL_PREFIX = '/user'
 SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
 SECURITY_PASSWORD_SALT = 'PLEASE CHANGE ME'
 SECURITY_TOKEN_AUTHENTICATION_HEADER = 'Auth'
+SECURITY_RECOVERABLE = True
+
+#
+# Database
+#
 DATABASE = {
     "name": "waikup",
     "user": "waikup",
@@ -25,10 +34,18 @@ DEFAULT_CATEGORIES = [
     'Other'
 ]
 DEFAULT_CATEGORY = 'Other'
+
+#
+# User interfaces (Web UI / API)
+#
 BUNDLE_ERRORS = True
 ITEMS_PER_PAGE = 10
 ATOM_LINKS_COUNT = 50
 DATETIME_FORMAT = '%b %d %Y at %H:%M:%S'
+
+#
+# E-mails
+#
 MAIL_SERVER = 'localhost'
 MAIL_PORT = 25
 MAIL_USE_TLS = False
