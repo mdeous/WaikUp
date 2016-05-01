@@ -11,6 +11,12 @@ main = Blueprint('main', __name__)
 
 
 def list_links(page_name, links=None):
+    """
+    Used for both index and archives view, returns a page containing given (or all) links.
+    :param page_name: 'index' or 'archives'
+    :param links: list of links to return in the page, or None
+    :return: rendered HTML page
+    """
     toggle_link_id = request.form.get('link_id')
     page_num = request.args.get('page')
     toggle_form = SimpleLinkForm()
@@ -42,18 +48,30 @@ def list_links(page_name, links=None):
 @main.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
+    """
+    Index page view.
+    :return: rendered HTML page.
+    """
     return list_links('index')
 
 
 @main.route('/archives', methods=['GET', 'POST'])
 @login_required
 def archives():
+    """
+    Archives page view.
+    :return: rendered HTML page.
+    """
     return list_links('archives')
 
 
 @main.route('/newlink', methods=['POST'])
 @login_required
 def new_link():
+    """
+    New link submission view.
+    :return: redirects to page from where submission was made.
+    """
     redirect_to = request.args.get('redir', 'index')
     redirect_to = url_for('main.'+redirect_to)
     form = NewLinkForm()
@@ -78,6 +96,10 @@ def new_link():
 @main.route('/chpasswd', methods=['POST'])
 @login_required
 def change_password():
+    """
+    Password changing view.
+    :return: redirects to page from which password changing occured.
+    """
     redirect_to = request.args.get('redir', 'index')
     redirect_to = url_for('main.'+redirect_to)
     form = ChangePasswordForm()
@@ -98,6 +120,10 @@ def change_password():
 @main.route('/delete', methods=['POST'])
 @login_required
 def delete_link():
+    """
+    Link deletion view.
+    :return: redirects to page from which link deletion occured.
+    """
     redirect_to = request.args.get('redir', 'index')
     redirect_to = url_for('main.'+redirect_to)
     linkid = request.form.get('link_id')
@@ -123,6 +149,10 @@ def delete_link():
 @main.route('/search', methods=['GET'])
 @login_required
 def search():
+    """
+    Link search view.
+    :return: rendered HTML page with links matching search terms.
+    """
     redirect_page = request.args.get('page', 'index')
     page_num = request.args.get('page')
     if (page_num is None) or (not page_num.isdigit()):
@@ -151,6 +181,11 @@ def search():
 @main.route('/edit_link/<int:linkid>', methods=['GET', 'POST'])
 @login_required
 def edit_link(linkid):
+    """
+    Link edition view.
+    :param linkid: id of link being edited.
+    :return: rendered HTML for modal's content.
+    """
     form = EditLinkForm()
     form.set_category_choices()
     link = Link.get(Link.id == linkid)
@@ -184,12 +219,3 @@ def edit_link(linkid):
         link=link,
         page_name=redirect_page
     )
-
-
-# @main.route('/stats')
-# @login_required
-# def stats():
-#     return render_template(
-#         'stats.html',
-#         page_name="stats"
-#     )

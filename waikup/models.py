@@ -10,12 +10,22 @@ from waikup.lib import globals as g
 
 
 class WaikUpAnonymousUser(AnonymousUser):
+    """
+    Custom anonymous user implementing the `has_admin` property.
+    """
     @property
     def is_admin(self):
+        """
+        Always returns False (an anonymous user can't be admin).
+        :return: False
+        """
         return False
 
 
 class User(UserMixin, g.db.Model):
+    """
+    User model.
+    """
     id = PrimaryKeyField()
     first_name = CharField()
     last_name = CharField()
@@ -43,12 +53,18 @@ class User(UserMixin, g.db.Model):
 
 
 class Role(RoleMixin, g.db.Model):
+    """
+    Role model.
+    """
     id = PrimaryKeyField()
     name = CharField(unique=True)
     description = TextField(null=True)
 
 
 class UserRole(g.db.Model):
+    """
+    Model implementing the User <-> Role many-to-many relationship.
+    """
     id = PrimaryKeyField()
     user = ForeignKeyField(User, related_name='roles')
     role = ForeignKeyField(Role, related_name='users')
@@ -64,6 +80,9 @@ class UserRole(g.db.Model):
 
 
 class Category(g.db.Model):
+    """
+    Category model.
+    """
     id = PrimaryKeyField()
     name = CharField(unique=True)
 
@@ -72,6 +91,9 @@ class Category(g.db.Model):
 
 
 class Link(g.db.Model):
+    """
+    Link model.
+    """
     class Meta(object):
         order_by = ('-submitted',)
 
@@ -93,6 +115,11 @@ class Link(g.db.Model):
 
     @classmethod
     def toggle_archiving(cls, linkid):
+        """
+        Toggles archived state for link with given id.
+        :param linkid: id of the link for which the archived state should be toggled.
+        :return: False if the link does not exist, True otherwise.
+        """
         links = list(cls.select().where(cls.id == linkid))
         if not links:
             return False

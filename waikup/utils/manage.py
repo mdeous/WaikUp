@@ -23,31 +23,22 @@ manager = Manager(app)
 
 
 def create_categories():
+    """
+    Inserts the default categories in the database.
+    :return: None
+    """
     for cat in app.config['DEFAULT_CATEGORIES']:
         if Category.select().where(Category.name == cat).count() == 0:
             print "[+] Inserting category: %s" % cat
             Category.create(name=cat)
 
 
-def read_db_version():
-    version = 0
-    if os.path.exists(app.config['DB_VERSION_FILE']):
-        with open(app.config['DB_VERSION_FILE']) as inf:
-            version = inf.read().strip() or '0'
-            if not version.isdigit():
-                print "[!] Unexpected version value: %s" % version
-                sys.exit(2)
-    return int(version)
-
-
-def write_db_version(ver):
-    with open(app.config['DB_VERSION_FILE'], 'w') as outf:
-        outf.write(str(ver))
-
-
 @manager.command
 def setupdb():
-    """Creates the database schema."""
+    """
+    Creates the database schema.
+    :return: None
+    """
     for table in TABLES:
         print "[+] Creating table: %s..." % table._meta.name
         table.create_table(fail_silently=True)
@@ -57,7 +48,10 @@ def setupdb():
 
 @manager.command
 def resetdb():
-    """Resets database content."""
+    """
+    Resets database content.
+    :return: None
+    """
     for table in TABLES:
         print "[+] Deleting table: %s..." % table._meta.name
         table.delete().execute()
@@ -67,7 +61,10 @@ def resetdb():
 
 @manager.command
 def adduser(admin=False, inactive=False):
-    """Adds a new user."""
+    """
+    Adds a new user.
+    :return: None
+    """
     user_datastore = PeeweeUserDatastore(db, User, Role, UserRole)
     print "[+] Creating new user (admin=%r, inactive=%r)" % (admin, inactive)
     first_name = raw_input("[>] First name: ")
@@ -91,7 +88,10 @@ def adduser(admin=False, inactive=False):
 
 @manager.command
 def chpasswd(username):
-    """Change given user's password."""
+    """
+    Change given user's password.
+    :return: None
+    """
     try:
         user = User.get(User.username == username)
     except User.DoesNotExist:
@@ -110,7 +110,10 @@ def chpasswd(username):
 
 @manager.command
 def sendmail():
-    """Sends an email containing last submitted links."""
+    """
+    Sends an email containing last submitted links.
+    :return: None
+    """
     links = Link.select().where(Link.archived == False)
     if not links:
         print "[+] No new links, nothing to do"

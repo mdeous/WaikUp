@@ -11,6 +11,7 @@ from waikup.models import Link, Category
 
 api = Blueprint('api', __name__)
 
+# messages format definitions
 link_format = {
     'id': Integer,
     'url': String,
@@ -32,12 +33,23 @@ link_list_message = {
 
 
 class BaseResource(Resource):
+    """
+    Base resource class requiring token authentication.
+    """
     method_decorators = [auth_token_required]
 
 
 class LinkResource(BaseResource):
+    """
+    Resource for unique existing links.
+    """
     @marshal_with(link_message)
     def get(self, linkid):
+        """
+        Gets given link.
+        :param linkid: id of the link that should be returned.
+        :return: the link corresponding to given id (or an error).
+        """
         try:
             link = Link.get(Link.id == linkid)
         except Link.DoesNotExist:
@@ -46,6 +58,11 @@ class LinkResource(BaseResource):
             return {'success': True, 'link': link}
 
     def delete(self, linkid):
+        """
+        Deletes given link.
+        :param linkid: id of the link that should be deleted.
+        :return: the id of the deleted link (or an error).
+        """
         try:
             link = Link.get(Link.id == linkid)
         except Link.DoesNotExist:
@@ -58,8 +75,15 @@ class LinkResource(BaseResource):
 
 
 class LinkListResource(BaseResource):
+    """
+    Resource for links list.
+    """
     @marshal_with(link_list_message)
     def get(self):
+        """
+        Gets all the links, filtered according to given parameters.
+        :return: a list of the filtered links
+        """
         get_parser = RequestParser()
         get_parser.add_argument(
             'archived',
@@ -86,6 +110,10 @@ class LinkListResource(BaseResource):
         return {'success': True, 'links': links.order_by(Link.id.asc())}
 
     def post(self):
+        """
+        Adds a new link.
+        :return: the newly created link (or an error).
+        """
         post_parser = RequestParser()
         post_parser.add_argument(
             'url',

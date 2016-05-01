@@ -84,6 +84,10 @@ app.register_blueprint(api_bp, url_prefix='/api')
 
 @app.route('/links.atom')
 def links_feed():
+    """
+    Atom feed view.
+    :return: Atom feed HTTP response.
+    """
     feed_title = 'Recently submitted links'
     cat = request.args.get('cat')
     if cat is not None:
@@ -113,6 +117,10 @@ def links_feed():
 
 @app.context_processor
 def global_forms():
+    """
+    Context processor that defines forms used in every view.
+    :return: a {form_name: form_object} dict.
+    """
     from waikup.forms import NewLinkForm, ChangePasswordForm
     newlink_form = NewLinkForm()
     newlink_form.set_category_choices()
