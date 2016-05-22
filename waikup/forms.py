@@ -16,9 +16,10 @@ def is_category(_, field):
     :param field: field object to check
     :return: None (or raises ValidationError)
     """
-    categories = [c.name for c in Category.select()]
-    if field.data not in categories:
-        raise ValidationError("Not a valid category")
+    try:
+        Category.get(Category.name == field.data)
+    except Category.DoesNotExist:
+        raise ValidationError("Invalid category")
 
 
 def flash_form_errors(form):

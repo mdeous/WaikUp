@@ -75,7 +75,6 @@ class UserRole(g.db.Model):
 
     @property
     def description(self):
-        assert isinstance(self.role, Role)
         return self.role.description
 
 
@@ -120,10 +119,10 @@ class Link(g.db.Model):
         :param linkid: id of the link for which the archived state should be toggled.
         :return: False if the link does not exist, True otherwise.
         """
-        links = list(cls.select().where(cls.id == linkid))
-        if not links:
+        try:
+            link = cls.get(cls.id == linkid)
+        except cls.DoesNotExist:
             return False
-        link = links[0]
         link.archived = not link.archived
         link.save()
         return True

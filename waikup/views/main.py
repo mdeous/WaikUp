@@ -132,8 +132,9 @@ def delete_link():
         if linkid is None:
             flash("No link specified", category='error')
             return redirect(redirect_to)
-        link = Link.get(Link.id == linkid)
-        if link is None:
+        try:
+            link = Link.get(Link.id == linkid)
+        except Link.DoesNotExist:
             flash("Link not found: %s" % linkid, category='error')
             return redirect(redirect_to)
         if (not current_user.is_admin) and (current_user.username != link.author.username):
@@ -188,10 +189,11 @@ def edit_link(linkid):
     """
     form = EditLinkForm()
     form.set_category_choices()
-    link = Link.get(Link.id == linkid)
     redirect_page = request.args.get('redir', 'index')
     redirect_to = url_for('main.'+redirect_page)
-    if link is None:
+    try:
+        link = Link.get(Link.id == linkid)
+    except Link.DoesNotExist:
         flash("Link not found: %d" % linkid, category='error')
         return redirect(redirect_to)
     if request.method == 'POST':
