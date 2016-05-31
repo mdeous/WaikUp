@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from flask import redirect, url_for, request
-from flask.ext.admin import AdminIndexView
-from flask.ext.admin.contrib.peewee import ModelView
-from flask.ext.security import current_user
+from flask_admin import AdminIndexView
+from flask_admin.contrib.peewee import ModelView
+from flask_security import current_user
 
 
 class RestrictedViewMixin:

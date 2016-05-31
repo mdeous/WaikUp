@@ -2,8 +2,8 @@
 
 from datetime import datetime
 
-from flask.ext.security import UserMixin, RoleMixin, AnonymousUser
-from flask.ext.security.utils import verify_password, encrypt_password
+from flask_security import UserMixin, RoleMixin, AnonymousUser
+from flask_security.utils import verify_password, encrypt_password
 from peewee import *
 
 from waikup.lib import globals as g

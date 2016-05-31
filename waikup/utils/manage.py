@@ -5,9 +5,9 @@ import os
 import sys
 from getpass import getpass
 
-from flask.ext.mail import Message
-from flask.ext.security import PeeweeUserDatastore
-from flask.ext.script import Manager
+from flask_mail import Message
+from flask_security import PeeweeUserDatastore
+from flask_script import Manager
 from jinja2 import Environment, PackageLoader
 
 from waikup.app import app, db, mail

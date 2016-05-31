@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, request
-from flask.ext.admin import Admin
-from flask.ext.bootstrap import Bootstrap
-from flask.ext.mail import Mail
-from flask.ext.restful import Api
-from flask.ext.security import Security, PeeweeUserDatastore
+from flask_admin import Admin
+from flask_bootstrap import Bootstrap
+from flask_mail import Mail
+from flask_restful import Api
+from flask_security import Security, PeeweeUserDatastore
 from peewee import fn
 from werkzeug.contrib.atom import AtomFeed
 

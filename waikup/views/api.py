@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from flask import Blueprint, current_app
-from flask.ext.restful import Resource, marshal_with, abort
-from flask.ext.restful.fields import Integer, String, DateTime, Boolean, List, Nested
-from flask.ext.restful.reqparse import RequestParser
-from flask.ext.security import current_user, auth_token_required
+from flask_restful import Resource, marshal_with, abort
+from flask_restful.fields import Integer, String, DateTime, Boolean, List, Nested
+from flask_restful.reqparse import RequestParser
+from flask_security import current_user, auth_token_required
 from peewee import IntegrityError
 
 from waikup.models import Link, Category
