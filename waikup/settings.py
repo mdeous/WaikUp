@@ -22,13 +22,11 @@ DATABASE = {
     "engine": "peewee.PostgresqlDatabase"
 }
 DEFAULT_CATEGORIES = [
-    'Web',
-    'Forensics',
-    'Reverse Engineering',
-    'Cryptography',
+    'System',
+    'Security',
     'Networking',
     'Development',
-    'Malware',
+    'Tools',
     'News',
     'Fun',
     'Other'
