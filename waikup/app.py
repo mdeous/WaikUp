@@ -72,11 +72,12 @@ app.register_blueprint(main)
 
 # Setup API
 
-from waikup.views.api import api as api_bp, LinkListResource, LinkResource
+from waikup.views.api import api as api_bp, LinkListResource, LinkResource, UserResource
 
 api = Api(api_bp)
 api.add_resource(LinkListResource, '/links')
 api.add_resource(LinkResource, '/links/<int:linkid>')
+api.add_resource(UserResource, '/profile')
 app.register_blueprint(api_bp, url_prefix='/api')
 
 

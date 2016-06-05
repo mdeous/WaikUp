@@ -30,6 +30,13 @@ link_list_message = {
     'success': Boolean,
     'links': List(Nested(link_format))
 }
+user_format = {
+    'id': Integer,
+    'first_name': String,
+    'last_name': String,
+    'email': String,
+    'admin': Boolean
+}
 
 
 class BaseResource(Resource):
@@ -154,3 +161,9 @@ class LinkListResource(BaseResource):
             abort(409, success=False, message='link already exists: %s' % args.url)
         else:
             return {'success': True, 'linkid': link.id}
+
+
+class UserResource(BaseResource):
+    @marshal_with(user_format)
+    def get(self):
+        return current_user
