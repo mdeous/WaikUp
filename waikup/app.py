@@ -3,6 +3,7 @@
 from flask import Flask, request
 from flask_admin import Admin
 from flask_bootstrap import Bootstrap
+from flask_cors import CORS
 from flask_mail import Mail
 from flask_restful import Api
 from flask_security import Security, PeeweeUserDatastore
@@ -25,6 +26,12 @@ if app.config['DEBUG'] and app.config.get('DEBUG_TB_ENABLED', False):
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
     toolbar = DebugToolbarExtension(app)
 Bootstrap(app)
+CORS(
+    app,
+    resources={
+        r'/api/*': {'origins': 'chrome-extension://*'}
+    }
+)
 
 # Setup database
 
