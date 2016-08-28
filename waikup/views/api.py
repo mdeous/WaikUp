@@ -37,6 +37,10 @@ user_format = {
     'email': String,
     'admin': Boolean
 }
+user_message = {
+    'success': Boolean,
+    'profile': Nested(user_format)
+}
 
 
 class BaseResource(Resource):
@@ -164,6 +168,6 @@ class LinkListResource(BaseResource):
 
 
 class UserResource(BaseResource):
-    @marshal_with(user_format)
+    @marshal_with(user_message)
     def get(self):
-        return current_user
+        return {'success': True, 'profile': current_user}
