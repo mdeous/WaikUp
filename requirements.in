@@ -6,6 +6,7 @@ Flask-Security
 Flask-RESTful
 Flask-Admin
 Flask-Bootstrap
+Flask-CORS
 peewee
 wtf-peewee
 psycopg2
