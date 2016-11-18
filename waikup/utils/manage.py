@@ -93,7 +93,7 @@ def chpasswd(username):
     :return: None
     """
     try:
-        user = User.get(User.username == username)
+        user = User.get(User.email == username)
     except User.DoesNotExist:
         print "[!] Unknown user: %s" % username
         sys.exit(1)
