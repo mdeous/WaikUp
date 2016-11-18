@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import flash
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms import TextAreaField, PasswordField, SelectField, StringField, IntegerField
 from wtforms.fields.html5 import URLField
 from wtforms.validators import url, required, optional, equal_to, ValidationError
@@ -33,7 +33,7 @@ def flash_form_errors(form):
             flash("%s (field: %s)" % (field_error, field_name), category='danger')
 
 
-class FormWithCategory(Form):
+class FormWithCategory(FlaskForm):
     """
     Base Form class for forms that have a category field.
     """
@@ -51,7 +51,7 @@ class FormWithCategory(Form):
         self.category.choices = [(c.name, c.name) for c in Category.select()]
 
 
-class SimpleLinkForm(Form):
+class SimpleLinkForm(FlaskForm):
     """
     Form for cases where only the field's id is needed (convenience form to benefit from CSRF protection).
     """
@@ -78,7 +78,7 @@ class NewLinkForm(FormWithCategory):
     )
 
 
-class ChangePasswordForm(Form):
+class ChangePasswordForm(FlaskForm):
     """
     Form for user password changes.
     """
