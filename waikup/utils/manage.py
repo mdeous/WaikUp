@@ -37,7 +37,6 @@ def create_categories():
 def setupdb():
     """
     Creates the database schema.
-    :return: None
     """
     for table in TABLES:
         print "[+] Creating table: %s..." % table._meta.name
@@ -50,7 +49,6 @@ def setupdb():
 def resetdb():
     """
     Resets database content.
-    :return: None
     """
     for table in TABLES:
         print "[+] Deleting table: %s..." % table._meta.name
@@ -63,7 +61,6 @@ def resetdb():
 def adduser(admin=False, inactive=False):
     """
     Adds a new user.
-    :return: None
     """
     user_datastore = PeeweeUserDatastore(db, User, Role, UserRole)
     print "[+] Creating new user (admin=%r, inactive=%r)" % (admin, inactive)
@@ -90,7 +87,6 @@ def adduser(admin=False, inactive=False):
 def chpasswd(username):
     """
     Change given user's password.
-    :return: None
     """
     try:
         user = User.get(User.email == username)
@@ -112,7 +108,6 @@ def chpasswd(username):
 def sendmail():
     """
     Sends an email containing last submitted links.
-    :return: None
     """
     links = Link.select().where(Link.archived == False)
     if not links:
