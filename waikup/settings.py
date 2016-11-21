@@ -53,8 +53,6 @@ MAIL_USERNAME = 'username'
 MAIL_PASSWORD = 'password'
 MAIL_DEFAULT_SENDER = 'sender@example.com'
 MAIL_TITLE = "[WaikUp] Latest selected links"
-MAIL_RECIPIENTS = []
-
 
 try:
     from prod_settings import *
