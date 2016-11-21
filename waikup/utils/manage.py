@@ -123,13 +123,12 @@ def sendmail():
     html = env.get_template('html.jinja2').render(links=links)
     text = env.get_template('text.jinja2').render(links=links)
     recipients = EMail.select().where(EMail.disabled == False)
-    for recipient in recipients:
-        print "[+] Sending email to %s..." % recipient.address
-        msg = Message(recipients=recipient.address)
-        msg.subject = app.config['MAIL_TITLE']
-        msg.body = text
-        msg.html = html
-        mail.send(msg)
+    print "[+] Sending %d email(s)..." % recipients.count()
+    msg = Message(recipients=[r.address for r in recipients])
+    msg.subject = app.config['MAIL_TITLE']
+    msg.body = text
+    msg.html = html
+    mail.send(msg)
     print "[+] Archiving links..."
     for link in links:
         link.archived = True
