@@ -11,3 +11,4 @@ peewee
 wtf-peewee
 psycopg2
 simplejson
+flask-reverse-proxy

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 DEBUG = True
+REVERSE_PROXIED = False
 
 #
 # Security

@@ -8,28 +8,29 @@ aniso8601==1.2.0          # via flask-restful
 blinker==1.4              # via flask-mail, flask-principal
 click==6.6                # via flask
 dominate==2.3.0           # via flask-bootstrap
-flask-admin==1.4.2
-flask-bootstrap==3.3.7.0
-flask-cors==3.0.2
-flask-login==0.3.2        # via flask-security
-flask-mail==0.9.1
-flask-principal==0.4.0    # via flask-security
-flask-restful==0.3.5
-flask-script==2.0.5
-flask-security==1.7.5
-flask-wtf==0.13.1
-flask==0.11.1
+Flask-Admin==1.4.2
+Flask-Bootstrap==3.3.7.0
+Flask-CORS==3.0.2
+Flask-Login==0.3.2        # via flask-security
+Flask-Mail==0.9.1         # via flask-security
+Flask-Principal==0.4.0    # via flask-security
+Flask-RESTful==0.3.5
+flask-reverse-proxy==0.2.0.2
+Flask-Script==2.0.5
+Flask-Security==1.7.5
+Flask-WTF==0.13.1         # via flask-security
+Flask==0.11.1             # via flask-admin, flask-bootstrap, flask-cors, flask-login, flask-mail, flask-principal, flask-restful, flask-script, flask-security, flask-wtf
 itsdangerous==0.24        # via flask, flask-security
-jinja2==2.8               # via flask
-markupsafe==0.23          # via jinja2
+Jinja2==2.8               # via flask
+MarkupSafe==0.23          # via jinja2
 passlib==1.6.5            # via flask-security
 peewee==2.8.5
 psycopg2==2.6.2
 python-dateutil==2.6.0    # via aniso8601
 pytz==2016.7              # via flask-restful
 simplejson==3.10.0
-six==1.10.0               # via flask-cors, flask-restful, python-dateutil
+Six==1.10.0               # via flask-cors, flask-restful, python-dateutil
 visitor==0.1.3            # via flask-bootstrap
-werkzeug==0.11.11         # via flask, flask-wtf
+Werkzeug==0.11.11         # via flask, flask-wtf
 wtf-peewee==0.2.6
 wtforms==2.1              # via flask-admin, flask-wtf, wtf-peewee

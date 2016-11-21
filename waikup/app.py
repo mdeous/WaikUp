@@ -36,6 +36,9 @@ if app.config['DEBUG'] and app.config.get('DEBUG_TB_ENABLED', False):
         'flask_debugtoolbar.panels.profiler.ProfilerDebugPanel'
     ]
     toolbar = DebugToolbarExtension(app)
+if app.config['REVERSE_PROXIED']:
+    from flask_reverse_proxy import FlaskReverseProxied
+    app = FlaskReverseProxied(app)
 Bootstrap(app)
 CORS(
     app,
