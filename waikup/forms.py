@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import flash
-from flask_wtf import Form
+from flask_wtf import FlaskForm as Form
 from wtforms import TextAreaField, PasswordField, SelectField, StringField, IntegerField
 from wtforms.fields.html5 import URLField
 from wtforms.validators import url, required, optional, equal_to, ValidationError
