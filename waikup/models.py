@@ -3,7 +3,7 @@
 from datetime import datetime
 
 from flask_security import UserMixin, RoleMixin, AnonymousUser
-from flask_security.utils import verify_password, encrypt_password
+from flask_security.utils import verify_password, hash_password
 from peewee import *
 
 from waikup.lib import globals as g
@@ -46,7 +46,7 @@ class User(UserMixin, g.db.Model):
         return "%s %s" % (self.first_name, self.last_name)
 
     def set_password(self, password):
-        self.password = encrypt_password(password)
+        self.password = hash_password(password)
 
     def check_password(self, password):
         return verify_password(password, self.password)
