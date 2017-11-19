@@ -7,7 +7,7 @@
   <br><br>
   <div class="col-md-4 col-md-offset-4">
     {{ super() }}
-    <form name="login_user_form" method="post" action="{{ url_for_security('login') }}">
+    <form id="login-form" name="login_user_form" method="post" action="{{ url_for_security('login') }}">
       {{ quick_form(login_user_form) }}
     </form>
 
