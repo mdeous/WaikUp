@@ -16,20 +16,13 @@ SERVICES = [
     'postgresql',
     'apache2'
 ]
-VIRTUALENV_ACTIVATE = '/var/www/waikup/bin/activate'
-
-
-def venv_run(activate, cmd, folder=None):
-    virtualenv = 'source %s' % activate
-    with prefix(virtualenv):
-        with cd(folder or '.'):
-            run(cmd)
 
 
 @task
 def prepare_system():
     sudo('apt-get update', quiet=True)
     sudo('apt-get install -y %s' % ' '.join(DEB_REQUIREMENTS), quiet=True)
+    sudo('pip install pipenv')
     sudo('sysctl -w net.ipv6.conf.all.disable_ipv6=1')
 
 
@@ -59,8 +52,8 @@ def setup_apache():
 @task
 def setup_waikup():
     sudo('chmod -R o+w /var/www/waikup')
-    run('virtualenv /var/www/waikup')
-    venv_run(VIRTUALENV_ACTIVATE, 'python /var/www/waikup/src/setup.py develop', folder='/var/www/waikup/src')
+    with cd('/var/www/waikup/src'):
+        run('pipenv install')
 
 
 @task
@@ -75,12 +68,15 @@ def init_dev():
     run('cp /var/www/waikup/src/deploy/testdb.sql /tmp/waikup_testdb.sql')
     sudo('psql --file=/tmp/waikup_setupdb.sql', user='postgres', quiet=True)
     sudo('psql -d waikup --file=/tmp/waikup_testdb.sql', user='postgres', quiet=True)
-    venv_run(VIRTUALENV_ACTIVATE, 'pip install flask-debugtoolbar')
+    with cd('/var/www/waikup/src'):
+        run('pipenv install -d')
 
 
 @task
 def init_prod():
-    venv_run(VIRTUALENV_ACTIVATE, 'waikup_manage setupdb')
+    with cd('/var/www/waikup/src'):
+        run('pipenv install')
+        run('pipenv run ./manage.py setupdb')
 
 
 @task(default=True)
