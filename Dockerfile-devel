@@ -1,0 +1,38 @@
+FROM alpine:3.6
+MAINTAINER Mathieu Deous "mattoufootu@gmail.com"
+
+# prepare environment
+ENV LANG=en_US LC_ALL=C
+EXPOSE 5000
+RUN adduser -S uwsgi
+
+# install system dependencies
+RUN apk --no-cache --update add \
+    ca-certificates \
+    python \
+    py-pip \
+    uwsgi \
+    uwsgi-python \
+    build-base \
+    libffi-dev \
+    libressl-dev \
+    postgresql-client \
+    postgresql-dev \
+    python-dev \
+    wget
+
+# install dockerize
+ENV DOCKERIZE_VERSION=v0.6.0
+RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
+    tar -C /usr/local/bin -xzvf dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
+    rm dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+# install pipenv
+RUN pip install pipenv
+
+# cleanup
+RUN apk del wget && \
+    rm -rf ~/.cache/pip
+
+# startup script
+CMD ["/bin/sh", "/opt/waikup/docker/entrypoint-devel.sh"]

@@ -1,0 +1,11 @@
+server {
+    listen 8080;
+
+    access_log /var/log/nginx/waikup-access.log;
+    error_log /var/log/nginx/waikup-errors.log;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass uwsgi://app:5000;
+    }
+}
