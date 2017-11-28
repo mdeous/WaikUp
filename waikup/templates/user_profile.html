@@ -38,7 +38,7 @@
             <tr>
               <td><strong>API Key</strong></td>
               <td>
-                {{ current_user.get_auth_token() }}&nbsp;
+                <input value="{{ current_user.get_auth_token() }}" readonly>&nbsp;
                 <button
                     class="btn btn-default" data-clipboard-text="{{ current_user.get_auth_token() }}"
                     data-toggle="tooltip"
