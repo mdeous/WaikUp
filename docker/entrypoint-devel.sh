@@ -12,7 +12,7 @@ pipenv install -d
 # setup database
 PGUSER=postgres PGPASSWORD=postgres psql -h db <<EOQUERY
 CREATE USER waikup WITH PASSWORD 'waikup' NOSUPERUSER NOCREATEDB NOCREATEROLE;
-CREATE DATABASE waikup-devel WITH OWNER waikup;
+CREATE DATABASE waikup_devel WITH OWNER waikup;
 EOQUERY
 pipenv run python manage.py setupdb
 

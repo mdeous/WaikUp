@@ -14,6 +14,7 @@ services:
     image: waikup:devel
     environment:
       - DATABASE_HOST=db
+      - DATABASE_NAME=waikup_devel
       - MAIL_SERVER=mta
     volumes:
       - ".:/opt/waikup"
