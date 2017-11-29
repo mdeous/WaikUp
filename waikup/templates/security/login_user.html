@@ -7,13 +7,9 @@
   <br><br>
   <div class="col-md-4 col-md-offset-4">
     {{ super() }}
-    <form id="login-form" name="login_user_form" method="post" action="{{ url_for_security('login') }}">
+    <form class="text-center" name="login_user_form" method="post" action="{{ url_for_security('login') }}">
       {{ quick_form(login_user_form) }}
     </form>
 
   </div>
-  <div class="col-md-4 col-md-offset-4">
-    <a href="{{ url_for_security('forgot_password') }}">Lost password</a>
-  </div>
-
 {% endblock %}
