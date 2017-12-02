@@ -134,26 +134,26 @@ class LinkListResource(BaseResource):
             'url',
             dest='url',
             required=True,
-            location='form'
+            location='json'
         )
         post_parser.add_argument(
             'title',
             dest='title',
             required=True,
-            location='form'
+            location='json'
         )
         post_parser.add_argument(
             'description',
             dest='description',
             default='No description',
-            location='form'
+            location='json'
         )
         post_parser.add_argument(
             'category',
             dest='category',
             choices=[cat.name for cat in Category.select()],
             default=current_app.config['DEFAULT_CATEGORY'],
-            location='form'
+            location='json'
         )
         args = post_parser.parse_args()
         category = Category.select().where(Category.name == args.category)
@@ -163,7 +163,7 @@ class LinkListResource(BaseResource):
                 title=args.title,
                 description=args.description,
                 category=category,
-                author=current_user
+                author=current_user.id
             )
         except IntegrityError:
             abort(409, success=False, message='link already exists: %s' % args.url)
