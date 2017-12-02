@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request
+from flask import Flask, request, url_for, current_app
 from flask_admin import Admin
 from flask_bootstrap import Bootstrap
 from flask_cors import CORS
+from flask_login import current_user
 from flask_mail import Mail
 from flask_restful import Api
 from flask_security import Security, PeeweeUserDatastore
+from jinja2 import Template
 from peewee import fn
 from werkzeug.contrib.atom import AtomFeed
 
@@ -79,12 +81,13 @@ app.register_blueprint(main)
 
 # Setup API
 
-from waikup.views.api import api as api_bp, LinkListResource, LinkResource, UserResource
+from waikup.views.api import api as api_bp, LinkListResource, LinkResource, UserResource, CategoryListResource
 
 api = Api(api_bp)
 api.add_resource(LinkListResource, '/links')
 api.add_resource(LinkResource, '/links/<int:linkid>')
 api.add_resource(UserResource, '/profile')
+api.add_resource(CategoryListResource, '/categories')
 app.register_blueprint(api_bp, url_prefix='/api')
 
 

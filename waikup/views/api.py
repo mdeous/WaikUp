@@ -41,6 +41,10 @@ user_message = {
     'success': Boolean,
     'profile': Nested(user_format)
 }
+category_list_message = {
+    'success': Boolean,
+    'categories': List(String)
+}
 
 
 class BaseResource(Resource):
@@ -171,3 +175,10 @@ class UserResource(BaseResource):
     @marshal_with(user_message)
     def get(self):
         return {'success': True, 'profile': current_user}
+
+
+class CategoryListResource(BaseResource):
+    @marshal_with(category_list_message)
+    def get(self):
+        categories = Category.select()
+        return {'success': True, 'categories': categories.order_by(Category.name.asc())}
