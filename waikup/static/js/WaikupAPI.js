@@ -13,8 +13,9 @@ var WaikUp = function(apiURL, apiKey) {
   var query = function(endpoint, method, data, callback) {
     endpoint = apiURL + endpoint;
     var req = new XMLHttpRequest();
-    req.setRequestHeader('Auth', apiKey);
     req.open(method, endpoint, true);
+    req.setRequestHeader('Auth', apiKey);
+    req.setRequestHeader('Content-Type', 'application/json');
     req.onreadystatechange = function() {
       if (req.readyState === 4) {
         var resp = JSON.parse(req.responseText);
@@ -44,7 +45,7 @@ var WaikUp = function(apiURL, apiKey) {
       description: description,
       category: category
     };
-    query('/links', 'POST', data, callback);
+    query('/links', 'POST', JSON.stringify(data), callback);
   };
 
   var getLink = function(linkID, callback) {
@@ -57,10 +58,15 @@ var WaikUp = function(apiURL, apiKey) {
     query(endpoint, 'DELETE', null, callback)
   };
 
+  var listCategories = function(callback) {
+    query('/categories', 'GET', null, callback);
+  };
+
   return {
     "listLinks": listLinks,
     "addLink": addLink,
     "getLink": getLink,
-    "deleteLink": deleteLink
+    "deleteLink": deleteLink,
+    "listCategories": listCategories
   };
 };
