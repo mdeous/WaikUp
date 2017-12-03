@@ -11,7 +11,7 @@ services:
       - smtp_user=username:password
       - maildomain=waikup@example.com
   app:
-    image: waikup:latest
+    image: mdeous/waikup:${WAIKUP_VERSION}
     environment:
       - DATABASE_HOST=db
       - MAIL_SERVER=mta
