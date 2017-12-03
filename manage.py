@@ -9,6 +9,8 @@ from jinja2 import Environment, PackageLoader
 
 from waikup.application import app, security_datastore, mail
 from waikup.lib.models import db, Category, User, Link, EMail
+# TODO: add user management commands (list, edit, delete)
+# TODO: allow user management commands to take input from stdin
 
 try:
     import simplejson as json
