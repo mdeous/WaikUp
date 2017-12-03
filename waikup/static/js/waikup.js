@@ -65,4 +65,4 @@ $('.toggle-archive').click(function () {
   return false;
 });
 $('[data-toggle="tooltip"]').tooltip();
-var clipboard = new Clipboard('[data-clipboard-btn]');
+new Clipboard('[data-clipboard-btn]');
