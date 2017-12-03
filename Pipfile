@@ -17,7 +17,6 @@ peewee = "*"
 wtf-peewee = "*"
 psycopg2 = "*"
 simplejson = "*"
-bcrypt = "*"
 
 [dev-packages]
 flask-debugtoolbar = "*"
