@@ -45,6 +45,15 @@ def list_links(page_name, links=None):
     )
 
 
+def get_link_or_error(linkid, redirect_to):
+    try:
+        link = Link.get(Link.id == linkid)
+    except Link.DoesNotExist:
+        flash("Link not found: %s" % linkid, category='error')
+        return redirect(redirect_to)
+    return link
+
+
 @main.route('/', methods=['GET', 'POST'])
 @login_required
 def index():
@@ -132,11 +141,7 @@ def delete_link():
         if linkid is None:
             flash("No link specified", category='error')
             return redirect(redirect_to)
-        try:
-            link = Link.get(Link.id == linkid)
-        except Link.DoesNotExist:
-            flash("Link not found: %s" % linkid, category='error')
-            return redirect(redirect_to)
+        link = get_link_or_error(linkid, redirect_to)
         if (not current_user.is_admin) and (current_user.username != link.author.username):
             flash("You are not allowed to delete this link: %s" % linkid, category='error')
             return redirect(redirect_to)
@@ -191,11 +196,7 @@ def edit_link(linkid):
     form.set_category_choices()
     redirect_page = request.args.get('redir', 'index')
     redirect_to = url_for('main.'+redirect_page)
-    try:
-        link = Link.get(Link.id == linkid)
-    except Link.DoesNotExist:
-        flash("Link not found: %d" % linkid, category='error')
-        return redirect(redirect_to)
+    link = get_link_or_error(linkid, redirect_to)
     if request.method == 'POST':
         if (not current_user.is_admin) and (current_user.username != link.author.username):
             flash("You are not allowed to edit this link: %d" % link.id, category='error')
