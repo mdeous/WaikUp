@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 import os
-import bcrypt
 
 DEBUG = True
 
 #
 # Security
 #
-SECRET_KEY = os.getenv('SECRET_KEY', bcrypt.gensalt())
+SECRET_KEY = os.getenv('SECRET_KEY', 'CHANGEME')
 SECURITY_URL_PREFIX = '/user'
 SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
-SECURITY_PASSWORD_SALT = os.getenv('SECURITY_PASSWORD_SALT', bcrypt.gensalt())
+SECURITY_PASSWORD_SALT = os.getenv('SECURITY_PASSWORD_SALT', 'CHANGEME')
 SECURITY_TOKEN_AUTHENTICATION_HEADER = 'Auth'
 SECURITY_RECOVERABLE = True
 
