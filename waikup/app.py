@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, request, url_for, current_app
+from flask import Flask, request
 from flask_admin import Admin
 from flask_bootstrap import Bootstrap
 from flask_cors import CORS
-from flask_login import current_user
 from flask_mail import Mail
 from flask_restful import Api
 from flask_security import Security, PeeweeUserDatastore
-from jinja2 import Template
 from peewee import fn
 from werkzeug.contrib.atom import AtomFeed
 
