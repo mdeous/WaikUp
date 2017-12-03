@@ -5,6 +5,7 @@ import os
 # Application
 #
 DEBUG = True
+REVERSE_PROXIED = False
 
 #
 # Security

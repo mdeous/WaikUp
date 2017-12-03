@@ -15,6 +15,7 @@ try:
 except ImportError:
     import json
 
+TABLES = g.db.Model.__subclasses__()
 manager = Manager(app)
 
 
@@ -35,7 +36,7 @@ def setupdb():
     Creates the database schema.
     :return: None
     """
-    for table in db.Model.__subclasses__():
+    for table in TABLES:
         print "[+] Creating table: %s..." % table._meta.name
         table.create_table(fail_silently=True)
     create_categories()
@@ -48,7 +49,7 @@ def resetdb():
     Resets database content.
     :return: None
     """
-    for table in db.Model.__subclasses__():
+    for table in TABLES:
         print "[+] Deleting table: %s..." % table._meta.name
         table.delete().execute()
         db.database.execute_sql(*db.database.compiler().drop_table(table, cascade=True))
