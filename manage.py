@@ -1,17 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import sys
 from getpass import getpass
 
 from flask_mail import Message
-from flask_security import PeeweeUserDatastore
 from flask_script import Manager
 from jinja2 import Environment, PackageLoader
 
-from waikup.application import app
-from waikup.lib import globals as g
-from waikup.models import Category, User, Role, UserRole, Link, EMail
+from waikup.application import app, security_datastore, mail
+from waikup.lib.models import db, Category, User, Link, EMail
 
 try:
     import simplejson as json
@@ -38,7 +35,7 @@ def setupdb():
     Creates the database schema.
     :return: None
     """
-    for table in g.db.Model.__subclasses__():
+    for table in db.Model.__subclasses__():
         print "[+] Creating table: %s..." % table._meta.name
         table.create_table(fail_silently=True)
     create_categories()
@@ -51,10 +48,10 @@ def resetdb():
     Resets database content.
     :return: None
     """
-    for table in g.db.Model.__subclasses__():
+    for table in db.Model.__subclasses__():
         print "[+] Deleting table: %s..." % table._meta.name
         table.delete().execute()
-        g.db.database.execute_sql(*db.database.compiler().drop_table(table, cascade=True))
+        db.database.execute_sql(*db.database.compiler().drop_table(table, cascade=True))
     setupdb()
 
 
@@ -64,7 +61,6 @@ def adduser(admin=False, inactive=False):
     Adds a new user.
     :return: None
     """
-    user_datastore = PeeweeUserDatastore(g.db, User, Role, UserRole)
     print "[+] Creating new user (admin=%r, inactive=%r)" % (admin, inactive)
     first_name = raw_input("[>] First name: ")
     last_name = raw_input("[>] Last name: ")
@@ -74,7 +70,7 @@ def adduser(admin=False, inactive=False):
     if password1 != password2:
         print "[!] Passwords don't match!"
         sys.exit(1)
-    user_datastore.create_user(
+    security_datastore.create_user(
         first_name=first_name,
         last_name=last_name,
         email=email,
@@ -128,7 +124,7 @@ def sendmail():
         msg.subject = app.config['MAIL_TITLE']
         msg.body = text
         msg.html = html
-        g.mail.send(msg)
+        mail.send(msg)
     print "[+] Archiving links..."
     for link in links:
         link.archived = True

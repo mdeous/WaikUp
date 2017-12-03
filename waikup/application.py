@@ -4,12 +4,12 @@ from flask import request
 from peewee import fn
 from werkzeug.contrib.atom import AtomFeed
 
-from waikup import settings
-from waikup.factory import create_app
+import settings
+from .lib.factory import create_app
 
 
 # Setup application
-app = create_app(settings)
+app, security_datastore, mail = create_app(settings)
 
 
 # Atom feed
@@ -19,7 +19,7 @@ def links_feed():
     Atom feed view.
     :return: Atom feed HTTP response.
     """
-    from waikup.models import Category, Link
+    from .lib.models import Category, Link
     feed_title = 'Recently submitted links'
     cat = request.args.get('cat')
     if cat is not None:
@@ -52,7 +52,7 @@ def global_forms():
     Context processor that defines forms used in every view.
     :return: a {form_name: form_object} dict.
     """
-    from waikup.forms import NewLinkForm, ChangePasswordForm
+    from .lib.forms import NewLinkForm, ChangePasswordForm
     newlink_form = NewLinkForm()
     newlink_form.set_category_choices()
     return {

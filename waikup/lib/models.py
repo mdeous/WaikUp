@@ -5,8 +5,9 @@ from datetime import datetime
 from flask_security import UserMixin, RoleMixin, AnonymousUser
 from flask_security.utils import verify_password, hash_password
 from peewee import *
+from playhouse.flask_utils import FlaskDB
 
-from waikup.lib import globals as g
+db = FlaskDB()
 
 
 class WaikUpAnonymousUser(AnonymousUser):
@@ -22,7 +23,7 @@ class WaikUpAnonymousUser(AnonymousUser):
         return False
 
 
-class User(UserMixin, g.db.Model):
+class User(UserMixin, db.Model):
     """
     User model.
     """
@@ -52,7 +53,7 @@ class User(UserMixin, g.db.Model):
         return verify_password(password, self.password)
 
 
-class Role(RoleMixin, g.db.Model):
+class Role(RoleMixin, db.Model):
     """
     Role model.
     """
@@ -61,7 +62,7 @@ class Role(RoleMixin, g.db.Model):
     description = TextField(null=True)
 
 
-class UserRole(g.db.Model):
+class UserRole(db.Model):
     """
     Model implementing the User <-> Role many-to-many relationship.
     """
@@ -78,7 +79,7 @@ class UserRole(g.db.Model):
         return self.role.description
 
 
-class Category(g.db.Model):
+class Category(db.Model):
     """
     Category model.
     """
@@ -89,7 +90,7 @@ class Category(g.db.Model):
         return u'%s' % self.name
 
 
-class Link(g.db.Model):
+class Link(db.Model):
     """
     Link model.
     """
@@ -128,7 +129,7 @@ class Link(g.db.Model):
         return True
 
 
-class EMail(g.db.Model):
+class EMail(db.Model):
     id = PrimaryKeyField()
     address = CharField(unique=True)
     disabled = BooleanField(default=False)

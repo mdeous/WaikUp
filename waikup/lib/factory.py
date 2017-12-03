@@ -1,5 +1,4 @@
 # coding: utf-8
-from waikup.lib import globals as g
 
 
 def create_cors():
@@ -13,18 +12,23 @@ def create_cors():
 
 
 def create_security():
-    from waikup.models import WaikUpAnonymousUser
-    from flask_security import Security, PeeweeUserDatastore
-    from waikup.models import User, Role, UserRole
-    g.user_datastore = PeeweeUserDatastore(g.db, User, Role, UserRole)
+    from flask_security import Security
+    from .models import WaikUpAnonymousUser
     security = Security(anonymous_user=WaikUpAnonymousUser)
     return security
 
 
+def create_security_datastore(db):
+    from flask_security import PeeweeUserDatastore
+    from .models import UserRole, User, Role
+    datastore = PeeweeUserDatastore(db, User, Role, UserRole)
+    return datastore
+
+
 def create_admin():
     from flask_admin import Admin
-    from waikup.models import User, Category, Link, EMail
-    from waikup.views.admin import (
+    from .models import User, Category, Link, EMail
+    from ..views.admin import (
         RestrictedAdminIndexView, UserModelView, CategoryModelView, LinkModelView, EMailModelView
     )
     admin = Admin(
@@ -41,17 +45,13 @@ def create_admin():
 
 def create_api():
     from flask_restful import Api
-    from waikup.views.api import LinkListResource, LinkResource, UserResource, CategoryListResource
+    from ..views.api import LinkListResource, LinkResource, UserResource, CategoryListResource
     api = Api(prefix='/api')
     api.add_resource(LinkListResource, '/links')
     api.add_resource(LinkResource, '/links/<int:linkid>')
     api.add_resource(UserResource, '/profile')
     api.add_resource(CategoryListResource, '/categories')
     return api
-
-
-def create_blueprints(app):
-    pass
 
 
 def create_app(settings):
@@ -64,17 +64,17 @@ def create_app(settings):
 
     # Main application
     from flask import Flask
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='../templates', static_folder='../static')
     app.config.from_object(settings)
 
     # Database
-    from waikup.lib.db import WaikupDB
-    g.db = WaikupDB()
-    g.db.init_app(app)
+    from .models import db
+    db.init_app(app)
 
     # Flask-Security
     security = create_security()
-    security.init_app(app, datastore=g.user_datastore)
+    security_datastore = create_security_datastore(db)
+    security.init_app(app, datastore=security_datastore)
 
     # Flask-DebugToolbar
     fdt = None
@@ -94,8 +94,8 @@ def create_app(settings):
 
     # Flask-Mail
     from flask_mail import Mail
-    g.mail = Mail()
-    extensions.append(g.mail)
+    mail = Mail()
+    extensions.append(mail)
 
     # Flask-Admin
     admin = create_admin()
@@ -111,7 +111,7 @@ def create_app(settings):
             extension.init_app(app)
 
     # Register blueprints
-    from waikup.views.main import main
+    from ..views.main import main
     app.register_blueprint(main)
 
-    return app
+    return app, security_datastore, mail

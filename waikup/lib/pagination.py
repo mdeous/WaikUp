@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys
 from math import ceil
 
 
@@ -41,15 +40,3 @@ class Paginated(object):
         :return: True/False
         """
         return self.page < self.pages
-
-
-def load_class(cls):
-    """
-    Loads a class based on its module path.
-    :param cls: path to the class that should be loaded.
-    :return: a class object
-    """
-    path, klass = cls.rsplit('.', 1)
-    __import__(path)
-    mod = sys.modules[path]
-    return getattr(mod, klass)

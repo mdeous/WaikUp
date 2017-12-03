@@ -7,7 +7,7 @@ from wtforms.fields.html5 import URLField
 from wtforms.validators import url, required, optional, equal_to, ValidationError
 
 from waikup import settings
-from waikup.models import Category
+from .models import Category
 
 
 def is_category(_, field):

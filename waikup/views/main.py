@@ -3,9 +3,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, current_app
 from flask_security import login_required, current_user
 
-from waikup.lib.helpers import Paginated
-from waikup.models import Link, Category
-from waikup.forms import NewLinkForm, ChangePasswordForm, EditLinkForm, SimpleLinkForm, flash_form_errors
+from ..lib.pagination import Paginated
+from ..lib.models import Link, Category
+from ..lib.forms import NewLinkForm, ChangePasswordForm, EditLinkForm, SimpleLinkForm, flash_form_errors
 
 main = Blueprint('main', __name__)
 

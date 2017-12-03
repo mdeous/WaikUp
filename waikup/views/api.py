@@ -7,8 +7,7 @@ from flask_restful.reqparse import RequestParser
 from flask_security import current_user, auth_token_required
 from peewee import IntegrityError
 
-from waikup.lib import globals as g
-from waikup.models import Link, Category
+from ..lib.models import db, Link, Category
 
 # messages format definitions
 link_format = {
@@ -156,7 +155,7 @@ class LinkListResource(BaseResource):
         )
         args = post_parser.parse_args()
         category = Category.select().where(Category.name == args.category)
-        with g.db.database.atomic():
+        with db.database.atomic():
             try:
                 link = Link.create(
                     url=args.url,
@@ -166,7 +165,7 @@ class LinkListResource(BaseResource):
                     author=current_user.id
                 )
             except IntegrityError:
-                g.db.database.rollback()
+                db.database.rollback()
                 abort(409, success=False, message='link already exists: %s' % args.url)
             else:
                 return {'success': True, 'linkid': link.id}

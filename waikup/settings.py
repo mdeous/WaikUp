@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
 
+#
+# Application
+#
 DEBUG = True
 
 #
@@ -57,7 +60,7 @@ MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER', 'waikup@example.com')
 MAIL_TITLE = '[WaikUp] Latest selected links'
 MAIL_RECIPIENTS = []
 
-
+del os
 try:
     from prod_settings import *
 except ImportError:
