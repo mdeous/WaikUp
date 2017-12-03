@@ -21,4 +21,4 @@ uwsgi --socket 0.0.0.0:5000 \
       --threads 2 \
       --plugins python \
       --virtualenv $(pipenv --venv) \
-      --wsgi waikup.app:app
+      --wsgi waikup.application:app

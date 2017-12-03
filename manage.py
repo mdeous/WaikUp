@@ -9,15 +9,15 @@ from flask_security import PeeweeUserDatastore
 from flask_script import Manager
 from jinja2 import Environment, PackageLoader
 
-from waikup.app import app, db, mail
-from waikup.models import *
+from waikup.application import app
+from waikup.lib import globals as g
+from waikup.models import Category, User, Role, UserRole, Link, EMail
 
 try:
     import simplejson as json
 except ImportError:
     import json
 
-TABLES = g.db.Model.__subclasses__()
 manager = Manager(app)
 
 
@@ -38,7 +38,7 @@ def setupdb():
     Creates the database schema.
     :return: None
     """
-    for table in TABLES:
+    for table in g.db.Model.__subclasses__():
         print "[+] Creating table: %s..." % table._meta.name
         table.create_table(fail_silently=True)
     create_categories()
@@ -51,10 +51,10 @@ def resetdb():
     Resets database content.
     :return: None
     """
-    for table in TABLES:
+    for table in g.db.Model.__subclasses__():
         print "[+] Deleting table: %s..." % table._meta.name
         table.delete().execute()
-        db.database.execute_sql(*db.database.compiler().drop_table(table, cascade=True))
+        g.db.database.execute_sql(*db.database.compiler().drop_table(table, cascade=True))
     setupdb()
 
 
@@ -64,7 +64,7 @@ def adduser(admin=False, inactive=False):
     Adds a new user.
     :return: None
     """
-    user_datastore = PeeweeUserDatastore(db, User, Role, UserRole)
+    user_datastore = PeeweeUserDatastore(g.db, User, Role, UserRole)
     print "[+] Creating new user (admin=%r, inactive=%r)" % (admin, inactive)
     first_name = raw_input("[>] First name: ")
     last_name = raw_input("[>] Last name: ")
@@ -128,7 +128,7 @@ def sendmail():
         msg.subject = app.config['MAIL_TITLE']
         msg.body = text
         msg.html = html
-        mail.send(msg)
+        g.mail.send(msg)
     print "[+] Archiving links..."
     for link in links:
         link.archived = True

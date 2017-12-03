@@ -25,4 +25,4 @@ uwsgi --socket 0.0.0.0:5000 \
       --plugins python \
       --virtualenv $(pipenv --venv) \
       --python-autoreload 1 \
-      --wsgi waikup.app:app
+      --wsgi waikup.application:app

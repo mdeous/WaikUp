@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, current_app
+from flask import current_app
 from flask_restful import Resource, marshal_with, abort
 from flask_restful.fields import Integer, String, DateTime, Boolean, List, Nested
 from flask_restful.reqparse import RequestParser
@@ -9,8 +9,6 @@ from peewee import IntegrityError
 
 from waikup.lib import globals as g
 from waikup.models import Link, Category
-
-api = Blueprint('api', __name__)
 
 # messages format definitions
 link_format = {

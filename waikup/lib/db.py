@@ -10,10 +10,16 @@ class WaikupDB(object):
     """
     Abstraction class that mimicks flask-peewee's Database class
     """
-    def __init__(self, app):
-        self.app = app
+    def __init__(self, app=None):
+        self.app = None
         self.db_cls = None
         self.database = None
+        self.Model = None
+        if app is not None:
+            self.init_app(app)
+
+    def init_app(self, app):
+        self.app = app
         self.load_database()
         self.Model = self.get_model_class()
         self.database.connect()
