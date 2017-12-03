@@ -4,7 +4,7 @@ import os
 #
 # Application
 #
-DEBUG = True
+DEBUG = False
 REVERSE_PROXIED = False
 
 #
