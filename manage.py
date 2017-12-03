@@ -86,22 +86,22 @@ def adduser(admin=False, inactive=False):
 
 
 @manager.command
-def chpasswd(username):
+def chpasswd(email):
     """
     Change given user's password.
     :return: None
     """
     try:
-        user = User.get(User.username == username)
+        user = User.get(User.email == email)
     except User.DoesNotExist:
-        print "[!] Unknown user: %s" % username
+        print "[!] Unknown user: %s" % email
         sys.exit(1)
     password1 = getpass("[>] Password: ")
     password2 = getpass("[>] Confirm password: ")
     if password1 != password2:
         print "[!] Passwords don't match!"
         sys.exit(2)
-    print "[+] Changing %s's password" % username
+    print "[+] Changing %s's password" % email
     user.set_password(password1)
     user.save()
     print "[+] Done"
