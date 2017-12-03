@@ -1,5 +1,5 @@
-FROM alpine:3.6
-MAINTAINER Mathieu Deous "mattoufootu@gmail.com"
+FROM alpine:latest
+MAINTAINER Mathieu Deous "mat.deous@gmail.com"
 
 # prepare environment
 ENV LANG=en_US LC_ALL=C
