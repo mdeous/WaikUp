@@ -15,7 +15,7 @@ try:
 except ImportError:
     import json
 
-TABLES = g.db.Model.__subclasses__()
+TABLES = db.Model.__subclasses__()
 manager = Manager(app)
 
 

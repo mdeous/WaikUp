@@ -26,7 +26,7 @@ DATABASE = {
     'password': os.getenv('DATABASE_PASSWORD', 'waikup'),
     'host': os.getenv('DATABASE_HOST', '127.0.0.1'),
     'port': int(os.getenv('DATABASE_PORT', 5432)),
-    'engine': 'peewee.PostgresqlDatabase'
+    'engine': 'waikup.lib.models.AutoRetryPostgresql'
 }
 DEFAULT_CATEGORIES = [
     'System',

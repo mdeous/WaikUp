@@ -6,8 +6,13 @@ from flask_security import UserMixin, RoleMixin, AnonymousUser
 from flask_security.utils import verify_password, hash_password
 from peewee import *
 from playhouse.flask_utils import FlaskDB
+from playhouse.shortcuts import RetryOperationalError
 
 db = FlaskDB()
+
+
+class AutoRetryPostgresql(PostgresqlDatabase, RetryOperationalError):
+    pass
 
 
 class WaikUpAnonymousUser(AnonymousUser):

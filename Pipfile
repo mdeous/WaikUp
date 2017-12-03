@@ -17,6 +17,7 @@ peewee = "*"
 wtf-peewee = "*"
 psycopg2 = "*"
 simplejson = "*"
+flask-reverse-proxy = "*"
 
 [dev-packages]
 flask-debugtoolbar = "*"

@@ -71,17 +71,22 @@ def create_app(settings):
     from .models import db
     db.init_app(app)
 
+    # Flask-Reverse-Proxy
+    if app.config['REVERSE_PROXIED']:
+        from flask_reverse_proxy import FlaskReverseProxied
+        rp = FlaskReverseProxied()
+        extensions.append(rp)
+
     # Flask-Security
     security = create_security()
     security_datastore = create_security_datastore(db)
     security.init_app(app, datastore=security_datastore)
 
     # Flask-DebugToolbar
-    fdt = None
     if app.config['DEBUG'] and app.config.get('DEBUG_TB_ENABLED', False):
         from flask_debugtoolbar import DebugToolbarExtension
         fdt = DebugToolbarExtension()
-    extensions.append(fdt)
+        extensions.append(fdt)
 
     # Flask-Bootstrap
     from flask_bootstrap import Bootstrap
