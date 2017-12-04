@@ -11,6 +11,7 @@ from waikup.application import app, security_datastore, mail
 from waikup.lib.models import db, Category, User, Link, EMail
 # TODO: add user management commands (list, edit, delete)
 # TODO: allow user management commands to take input from stdin
+# TODO: implement database migration
 
 try:
     import simplejson as json
