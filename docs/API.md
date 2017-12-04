@@ -1,16 +1,13 @@
 # WaikUp API Documentation
-
 WaikUp provides a RESTful JSON API to programatically interact with the application.
 The API only exposes user methods, no administrative action can be performed from it.
 
 ## Authentication
-
 Every API calls require to be passed an `Auth` header holding the API key, which is 
 available on the user's profile page.
 
 
 ## Errors
-
 Errors are formatted the same way as regular responses, except they have an HTTP code
 corresponding to the error type, with the error message in the JSON body's `message`
 field.
@@ -27,7 +24,6 @@ Response body:
 ## Endpoints
 
 ### Links
-
 * `GET /api/links?search=<str:search>&archived=<int:archived>` - Fetch links
     * `search` (optional, default: return all links) - Only fetch links
     matching `<search>` in their title, description, and URL
@@ -123,7 +119,6 @@ Response body:
 
 
 ### User profile
-
 * `GET /api/profile` - Get the user profile
 
 Response body:
@@ -142,7 +137,6 @@ Response body:
 
 
 ### Categories
-
 * `GET /api/categories` - Get available categories
 
 Response body:

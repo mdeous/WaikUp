@@ -44,7 +44,7 @@ system.
 
 ### Settings
 
-* Create a `/var/www/waikup/src/waikup/prod_settings.py` file with (at least) the following values defined:
+* Create a `waikup/prod_settings.py` file with (at least) the following values defined:
   * `DEBUG = False`
   * `SECRET_KEY = 'some complicated secret key'` (can be generated using `''.join(choice(string.printable) for _ in range(32))`)
   * `SECURITY_PASSWORD_SALT = 'some complicated salt to be used when hashing passwords'` 
