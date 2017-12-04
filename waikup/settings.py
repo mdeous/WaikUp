@@ -2,20 +2,39 @@
 import os
 
 #
-# Application
+# WaikUp
 #
-DEBUG = False
-REVERSE_PROXIED = False
+DEFAULT_CATEGORIES = [
+    'System',
+    'Security',
+    'Networking',
+    'Development',
+    'Tools',
+    'News',
+    'Fun',
+    'Other'
+]
+DEFAULT_CATEGORY = 'Other'
+ITEMS_PER_PAGE = 10
+ATOM_LINKS_COUNT = 50
+DATETIME_FORMAT = '%b %d %Y at %H:%M:%S'
 
 #
-# Security
+# Flask
 #
-SECRET_KEY = os.getenv('SECRET_KEY', 'CHANGEME')
+DEBUG = bool(os.getenv('FLASK_DEBUG', False))
+TESTING = bool(os.getenv('FLASK_TESTING', False))
+SECRET_KEY = os.getenv('FLASK_SECRET_KEY', 'CHANGEME')
+REVERSE_PROXIED = bool(os.getenv('REVERSE_PROXIED', False))
+
+#
+# User accounts
+#
 SECURITY_URL_PREFIX = '/user'
 SECURITY_PASSWORD_HASH = 'pbkdf2_sha512'
 SECURITY_PASSWORD_SALT = os.getenv('SECURITY_PASSWORD_SALT', 'CHANGEME')
 SECURITY_TOKEN_AUTHENTICATION_HEADER = 'Auth'
-SECURITY_RECOVERABLE = True
+SECURITY_RECOVERABLE = bool(os.getenv('SECURITY_RECOVERABLE', True))
 
 #
 # Database
@@ -28,25 +47,6 @@ DATABASE = {
     'port': int(os.getenv('DATABASE_PORT', 5432)),
     'engine': 'waikup.lib.models.AutoRetryPostgresql'
 }
-DEFAULT_CATEGORIES = [
-    'System',
-    'Security',
-    'Networking',
-    'Development',
-    'Tools',
-    'News',
-    'Fun',
-    'Other'
-]
-DEFAULT_CATEGORY = 'Other'
-
-#
-# User interfaces (Web UI / API)
-#
-BUNDLE_ERRORS = True
-ITEMS_PER_PAGE = 10
-ATOM_LINKS_COUNT = 50
-DATETIME_FORMAT = '%b %d %Y at %H:%M:%S'
 
 #
 # E-mails
