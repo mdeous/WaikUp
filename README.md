@@ -1,4 +1,4 @@
-![](https://api.codeclimate.com/v1/badges/2ddc51217828000b8267/maintainability)
+[![maintainability_badge](https://api.codeclimate.com/v1/badges/2ddc51217828000b8267/maintainability)](https://api.codeclimate.com/v1/badges/2ddc51217828000b8267/maintainability)
 
 # WaikUp
 Collaborative news sharing platform.
@@ -121,5 +121,5 @@ This project is licensed under the GNU General Public License v3.
 
 ---
 
-[![forthebadge](http://forthebadge.com/images/badges/made-with-python.svg)](http://forthebadge.com)
-[![forthebadge](http://forthebadge.com/images/badges/uses-badges.svg)](http://forthebadge.com)
+![forthebadge](http://forthebadge.com/images/badges/made-with-python.svg)
+![forthebadge](http://forthebadge.com/images/badges/uses-badges.svg)
