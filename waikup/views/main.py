@@ -96,9 +96,7 @@ def new_link():
         )
         flash("New link added: %s" % form.url.data, category='success')
         return redirect(redirect_to)
-    for field_name, field_errors in form.errors.iteritems():
-        for field_error in field_errors:
-            flash("%s (field: %s)" % (field_error, field_name), category='error')
+    flash_form_errors(form)
     return redirect(redirect_to)
 
 
@@ -120,9 +118,7 @@ def change_password():
         current_user.save()
         flash("Password changed", category='success')
         return redirect(redirect_to)
-    for field_name, field_errors in form.errors.iteritems():
-        for field_error in field_errors:
-            flash("%s (field: %s)" % (field_error, field_name), category='error')
+    flash_form_errors(form)
     return redirect(redirect_to)
 
 
