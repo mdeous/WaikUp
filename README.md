@@ -28,7 +28,30 @@ User profile:
 * A bunch of Python modules (see [`Pipfile`](Pipfile) for details)
 
 ## :wrench: Management Utility
-The documentation for management commands is available [here](docs/MANAGEMENT.md)
+It is possible to perform some development / administration tasks using the
+provided `manage.py` script. Help for any command can be viewed with
+`./manage.py <command> --help`.
+
+Main help:
+```
+$ ./manage.py                         
+Usage: manage.py [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --version  Show the flask version
+  --help     Show this message and exit.
+
+Commands:
+  adduser   Adds a new user.
+  chpasswd  Change given user's password.
+  resetdb   Resets database content.
+  roles     Role commands.
+  run       Runs a development server.
+  sendmail  Sends an email containing last submitted...
+  setupdb   Creates the database schema.
+  shell     Runs a shell in the app context.
+  users     User commands.
+```
 
 ## :link: API
 The API documentation is available [here](docs/API.md).
