@@ -11,7 +11,6 @@ Additionally to the web interface, WaikUp provides a RESTful API to allow
 interacting with the application programatically.
 
 ## Screenshots
-
 Links list:
 ![links_list](docs/links_list.png)
 
@@ -28,7 +27,7 @@ User profile:
 * Python2
 * A bunch of Python modules (see [`Pipfile`](Pipfile) for details)
 
-## Management utility
+## Management Utility
 The documentation for management commands is available [here](docs/MANAGEMENT.md)
 
 ## API
@@ -47,10 +46,10 @@ The following `make` targets are available:
 * `build` (default) - builds a `mdeous/waikup:latest` image
 * `run` - runs `docker-compose` with a waikup+nginx+postgresql+postfix stack
 
-### Manual deployment
+### Manual Deployment
 A dedicated documentation page is available [here](docs/DEPLOY.md).
 
-### Development environment
+### Development Environment
 To create a development environment, the only mandatory dependency is a properly configured
 Postgresql server with the correct database and user created. The SMTP server is only required
 to test email distribution.
@@ -66,7 +65,7 @@ python manage.py adduser --admin  # create a new administrator
 python manage.py runserver -r -d  # start Flask development server
 ```
 
-### Sending emails
+### Sending Emails
 Emails can be sent using the `./manage.py sendmail` command, if you want to automate this, 
 just set a `crontab` entry to run this command periodically (make sure to run it using the 
 virtualenv's Python interpreter, this can be done with pipenv: `pipenv run ./manage.py sendmail`) 
@@ -88,7 +87,7 @@ A table describing every setting available in the `settings.py` file, its defaul
 and the environment variable from which they can alternatively be set, is available
 [here](docs/SETTINGS.md "Settings list").
 
-## Issues and contributions
+## Issues and Contributions
 If you encounter any bug, or think a particular feature is missing, feel free to open a
 ticket, or even better, fork the repository and make a pull request with your changes! ;)
 
