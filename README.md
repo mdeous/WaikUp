@@ -26,14 +26,13 @@ User profile:
 
 ## Dependencies
 * Python2
-* A bunch of Python modules (see [`Pipfile`](Pipfile "Pipfile") for details)
+* A bunch of Python modules (see [`Pipfile`](Pipfile) for details)
 
 ## Management utility
-The documentation for management commands is available [here](docs/MANAGEMENT.md "Management 
-commands")
+The documentation for management commands is available [here](docs/MANAGEMENT.md)
 
 ## API
-The API documentation is available [here](docs/API.md "API documentation").
+The API documentation is available [here](docs/API.md).
 
 A Javascript library for the API is available in `waikup/static/js/WaikupAPI.js`, and can
 be used either included from the server (`https://waikup-host/static/js/WaikupAPI.js`).
@@ -49,7 +48,7 @@ The following `make` targets are available:
 * `run` - runs `docker-compose` with a waikup+nginx+postgresql+postfix stack
 
 ### Manual deployment
-A dedicated documentation page is available [here](docs/DEPLOY.md "Deployment documentation").
+A dedicated documentation page is available [here](docs/DEPLOY.md).
 
 ### Development environment
 To create a development environment, the only mandatory dependency is a properly configured
