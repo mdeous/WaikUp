@@ -1,4 +1,4 @@
-![maintainability_badge](https://api.codeclimate.com/v1/badges/2ddc51217828000b8267/maintainability)
+[![maintainability_badge](https://api.codeclimate.com/v1/badges/2ddc51217828000b8267/maintainability)](https://api.codeclimate.com/v1/badges/2ddc51217828000b8267/maintainability)
 
 # WaikUp
 Collaborative news sharing platform.
