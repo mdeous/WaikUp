@@ -3,14 +3,14 @@
 # WaikUp
 Collaborative news sharing platform.
 
-## Introduction
+## :information_source: Introduction
 WaikUp is an application to share links found around the Web with a group of people.
 It is written in Python using the Flask framework.
 
 Additionally to the web interface, WaikUp provides a RESTful API to allow
 interacting with the application programatically.
 
-## Screenshots
+## :camera: Screenshots
 Links list:
 ![links_list](docs/links_list.png)
 
@@ -23,22 +23,22 @@ Link submition:
 User profile:
 ![user_profile](docs/user_profile.png)
 
-## Dependencies
+## :white_check_mark: Dependencies
 * Python2
 * A bunch of Python modules (see [`Pipfile`](Pipfile) for details)
 
-## Management Utility
+## :wrench: Management Utility
 The documentation for management commands is available [here](docs/MANAGEMENT.md)
 
-## API
+## :link: API
 The API documentation is available [here](docs/API.md).
 
 A Javascript library for the API is available in `waikup/static/js/WaikupAPI.js`, and can
 be used either included from the server (`https://waikup-host/static/js/WaikupAPI.js`).
 
-## Deployment
+## :rocket: Deployment
 
-### Docker
+### :whale: Docker
 The project provides a `Dockerfile` as well as a `docker-compose` configuration for easier
 deployment. A `Makefile` is also provided to abstract image creation and container execution.
 
@@ -46,10 +46,10 @@ The following `make` targets are available:
 * `build` (default) - builds a `mdeous/waikup:latest` image
 * `run` - runs `docker-compose` with a waikup+nginx+postgresql+postfix stack
 
-### Manual Deployment
+### :hand: Manual Deployment
 A dedicated documentation page is available [here](docs/DEPLOY.md).
 
-### Development Environment
+### :house: Development Environment
 To create a development environment, the only mandatory dependency is a properly configured
 Postgresql server with the correct database and user created. The SMTP server is only required
 to test email distribution.
@@ -65,13 +65,13 @@ python manage.py adduser --admin  # create a new administrator
 python manage.py runserver -r -d  # start Flask development server
 ```
 
-### Sending Emails
+### :envelope: Sending Emails
 Emails can be sent using the `./manage.py sendmail` command, if you want to automate this, 
 just set a `crontab` entry to run this command periodically (make sure to run it using the 
 virtualenv's Python interpreter, this can be done with pipenv: `pipenv run ./manage.py sendmail`) 
 When running this command, all active emails will be archived.
 
-### Settings
+### :floppy_disk: Settings
 :warning: **`SECRET_KEY` and `SECURITY_PASSWORD_SALT` should be replaced with random values 
 for production use** :warning:
 
@@ -87,11 +87,16 @@ A table describing every setting available in the `settings.py` file, its defaul
 and the environment variable from which they can alternatively be set, is available
 [here](docs/SETTINGS.md "Settings list").
 
-## Issues and Contributions
+## :bug: Issues and Contributions
 If you encounter any bug, or think a particular feature is missing, feel free to open a
 ticket, or even better, fork the repository and make a pull request with your changes! ;)
 
 Contribution guidelines are available [here](docs/CONTRIBUTING.md).
 
-## Licensing
+## :copyright: Licensing
 This project is licensed under the GNU General Public License v3.
+
+---
+
+[![forthebadge](http://forthebadge.com/images/badges/made-with-python.svg)](http://forthebadge.com)
+[![forthebadge](http://forthebadge.com/images/badges/uses-badges.svg)](http://forthebadge.com)
