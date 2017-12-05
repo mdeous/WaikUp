@@ -10,15 +10,19 @@ It is written in Python using the Flask framework.
 Additionally to the traditionnal web interface, WaikUp provides a RESTful API to allow
 interacting with the application programatically.
 
-## Features
-* Web interface
-    * Links list (active and archived)
-    * Link submission
-    * Links search
-    * User profile (information + API key)
-    * Administration interface
-* RESTful API
-* Javascript library for interacting with the API
+## Screenshots
+
+Links list:
+![links_list](docs/links_list.png)
+
+Expanded link description:
+![links_list_expanded](docs/links_list_expanded.png)
+
+Link submition:
+![submit_link](docs/submit_link.png)
+
+User profile:
+![user_profile](docs/user_profile.png)
 
 ## Dependencies
 * Python2
@@ -30,6 +34,9 @@ commands")
 
 ## API
 The API documentation is available [here](docs/API.md "API documentation").
+
+A Javascript library for the API is available in `waikup/static/js/WaikupAPI.js`, and can
+be used either included from the server (`https://waikup-host/static/js/WaikupAPI.js`).
 
 ## Deployment
 
@@ -86,16 +93,23 @@ and the environment variable from which they can alternatively be set, is availa
 If you encounter any bug, or think a particular feature is missing, feel free to open a
 ticket, or even better, fork the repository and make a pull request with your changes! ;)
 
-
 ### Version control workflow
 Development of this application and its features (try to) follow the `git-flow` workflow,
 to ensure features' code is separated from the stable (`master`) branch, and stable code
 remains, well... stable!
 
+tl;dr:
+* `master` always contains the latest **stable** version.
+* `develop` is the most often updated branch, it contains the latest **development**
+(but working) version, and should not be considered ready for production.
+* New features are developed in a `feature/<feature-name>` branch, and are merged into
+`develop` once they're ready.
+* Important bug fixes are done in a `hotfix/<fix-name or issue ID>`, and are merged into
+`develop` once they're ready.
+
 The complete workflow is explained in details on
 [this page](http://nvie.com/posts/a-successful-git-branching-model/ "A successful branching model"),
 and the `git-flow` utility can be found [here](https://github.com/nvie/gitflow "Git-Flow").
-
 
 ## Licensing
 This project is licensed under the GNU General Public License v3.
