@@ -7,15 +7,10 @@ from flask import current_app
 from flask.cli import FlaskGroup
 from flask_mail import Message
 from jinja2 import Environment, PackageLoader
-from peewee import IntegrityError
 
 from waikup import settings
 from waikup.lib.factory import create_app
 from waikup.lib.models import Category, EMail, Link, User, db
-
-# TODO: add user management commands (list, edit, delete)
-# TODO: allow user management commands to take input from stdin
-# TODO: implement database migration
 
 TABLES = db.Model.__subclasses__()
 
