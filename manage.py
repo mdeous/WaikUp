@@ -29,7 +29,7 @@ def create_categories():
     """
     for cat in app.config['DEFAULT_CATEGORIES']:
         if Category.select().where(Category.name == cat).count() == 0:
-            print "[+] Inserting category: %s" % cat
+            print("[+] Inserting category: %s" % cat)
             Category.create(name=cat)
 
 
@@ -40,10 +40,10 @@ def setupdb():
     :return: None
     """
     for table in TABLES:
-        print "[+] Creating table: %s..." % table._meta.name
+        print("[+] Creating table: %s..." % table._meta.name)
         table.create_table(fail_silently=True)
     create_categories()
-    print "[+] Done"
+    print("[+] Done")
 
 
 @manager.command
@@ -53,7 +53,7 @@ def resetdb():
     :return: None
     """
     for table in TABLES:
-        print "[+] Deleting table: %s..." % table._meta.name
+        print("[+] Deleting table: %s..." % table._meta.name)
         table.delete().execute()
         db.database.execute_sql(*db.database.compiler().drop_table(table, cascade=True))
     setupdb()
@@ -65,14 +65,14 @@ def adduser(admin=False, inactive=False):
     Adds a new user.
     :return: None
     """
-    print "[+] Creating new user (admin=%r, inactive=%r)" % (admin, inactive)
+    print("[+] Creating new user (admin=%r, inactive=%r)" % (admin, inactive))
     first_name = raw_input("[>] First name: ")
     last_name = raw_input("[>] Last name: ")
     email = raw_input("[>] Email: ")
     password1 = getpass("[>] Password: ")
     password2 = getpass("[>] Confirm password: ")
     if password1 != password2:
-        print "[!] Passwords don't match!"
+        print("[!] Passwords don't match!")
         sys.exit(1)
     security_datastore.create_user(
         first_name=first_name,
@@ -82,7 +82,7 @@ def adduser(admin=False, inactive=False):
         active=not inactive,
         password=password1
     )
-    print "[+] Done"
+    print("[+] Done")
 
 
 @manager.command
@@ -94,17 +94,17 @@ def chpasswd(email):
     try:
         user = User.get(User.email == email)
     except User.DoesNotExist:
-        print "[!] Unknown user: %s" % email
+        print("[!] Unknown user: %s" % email)
         sys.exit(1)
     password1 = getpass("[>] Password: ")
     password2 = getpass("[>] Confirm password: ")
     if password1 != password2:
-        print "[!] Passwords don't match!"
+        print("[!] Passwords don't match!")
         sys.exit(2)
-    print "[+] Changing %s's password" % email
+    print("[+] Changing %s's password" % email)
     user.set_password(password1)
     user.save()
-    print "[+] Done"
+    print("[+] Done")
 
 
 @manager.command
@@ -115,25 +115,25 @@ def sendmail():
     """
     links = Link.select().where(Link.archived == False)
     if not links:
-        print "[+] No new links, nothing to do"
+        print("[+] No new links, nothing to do")
         return
-    print "[+] Loading and populating email templates..."
+    print("[+] Loading and populating email templates...")
     env = Environment(loader=PackageLoader('waikup', 'templates/emails'))
     html = env.get_template('html.jinja2').render(links=links)
     text = env.get_template('text.jinja2').render(links=links)
     recipients = EMail.select().where(EMail.disabled == False)
     for recipient in recipients:
-        print "[+] Sending email to %s..." % recipient.address
+        print("[+] Sending email to %s..." % recipient.address)
         msg = Message(recipients=recipient.address)
         msg.subject = app.config['MAIL_TITLE']
         msg.body = text
         msg.html = html
         mail.send(msg)
-    print "[+] Archiving links..."
+    print("[+] Archiving links...")
     for link in links:
         link.archived = True
         link.save()
-    print "[+] Done"
+    print("[+] Done")
 
 
 def main():
