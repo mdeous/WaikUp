@@ -1,4 +1,4 @@
-TODO: badges, plenty of them
+[![Maintainability](https://api.codeclimate.com/v1/badges/2ddc51217828000b8267/maintainability)](https://codeclimate.com/github/mattoufoutu/WaikUp/maintainability)
 
 # WaikUp
 Collaborative news sharing platform.
