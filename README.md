@@ -7,7 +7,7 @@ Collaborative news sharing platform.
 WaikUp is an application to share links found around the Web with a group of people.
 It is written in Python using the Flask framework.
 
-Additionally to the traditionnal web interface, WaikUp provides a RESTful API to allow
+Additionally to the web interface, WaikUp provides a RESTful API to allow
 interacting with the application programatically.
 
 ## Screenshots
@@ -60,8 +60,8 @@ Once the Postgresql server is up and running (see deployment documentation for d
 the development environment can be created using the following commands:
 
 ```bash
-pipenv install -d  # creates the virtulenv and installs dependencies
-pipenv shell  # activates the virtualenv
+pipenv install -d  # create the virtulenv and install dependencies
+pipenv shell  # activate the virtualenv
 python manage.py setupdb  # create database structure
 python manage.py adduser --admin  # create a new administrator
 python manage.py runserver -r -d  # start Flask development server
@@ -74,16 +74,16 @@ virtualenv's Python interpreter, this can be done with pipenv: `pipenv run ./man
 When running this command, all active emails will be archived.
 
 ### Settings
-**IMPORTANT: `SECRET_KEY` and `SECURITY_PASSWORD_SALT` should be replaced with random
-values for production use**
+:warning: **`SECRET_KEY` and `SECURITY_PASSWORD_SALT` should be replaced with random values 
+for production use** :warning:
 
 Default settings value are stored in the `waikup/settings.py` file. These values can be
 overriden by creating a `prod_settings.py` file in the same directory and storing custom
 configuration values in this file.
 
 The `settings.py` file doesn't contain every available setting though, for a complete list,
-please refer to Flask and used plugins documentation (see [`Pipfile`](Pipfile "Pipfile") for 
-plugins list).
+please refer to Flask and used plugins documentation (see [`Pipfile`](Pipfile) for 
+a complete plugins list).
 
 A table describing every setting available in the `settings.py` file, its default value, 
 and the environment variable from which they can alternatively be set, is available
@@ -93,23 +93,7 @@ and the environment variable from which they can alternatively be set, is availa
 If you encounter any bug, or think a particular feature is missing, feel free to open a
 ticket, or even better, fork the repository and make a pull request with your changes! ;)
 
-### Version control workflow
-Development of this application and its features (try to) follow the `git-flow` workflow,
-to ensure features' code is separated from the stable (`master`) branch, and stable code
-remains, well... stable!
-
-tl;dr:
-* `master` always contains the latest **stable** version.
-* `develop` is the most often updated branch, it contains the latest **development**
-(but working) version, and should not be considered ready for production.
-* New features are developed in a `feature/<feature-name>` branch, and are merged into
-`develop` once they're ready.
-* Important bug fixes are done in a `hotfix/<fix-name or issue ID>`, and are merged into
-`develop` once they're ready.
-
-The complete workflow is explained in details on
-[this page](http://nvie.com/posts/a-successful-git-branching-model/ "A successful branching model"),
-and the `git-flow` utility can be found [here](https://github.com/nvie/gitflow "Git-Flow").
+Contribution guidelines are available [here](docs/CONTRIBUTING.md).
 
 ## Licensing
 This project is licensed under the GNU General Public License v3.
