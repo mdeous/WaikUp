@@ -119,4 +119,4 @@ def create_app(settings):
     from ..views.main import main
     app.register_blueprint(main)
 
-    return app, security_datastore, mail
+    return app
