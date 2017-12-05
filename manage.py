@@ -56,38 +56,6 @@ def resetdb():
 
 
 @cli.command()
-@click.option('--admin', default=False, is_flag=True)
-@click.option(
-    '--firstname',
-    prompt=(click.style('Creating new user:', fg='green') + '\n' +
-            click.style('* first name: ', fg='blue'))
-)
-@click.option('--lastname', prompt=click.style('* last name: ', fg='blue'))
-@click.option('--email', prompt=click.style('* email address: ', fg='blue'))
-@click.option(
-    '--password',
-    prompt=click.style('* password: ', fg='blue'),
-    confirmation_prompt=True,
-    hide_input=True
-)
-def adduser(admin, firstname, lastname, email, password):
-    """
-    Adds a new user.
-    :return: None
-    """
-    try:
-        current_app.extensions['security'].datastore.create_user(
-            first_name=firstname,
-            last_name=lastname,
-            email=email,
-            admin=admin,
-            password=password
-        )
-    except IntegrityError:
-        click.echo(click.style('ERROR: user already exists', bold=True, fg='red'))
-
-
-@cli.command()
 @click.argument('email')
 @click.option(
     '--password',
