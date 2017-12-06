@@ -1,144 +1,105 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from getpass import getpass
 
+import click
+from flask import current_app
+from flask.cli import FlaskGroup
 from flask_mail import Message
-from flask_script import Manager
 from jinja2 import Environment, PackageLoader
 
-from waikup.application import app, security_datastore, mail
-from waikup.lib.models import db, Category, User, Link, EMail
-# TODO: add user management commands (list, edit, delete)
-# TODO: allow user management commands to take input from stdin
-# TODO: implement database migration
-
-try:
-    import simplejson as json
-except ImportError:
-    import json
+from waikup import settings
+from waikup.lib.factory import create_app
+from waikup.lib.models import Category, EMail, Link, User, db
 
 TABLES = db.Model.__subclasses__()
-manager = Manager(app)
 
 
-def create_categories():
-    """
-    Inserts the default categories in the database.
-    :return: None
-    """
-    for cat in app.config['DEFAULT_CATEGORIES']:
-        if Category.select().where(Category.name == cat).count() == 0:
-            print "[+] Inserting category: %s" % cat
-            Category.create(name=cat)
+@click.group(cls=FlaskGroup, create_app=lambda _: create_app(settings))
+def cli():
+    click.echo(click.style('\n[ WaikUp Management Tool ]\n', bold=True, fg='yellow'))
 
 
-@manager.command
+@cli.command()
 def setupdb():
     """
     Creates the database schema.
     :return: None
     """
+    click.echo(click.style('Setting up database:', fg='green'))
     for table in TABLES:
-        print "[+] Creating table: %s..." % table._meta.name
+        click.echo(click.style('* creating table: {}'.format(table._meta.name), fg='blue'))
         table.create_table(fail_silently=True)
-    create_categories()
-    print "[+] Done"
+    for cat in current_app.config['DEFAULT_CATEGORIES']:
+        if Category.select().where(Category.name == cat).count() == 0:
+            click.echo(click.style('* creating category: {}'.format(cat), fg='blue'))
+            Category.create(name=cat)
 
 
-@manager.command
+@cli.command()
 def resetdb():
     """
     Resets database content.
     :return: None
     """
+    click.echo(click.style('Resetting database:', fg='green'))
     for table in TABLES:
-        print "[+] Deleting table: %s..." % table._meta.name
+        click.echo(click.style('* deleting table: {}...'.format(table._meta.name), fg='blue'))
         table.delete().execute()
         db.database.execute_sql(*db.database.compiler().drop_table(table, cascade=True))
     setupdb()
 
 
-@manager.command
-def adduser(admin=False, inactive=False):
-    """
-    Adds a new user.
-    :return: None
-    """
-    print "[+] Creating new user (admin=%r, inactive=%r)" % (admin, inactive)
-    first_name = raw_input("[>] First name: ")
-    last_name = raw_input("[>] Last name: ")
-    email = raw_input("[>] Email: ")
-    password1 = getpass("[>] Password: ")
-    password2 = getpass("[>] Confirm password: ")
-    if password1 != password2:
-        print "[!] Passwords don't match!"
-        sys.exit(1)
-    security_datastore.create_user(
-        first_name=first_name,
-        last_name=last_name,
-        email=email,
-        admin=admin,
-        active=not inactive,
-        password=password1
-    )
-    print "[+] Done"
-
-
-@manager.command
-def chpasswd(email):
+@cli.command()
+@click.argument('email')
+@click.option(
+    '--password',
+    prompt=click.style('* new password: ', fg='blue'),
+    confirmation_prompt=True,
+    hide_input=True
+)
+def chpasswd(email, password):
     """
     Change given user's password.
     :return: None
     """
+    click.echo(click.style("Changing {}'s password:".format(email), fg='green'))
     try:
         user = User.get(User.email == email)
     except User.DoesNotExist:
-        print "[!] Unknown user: %s" % email
+        click.echo(click.style('ERROR: unknown user'.format(email), bold=True, fg='red'))
         sys.exit(1)
-    password1 = getpass("[>] Password: ")
-    password2 = getpass("[>] Confirm password: ")
-    if password1 != password2:
-        print "[!] Passwords don't match!"
-        sys.exit(2)
-    print "[+] Changing %s's password" % email
-    user.set_password(password1)
+    user.set_password(password)
     user.save()
-    print "[+] Done"
 
 
-@manager.command
+@cli.command()
 def sendmail():
     """
     Sends an email containing last submitted links.
     :return: None
     """
+    click.echo(click.style('Sending new links list by e-mail:', fg='green'))
     links = Link.select().where(Link.archived == False)
     if not links:
-        print "[+] No new links, nothing to do"
+        click.echo(click.style('* no new links', fg='blue'))
         return
-    print "[+] Loading and populating email templates..."
     env = Environment(loader=PackageLoader('waikup', 'templates/emails'))
     html = env.get_template('html.jinja2').render(links=links)
     text = env.get_template('text.jinja2').render(links=links)
     recipients = EMail.select().where(EMail.disabled == False)
     for recipient in recipients:
-        print "[+] Sending email to %s..." % recipient.address
+        click.echo(click.style('* sending email to {}'.format(recipient.address), fg='blue'))
         msg = Message(recipients=recipient.address)
-        msg.subject = app.config['MAIL_TITLE']
+        msg.subject = current_app.config['MAIL_TITLE']
         msg.body = text
         msg.html = html
-        mail.send(msg)
-    print "[+] Archiving links..."
+        current_app.extensions['mail'].send(msg)
     for link in links:
+        click.echo(click.style('* archiving link #{}'.format(link.id), fg='blue'))
         link.archived = True
         link.save()
-    print "[+] Done"
-
-
-def main():
-    manager.run()
 
 
 if __name__ == '__main__':
-    main()
+    cli()

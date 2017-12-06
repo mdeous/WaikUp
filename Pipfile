@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 flask = "*"
-flask-script = "*"
 flask-wtf = "*"
 flask-mail = "*"
 flask-security = "*"
@@ -16,7 +15,6 @@ flask-cors = "*"
 peewee = "*"
 wtf-peewee = "*"
 psycopg2 = "*"
-simplejson = "*"
 flask-reverse-proxy = "*"
 
 [dev-packages]

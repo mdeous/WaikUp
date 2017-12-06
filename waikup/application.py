@@ -9,7 +9,7 @@ from .lib.factory import create_app
 
 
 # Setup application
-app, security_datastore, mail = create_app(settings)
+app = create_app(settings)
 
 
 # Atom feed

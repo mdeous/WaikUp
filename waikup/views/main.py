@@ -18,13 +18,9 @@ def list_links(page_name, links=None):
     :return: rendered HTML page
     """
     toggle_link_id = request.form.get('link_id')
-    page_num = request.args.get('page')
+    page_num = get_page_num()
     toggle_form = SimpleLinkForm()
     delete_form = SimpleLinkForm()
-    if (page_num is None) or (not page_num.isdigit()):
-        page_num = 1
-    else:
-        page_num = int(page_num)
     if toggle_form.validate_on_submit():
         result_ok = Link.toggle_archiving(toggle_link_id)
         if result_ok:
@@ -52,6 +48,13 @@ def get_link_or_error(linkid, redirect_to):
         flash("Link not found: %s" % linkid, category='error')
         return redirect(redirect_to)
     return link
+
+
+def get_page_num():
+    page_num = request.args.get('page')
+    if (page_num is None) or (not page_num.isdigit()):
+        return 1
+    return int(page_num)
 
 
 @main.route('/', methods=['GET', 'POST'])
@@ -96,9 +99,7 @@ def new_link():
         )
         flash("New link added: %s" % form.url.data, category='success')
         return redirect(redirect_to)
-    for field_name, field_errors in form.errors.iteritems():
-        for field_error in field_errors:
-            flash("%s (field: %s)" % (field_error, field_name), category='error')
+    flash_form_errors(form)
     return redirect(redirect_to)
 
 
@@ -120,9 +121,7 @@ def change_password():
         current_user.save()
         flash("Password changed", category='success')
         return redirect(redirect_to)
-    for field_name, field_errors in form.errors.iteritems():
-        for field_error in field_errors:
-            flash("%s (field: %s)" % (field_error, field_name), category='error')
+    flash_form_errors(form)
     return redirect(redirect_to)
 
 
@@ -160,11 +159,7 @@ def search():
     :return: rendered HTML page with links matching search terms.
     """
     redirect_page = request.args.get('page', 'index')
-    page_num = request.args.get('page')
-    if (page_num is None) or (not page_num.isdigit()):
-        page_num = 1
-    else:
-        page_num = int(page_num)
+    page_num = get_page_num()
     pattern = request.args.get('pattern')
     if pattern is None:
         flash("No pattern given", category='error')
