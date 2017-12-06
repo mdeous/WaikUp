@@ -5,6 +5,7 @@ dist: trusty
 install:
   - pip install pipenv
   - pipenv install -d --system
+  - pipenv lock -r > requirements.txt
 addons:
   srcclr: true
   sonarcloud:
