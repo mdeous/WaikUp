@@ -1,6 +1,18 @@
 language: python
 python:
   - "2.7"
+dist: trusty
 install:
   - pip install pipenv
   - pipenv install -d --system
+addons:
+  srcclr: true
+  sonarcloud:
+    organization: mattoufoutu-github
+    token:
+      secure: ${SONAR_TOKEN}
+    branches:
+      - master
+      - develop
+script:
+  - sonar-scanner
