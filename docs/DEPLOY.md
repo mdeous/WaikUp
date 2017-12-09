@@ -1,64 +1,70 @@
 # Deployment
 
-## Development
+## Requirements
+To run WaikUp, the following software and services are needed:
+* Python
+* Pipenv
+* uWSGI
+* PostgreSQL server
+* Mail server (not strictly required for development, except for testing 
+  mailing features)
+* Reverse proxy server (preferably nginx, only required for production deployment)
 
+For details about installing and configuring these dependencies, please refer
+to their own documentation.
+
+## Installation
+Clone source code and install dependencies:
+```bash
+git clone https://github.com/mattoufoutu/waikup
+cd waikup
+pipenv install -d
+pipenv shell
+```
+
+Prepare the database:
+```bash
+su postgres -c "createuser -DPRS waikup"
+# use "waikup" as the password when prompted
+su postgres -c "createdb -O waikup waikup"
+./manage.py setupdb
+```
+
+## Development Mode
+Simply run Flask's integrated development server:
+```bash
+FLASK_APP=waikup/application.py flask run --reload
+```
+
+## Production Mode
 TODO
 
+## Post-Install
+* Create a `waikup/prod_settings.py` file with (at least) the following entries:
+```python
+SECRET_KEY = 'secret key'
+SECURITY_PASSWORD_SALT = 'passwords salt' 
+DATABASE_PASSWORD = 'db connection password'
+MAIL_USERNAME = 'smtp user'
+MAIL_PASSWORD = 'smtp password'
+MAIL_DEFAULT_SENDER = 'waikup@mydomain'
+```
 
-## Production
+The `SECRET_KEY` and `SECURITY_PASSWORD_SALT` variables are used respectively to 
+encrypt/sign session data, and to complexify password hashes, both should be set 
+to some long random string.
 
-While Flask's built-in server is perfect during development, deploying the application for production use requires to 
-use a standalone Web server. This documentation describes the procedure using the Apache web server on a debian based 
-system.
+Safe values for can be generated using the following code (eg. from a Python shell):
+```python
+import os
+from binascii import hexlify
+print(hexlify(os.urandom(64)))
+```
 
-* Make sure that the following packages are installed on the system:
-    * `apache2`
-    * `libapache2-mod-wsgi`
-    * `postgresql`
-    * `libpq-dev`
-
-* Enable Apache's SSL module using `a2enmod ssl` and generate the appropriate certificates in `/etc/apache2`.
-* Create a new virtualenv in `/var/www`, and clone the repository into the virtualenv's `src` folder:
-
-
-    cd /var/www
-    virtualenv waikup
-    chmod +x waikup
-    cd waikup
-    git clone git@bitbucket.org:MatToufoutu/waikup.git src
-
-
-* Activate the newly created virtualenv and install the application:
-
-
-    source bin/activate
-    cd src
-    python setup.py install
-
-
-* Configure Apache using the settings provided in the `waikup.wsgi` file.
-* Setup the database schema using the `./manage.py setupdb` command.
-
-
-## Post-install
-
-### Settings
-
-* Create a `waikup/prod_settings.py` file with (at least) the following values defined:
-  * `DEBUG = False`
-  * `SECRET_KEY = 'some complicated secret key'` (can be generated using `''.join(choice(string.printable) for _ in range(32))`)
-  * `SECURITY_PASSWORD_SALT = 'some complicated salt to be used when hashing passwords'` 
-
-(safe values for `SECRET_KEY` and `SECURITY_PASSWORD_SALT` can be generated using 
-`''.join(choice(string.printable) for _ in range(32))`)
-
-For a list of other settings you might wish to change (database, emails), have a look at the `waikup/settings.py` file.
+For a list of other settings you might wish to change (database, emails), have a 
+look at the [SETTINGS.md](SETTINGS.md) file.
  
-* Create a new admin user using the `./manage.py adduser -a` command (you can create more users later from the WebUI).
+Now, create a new admin user using the `./manage.py adduser -a` command (you can 
+create more users later from the Web interface).
 
-
-### Sending emails
-
-Emails can be sent using the `./manage.py sendmail` command, if you want to automate this, just set a `crontab` entry
-to run this command periodically (make sure to run it using the virtualenv's Python interpreter, which is located at
-`/var/www/waikup/bin/python`.) When running this command, all active emails will be archived.
+The WaikUp instance is now ready for use.
