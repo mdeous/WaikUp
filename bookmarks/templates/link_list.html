@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Links{% endblock %}
+{% block content %}
+  <ul class="collapsible popout" data-collapsible="accordion">
+  {% for link in link_list %}
+    <li>
+      <div class="collapsible-header">
+        <a class="post-link" href="{% url 'link-edit' link_id=link.id %}"><i class="material-icons">edit</i></a>
+        <a class="post-link" data-url="{% url 'link-toggle-archive' link_id=link.id %}" href="#"><i class="material-icons">folder</i></a>
+        <a class="post-link" href="{% url 'link-delete' link_id=link.id %}"><i class="material-icons">delete</i></a>
+        <a href="{{ link.url }}" target="_blank" class="tooltipped" data-delay="50" data-tooltip="Open in new tab">{{ link.title }}</a>
+      </div>
+      <div class="collapsible-body">
+        <span>
+          Added {{ link.submit_date }} by {{ link.author.get_full_name }}
+          <br><br>
+          {{ link.description }}
+        </span>
+      </div>
+    </li>
+  {% endfor %}
+  </ul>
+{#  <table class="bordered highlight">#}
+{#    <thead>#}
+{#      <tr>#}
+{#        <th>Title</th>#}
+{#        <th>Category</th>#}
+{#        <th>Submission date</th>#}
+{#        <th>Submitter</th>#}
+{#      </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#    {% for link in link_list %}#}
+{#      <tr>#}
+{#        <td>#}
+{#          <a href="{% url 'link-edit' link_id=link.id %}" class="post-link"><i class="material-icons">edit</i></a>#}
+{#          <a href="{% url 'link-toggle-archive' link_id=link.id %}" class="post-link"><i class="material-icons">folder</i></a>#}
+{#          <a href="{% url 'link-delete' link_id=link.id %}" class="post-link"><i class="material-icons">delete</i></a>#}
+{#          <a href="{{ link.url }}" target="_blank">{{ link.title }}</a>#}
+{#        </td>1#}
+{#        <td>{{ link.category.name }}</td>#}
+{#        <td>{{ link.submit_date }}</td>#}
+{#        <td>{{ link.author.get_full_name }}</td>#}
+{#      </tr>#}
+{#    {% endfor %}#}
+{##}
+{#    </tbody>#}
+{#  </table>#}
+  <a href="{% url 'link-create' %}">New link</a>
+{% endblock %}

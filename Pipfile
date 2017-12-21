@@ -4,18 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
-flask-wtf = "*"
-flask-mail = "*"
-flask-security = "*"
-flask-restful = "*"
-flask-admin = "*"
-flask-bootstrap = "*"
-flask-cors = "*"
-peewee = "*"
-wtf-peewee = "*"
-psycopg2 = "*"
-flask-reverse-proxy = "*"
+django = "*"
 
 [dev-packages]
-flask-debugtoolbar = "*"
+django-debug-toolbar = "*"

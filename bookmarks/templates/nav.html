@@ -1,0 +1,28 @@
+<ul id="user-dropdown" class="dropdown-content">
+  <li><a href="#"><i class="material-icons left">person</i>Profile</a></li>
+  <li><a href="{% url 'admin:index' %}"><i class="material-icons left">supervisor_account</i>Admin.</a></li>
+  <li><a href="#"><i class="material-icons left">power_settings_new</i>Logout</a></li>
+</ul>
+<div class="navbar-fixed">
+  <nav class="top-nav">
+    <div class="container blue darken-1">
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo">WaikUp</a>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        {% if user.is_authenticated %}
+          <ul id="nav-mobile" class="right">
+            <li{% if current_page == 'link-list' %} class="active"{% endif %}><a href="{% url 'link-list' %}">
+              <i class="material-icons left">home</i>Home
+            </a></li>
+            <li{% if current_page == 'archives' %} class="active"{% endif %}><a href="{% url 'link-list' %}?archived=1">
+              <i class="material-icons left">folder</i>Archives
+            </a></li>
+            <li><a class="dropdown-button" href="#" data-activates="user-dropdown">
+              <img src="{{ gravatar }}" alt="" class="circle profile-pic left">&nbsp;{{ user.get_full_name }}<i class="material-icons right">arrow_drop_down</i>
+            </a></li>
+          </ul>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+</div>
