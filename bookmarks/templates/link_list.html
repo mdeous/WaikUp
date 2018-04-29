@@ -2,49 +2,64 @@
 {% block title %}Links{% endblock %}
 {% block content %}
   <ul class="collapsible popout" data-collapsible="accordion">
-  {% for link in link_list %}
-    <li>
-      <div class="collapsible-header">
-        <a class="post-link" href="{% url 'link-edit' link_id=link.id %}"><i class="material-icons">edit</i></a>
-        <a class="post-link" data-url="{% url 'link-toggle-archive' link_id=link.id %}" href="#"><i class="material-icons">folder</i></a>
-        <a class="post-link" href="{% url 'link-delete' link_id=link.id %}"><i class="material-icons">delete</i></a>
-        <a href="{{ link.url }}" target="_blank" class="tooltipped" data-delay="50" data-tooltip="Open in new tab">{{ link.title }}</a>
-      </div>
-      <div class="collapsible-body">
-        <span>
-          Added {{ link.submit_date }} by {{ link.author.get_full_name }}
-          <br><br>
-          {{ link.description }}
-        </span>
-      </div>
-    </li>
-  {% endfor %}
+    {% for link in object_list %}
+      <li>
+        <div class="collapsible-header valign-wrapper">
+          <a class="post-link tooltipped"
+             data-delay="100"
+             data-tooltip="edit link"
+             href="#" data-url="{% url 'edit' link_id=link.id %}">
+            <i class="material-icons">edit</i>
+          </a>
+          <a class="post-link tooltipped"
+             data-delay="100"
+             data-tooltip="{% if current_page == 'archives' %}un{% endif %}archive link"
+             href="#" data-url="{% url 'archive' link_id=link.id %}">
+            <i class="material-icons">{% if current_page == 'archives' %}folder_open{% else %}folder{% endif %}</i>
+          </a>
+          <a class="post-link tooltipped"
+             data-delay="100"
+             data-tooltip="delete link"
+             href="#" data-url="{% url 'delete' link_id=link.id %}">
+            <i class="material-icons">delete</i>
+          </a>
+          <a class="tooltipped"
+             data-delay="100" data-tooltip="open in a new tab"
+             href="{{ link.url }}" target="_blank">
+            {{ link.title }}
+          </a>
+          &nbsp;<small class="thin">(added by: {{ link.author.get_full_name }})</small>
+          <div class="chip right-align">{{ link.category.name }}</div>
+          {#        <span class="new badge" data-badge-caption="">{{ link.category.name }}</span>#}
+        </div>
+        <div class="collapsible-body">
+          <span>{{ link.description }}</span>
+        </div>
+      </li>
+    {% empty %}
+      <h5 class="center-align">No{% if current_page == 'archives' %} archived{% endif %} links</h5>
+    {% endfor %}
   </ul>
-{#  <table class="bordered highlight">#}
-{#    <thead>#}
-{#      <tr>#}
-{#        <th>Title</th>#}
-{#        <th>Category</th>#}
-{#        <th>Submission date</th>#}
-{#        <th>Submitter</th>#}
-{#      </tr>#}
-{#    </thead>#}
-{#    <tbody>#}
-{#    {% for link in link_list %}#}
-{#      <tr>#}
-{#        <td>#}
-{#          <a href="{% url 'link-edit' link_id=link.id %}" class="post-link"><i class="material-icons">edit</i></a>#}
-{#          <a href="{% url 'link-toggle-archive' link_id=link.id %}" class="post-link"><i class="material-icons">folder</i></a>#}
-{#          <a href="{% url 'link-delete' link_id=link.id %}" class="post-link"><i class="material-icons">delete</i></a>#}
-{#          <a href="{{ link.url }}" target="_blank">{{ link.title }}</a>#}
-{#        </td>1#}
-{#        <td>{{ link.category.name }}</td>#}
-{#        <td>{{ link.submit_date }}</td>#}
-{#        <td>{{ link.author.get_full_name }}</td>#}
-{#      </tr>#}
-{#    {% endfor %}#}
-{##}
-{#    </tbody>#}
-{#  </table>#}
-  <a href="{% url 'link-create' %}">New link</a>
+  <a href="#new-link-modal"
+     id="add-link-btn"
+     class="btn-floating btn-large waves-effect blue tooltipped modal-trigger"
+     data-delay="100"
+     data-position="left"
+     data-tooltip="add a new link">
+    <i class="material-icons">add</i>
+  </a>
+  <div id="new-link-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>New Link</h4>
+      <p>This is where the new link form is supposed to be.</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" id="new-link-close" class="modal-action modal-close waves-effect waves-green btn-flat">
+        <i class="material-icons left">cancel</i>Cancel
+      </a>
+      <a href="#" id="new-link-save" class="modal-action waves-effect waves-green btn-flat btn-default green">
+        <i class="material-icons left">check_circle</i>Save
+      </a>
+    </div>
+  </div>
 {% endblock %}

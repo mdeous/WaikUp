@@ -89,25 +89,20 @@ python manage.py runserver -r -d  # start Flask development server
 ```
 
 ### :envelope: Sending Emails
-Emails can be sent using the `./manage.py sendmail` command, if you want to automate this, 
-just set a `crontab` entry to run this command periodically (make sure to run it using the 
-virtualenv's Python interpreter, this can be done with pipenv: `pipenv run ./manage.py sendmail`) 
-When running this command, all active emails will be archived.
+TODO
 
 ### :floppy_disk: Settings
-:warning: **`SECRET_KEY` and `SECURITY_PASSWORD_SALT` should be replaced with random values 
-for production use** :warning:
+:warning: **`SECRET_KEY` should be replaced with a random value for production use** :warning:
 
 Default settings value are stored in the `waikup/settings.py` file. These values can be
 overriden by creating a `prod_settings.py` file in the same directory and storing custom
-configuration values in this file.
+configuration values there.
 
-The `settings.py` file doesn't contain every available setting though, for a complete list,
-please refer to Flask and used plugins documentation (see [`Pipfile`](Pipfile) for 
-a complete plugins list).
+For a complete list of available configuration options, please refer to the official
+[Django documentation](https://docs.djangoproject.com/en/2.0/ref/settings/ "Django settings").
 
-A table describing every setting available in the `settings.py` file, its default value, 
-and the environment variable from which they can alternatively be set, is available
+A table describing every custom setting available in the `settings.py` file, its default 
+value, and the environment variable from which they can alternatively be set, is available
 [here](docs/SETTINGS.md "Settings list").
 
 ## :bug: Issues and Contributions

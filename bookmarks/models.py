@@ -9,6 +9,8 @@ class User(AbstractUser):
 
 
 class Category(models.Model):
+    class Meta:
+        verbose_name_plural = 'categories'
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -28,7 +30,9 @@ class Link(models.Model):
         return self.url
 
 
-class EMail(models.Model):
+class Recipient(models.Model):
+    class Meta:
+        verbose_name = 'E-mail'
     address = models.EmailField()
     active = models.BooleanField(default=True)
 

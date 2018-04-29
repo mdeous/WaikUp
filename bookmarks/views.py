@@ -1,10 +1,9 @@
 from hashlib import md5
 
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, HttpResponse, get_object_or_404, redirect
-from django.views.decorators.http import require_POST, require_GET
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 
+from .forms import NewLinkForm
 from .models import Link
 
 
@@ -15,49 +14,47 @@ def global_context(request):
         context['gravatar'] = 'https://www.gravatar.com/avatar/{}?d=mm'.format(email_hash)
     else:
         context['gravatar'] = 'https://www.gravatar.com/avatar/?d=mm'
+    context['new_link_form'] = NewLinkForm()
     return context
 
 
-@login_required
-@require_GET
-def link_list(request):
-    try:
-        archived = bool(int(request.GET.get('archived', 0)))
-    except ValueError:
-        archived = False
-    current_page = 'link-list'
-    if archived:
-        current_page = 'archives'
-    links = Link.objects.filter(archived=archived)
-    return render(request, 'link_list.html', context={'link_list': links, 'current_page': current_page})
+class LinkListView(LoginRequiredMixin, ListView):
+    template_name = 'link_list.html'
+    model = Link
+    current_page = ''
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(archived=self.current_page == 'archives').all()
+        return queryset
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(LinkListView, self).get_context_data(*args, **kwargs)
+        context['current_page'] = self.current_page
+        return context
 
 
-@login_required
-@require_POST
-def link_create(request):
-    return HttpResponse('Link created')
+class IndexView(LinkListView):
+    current_page = 'link_list'
 
 
-@login_required
-@require_POST
-def link_edit(request, link_id):
-    return HttpResponse('Link {} edited'.format(link_id))
+class ArchivesView(LinkListView):
+    current_page = 'archives'
 
 
-@login_required
-@require_POST
-def link_toggle_archive(request, link_id):
-    link = get_object_or_404(Link, id=link_id)
-    link.archived = not link.archived
-    link.save()
-    messages.add_message(request, messages.SUCCESS, 'Link {} {}archived'.format(
-        link_id,
-        '' if link.archived else 'un'
-    ))
-    return redirect('link-list')
+class LinkCreateView(LoginRequiredMixin, CreateView):
+    model = Link
 
 
-@login_required
-@require_POST
-def link_delete(request, link_id):
-    return HttpResponse('Link {} deleted'.format(link_id))
+class LinkUpdateView(LoginRequiredMixin, UpdateView):
+    model = Link
+    pk_url_kwarg = 'link_id'
+
+
+class LinkArchiveView(LoginRequiredMixin, UpdateView):
+    model = Link
+    pk_url_kwarg = 'link_id'
+
+
+class LinkDeleteView(LoginRequiredMixin, DeleteView):
+    model = Link
+    pk_url_kwarg = 'link_id'

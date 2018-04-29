@@ -4,7 +4,7 @@
   <form action="{% url 'login' %}" method="post">
     {% csrf_token %}
     {{ form }}
-    <input type="hidden" name="next" value="{% url 'link-list' %}">
-    <input type="submit">
+    <input type="hidden" name="next" value="{% url 'index' %}">
+    <button class="btn" type="submit">Log In <i class="material-icons right">send</i></button>
   </form>
 {% endblock %}

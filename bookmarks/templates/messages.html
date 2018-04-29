@@ -1,0 +1,7 @@
+<script>
+    {% if messages %}
+        {% for message in messages %}
+            Materialize.toast('{{ message }}', 5000, '{{ message.tags }}');
+        {% endfor %}
+    {% endif %}
+</script>
