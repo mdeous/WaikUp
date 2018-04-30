@@ -41,4 +41,5 @@ $(document).ready(() => {
     $('#new-link-close').click(closeNewLinkModal);
     $('#new-link-save').click(postLink);
     $('.modal').modal();
+    $('select').material_select();
 });
