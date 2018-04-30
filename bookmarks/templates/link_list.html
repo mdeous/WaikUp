@@ -48,19 +48,5 @@
      data-tooltip="add a new link">
     <i class="material-icons">add</i>
   </a>
-  <div id="new-link-modal" class="modal modal-fixed-footer">
-    <div class="modal-content">
-      <form class="form" method="post" action="{% url 'create' %}">
-        {{ new_link_form.as_table }}
-      </form>
-    </div>
-    <div class="modal-footer">
-      <a href="#" id="new-link-close" class="modal-action modal-close waves-effect waves-green btn-flat">
-        <i class="material-icons left">cancel</i>Cancel
-      </a>
-      <a href="#" id="new-link-save" class="modal-action waves-effect waves-green btn-flat btn-default green">
-        <i class="material-icons left">check_circle</i>Save
-      </a>
-    </div>
-  </div>
+  {% include 'new_link_modal.html' %}
 {% endblock %}
