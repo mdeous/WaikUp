@@ -28,7 +28,7 @@
              href="{{ link.url }}" target="_blank">
             {{ link.title }}
           </a>
-          &nbsp;<small class="thin">(added by: {{ link.author.get_full_name }})</small>
+          &nbsp;<small class="thin">(added by: {{ link.author.get_full_name|default:link.author.username }})</small>&nbsp;
           <div class="chip right-align">{{ link.category.name }}</div>
           {#        <span class="new badge" data-badge-caption="">{{ link.category.name }}</span>#}
         </div>
@@ -50,8 +50,9 @@
   </a>
   <div id="new-link-modal" class="modal modal-fixed-footer">
     <div class="modal-content">
-      <h4>New Link</h4>
-      <p>This is where the new link form is supposed to be.</p>
+      <form class="form" method="post" action="{% url 'create' %}">
+        {{ new_link_form.as_table }}
+      </form>
     </div>
     <div class="modal-footer">
       <a href="#" id="new-link-close" class="modal-action modal-close waves-effect waves-green btn-flat">
