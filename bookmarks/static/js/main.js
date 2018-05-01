@@ -33,13 +33,15 @@ function postLink() {
     return false;
 }
 
-function closeNewLinkModal() {
-    return true;
-}
-
 $(document).ready(() => {
-    $('#new-link-close').click(closeNewLinkModal);
-    $('#new-link-save').click(postLink);
-    $('.modal').modal();
-    $('select').material_select();
+    // initialize Semantic UI plugins
+    $('.ui.dropdown').dropdown();
+    $('.ui.modal').modal();
+    $('.ui.accordion').accordion();
+    // custom events
+    $('.ui.message i.close').click((ev) => { $(ev.currentTarget).closest('.message').transition(); });
+    $('button#new-link-btn').click(() => { $('.ui.modal#new-link-modal').modal('show') });
+    $('a#profile-link').click(() => { $('.ui.modal#profile-modal').modal('show') });
+    $('button#new-link-save').click(postLink);
+    // $('select').material_select();
 });

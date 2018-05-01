@@ -1,7 +1,10 @@
 {% if messages %}
-  <script>
-      {% for message in messages %}
-          Materialize.toast('{{ message }}', 5000, '{{ message.tags }}');
-      {% endfor %}
-  </script>
+  {% for message in messages %}
+    <div class="ui floating message {{ message.tags }}">
+      <i class="close icon"></i>
+      <div class="header">
+        {{ message }}
+      </div>
+    </div>
+  {% endfor %}
 {% endif %}

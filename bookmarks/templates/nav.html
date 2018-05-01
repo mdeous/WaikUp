@@ -1,28 +1,31 @@
-<ul id="user-dropdown" class="dropdown-content" style="width: 600px !important">
-  <li><a href="#"><i class="material-icons left">person</i>Profile</a></li>
-  {% if user.is_admin %}<li><a href="{% url 'admin:index' %}"><i class="material-icons left">supervisor_account</i>Admin</a></li>{% endif %}
-  <li><a href="{% url 'logout' %}"><i class="material-icons left">power_settings_new</i>Logoff</a></li>
-</ul>
-<div class="navbar-fixed">
-  <nav class="top-nav">
-    <div class="container blue darken-1">
-      <div class="nav-wrapper">
-        <a href="#" class="brand-logo">WaikUp</a>
-        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-        {% if user.is_authenticated %}
-          <ul id="nav-mobile" class="right">
-            <li{% if current_page == 'link_list' %} class="active"{% endif %}><a href="{% url 'index' %}">
-              <i class="material-icons left">home</i>Home
-            </a></li>
-            <li{% if current_page == 'archives' %} class="active"{% endif %}><a href="{% url 'archives' %}">
-              <i class="material-icons left">folder</i>Archives
-            </a></li>
-            <li><a class="dropdown-button" href="#" data-activates="user-dropdown">
-              <img src="{{ gravatar }}" alt="" class="profile-pic left circle">&nbsp;{{ user.get_full_name }}<i class="material-icons right">arrow_drop_down</i>
-            </a></li>
-          </ul>
-        {% endif %}
+{% load static %}
+<div class="ui menu">
+  <a href="#" class="header item"><img src="{% static 'img/waikup-globe.png' %}" alt=""></a>
+  {% if user.is_authenticated %}
+    <a href="{% url 'index' %}" class="item{% if current_page == 'link_list' %} active{% endif %}">Links</a>
+    <a href="{% url 'archives' %}" class="item{% if current_page == 'archives' %} active{% endif %}">Archives</a>
+    <div class="right menu">
+      <div class="borderless item">
+        <button class="ui blue button" id="new-link-btn"><i class="middle aligned plus circle icon"></i>New Link</button>
+      </div>
+      <div class="ui input item">
+        <input type="text" class="prompt" placeholder="Search links">
+        <a href="#">&nbsp;<i class="search icon"></i></a>
+      </div>
+      <div class="ui dropdown item">
+        <img src="{{ gravatar }}" alt="gravatar" class="ui avatar image"> {{ user.get_full_name|default:user.username }}
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          {% if user.is_staff %}
+            <a href="{% url 'admin:index' %}" class="item">Administration</a>
+            <div class="divider"></div>
+          {% endif %}
+          <a href="#" class="item" id="profile-link">Profile</a>
+          <a href="{% url 'logout' %}" class="item">Log out</a>
+        </div>
       </div>
     </div>
-  </nav>
+  {% endif %}
 </div>
+{% include 'new_link_modal.html' %}
+{% include 'profile_modal.html' %}

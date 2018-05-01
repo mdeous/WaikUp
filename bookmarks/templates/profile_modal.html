@@ -1,0 +1,34 @@
+<div class="ui large modal" id="profile-modal">
+  <div class="header">
+    User profile
+  </div>
+  <div class="content">
+    <table class="ui celled table">
+      <tbody>
+        <tr>
+          <td><strong>First name</strong></td>
+          <td>{{ user.first_name|default:"N/A" }}</td>
+        </tr>
+        <tr>
+          <td><strong>Last name</strong></td>
+          <td>{{ user.last_name|default:"N/A" }}</td>
+        </tr>
+        <tr>
+          <td><strong>Username</strong></td>
+          <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+          <td><strong>E-Mail</strong></td>
+          <td>{{ user.email }}</td>
+        </tr>
+        <tr class="disabled">
+          <td><strong>API key</strong></td>
+          <td>{{ user.api_key|default:"N/A" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="actions">
+    <div class="ui cancel button">Close</div>
+  </div>
+</div>

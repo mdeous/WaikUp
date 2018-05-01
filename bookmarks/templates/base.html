@@ -8,16 +8,17 @@
   <title>WaikUp - {% block title %}{% endblock %}</title>
   {% block css %}
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"
-          integrity="sha256-e22BQKCF7bb/h/4MFJ1a4lTRR2OuAe8Hxa/3tgU5Taw="
-          crossorigin="anonymous" />
+          href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"
+          integrity="sha256-oDCP2dNW17Y1QhBwQ+u2kLaKxoauWvIGks3a4as9QKs="
+          crossorigin="anonymous"/>
     <link rel="stylesheet" href="{% static 'css/material-icons.css' %}">
     <link rel="stylesheet" href="{% static 'css/waikup.css' %}">
   {% endblock %}
 </head>
 <body>
-{% include 'nav.html' %}
-<div class="container">
+<div class="ui container">
+  {% include 'nav.html' %}
+  {% include 'messages.html' %}
   {% block content %}{% endblock %}
 </div>
 {% block javascript %}
@@ -25,12 +26,11 @@
           integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
           crossorigin="anonymous">
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"
-          integrity="sha256-uWtSXRErwH9kdJTIr1swfHFJn/d/WQ6s72gELOHXQGM="
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"
+          integrity="sha256-RKNmL9+6j/3jB72OcIg8OQr91Bi4OgFPnKQOFS1O+fo="
           crossorigin="anonymous">
   </script>
   <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}
-{% include 'messages.html' %}
 </body>
 </html>

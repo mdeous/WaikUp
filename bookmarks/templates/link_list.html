@@ -1,52 +1,19 @@
 {% extends "base.html" %}
 {% block title %}Links{% endblock %}
 {% block content %}
-  <ul class="collapsible popout" data-collapsible="accordion">
+  <div class="ui accordion relaxed divided list">
     {% for link in object_list %}
-      <li>
-        <div class="collapsible-header valign-wrapper">
-          <a class="post-link tooltipped"
-             data-delay="100"
-             data-tooltip="edit link"
-             href="#" data-url="{% url 'edit' link_id=link.id %}">
-            <i class="material-icons">edit</i>
-          </a>
-          <a class="post-link tooltipped"
-             data-delay="100"
-             data-tooltip="{% if current_page == 'archives' %}un{% endif %}archive link"
-             href="#" data-url="{% url 'archive' link_id=link.id %}">
-            <i class="material-icons">{% if current_page == 'archives' %}folder_open{% else %}folder{% endif %}</i>
-          </a>
-          <a class="post-link tooltipped"
-             data-delay="100"
-             data-tooltip="delete link"
-             href="#" data-url="{% url 'delete' link_id=link.id %}">
-            <i class="material-icons">delete</i>
-          </a>
-          <a class="tooltipped"
-             data-delay="100" data-tooltip="open in a new tab"
-             href="{{ link.url }}" target="_blank">
-            {{ link.title }}
-          </a>
-          &nbsp;<small class="thin">(added by: {{ link.author.get_full_name|default:link.author.username }})</small>&nbsp;
-          <div class="chip right-align">{{ link.category.name }}</div>
-          {#        <span class="new badge" data-badge-caption="">{{ link.category.name }}</span>#}
+      <div class="item title">
+        <i class="large linkify middle aligned icon"></i>
+        <div class="content">
+          <a href="{{ link.url }}" target="_blank" class="header">{{ link.title }}</a>
+          <div class="description">
+            <div>Added {{ link.submit_date }} by {{ link.author.get_full_name|default:link.author.username }}</div>
+            <div class="ui label">{{ link.category.name }}</div>
+          </div>
         </div>
-        <div class="collapsible-body">
-          <span>{{ link.description }}</span>
-        </div>
-      </li>
-    {% empty %}
-      <h5 class="center-align">No{% if current_page == 'archives' %} archived{% endif %} links</h5>
+      </div>
+      <div class="item content">{{ link.description }}</div>
     {% endfor %}
-  </ul>
-  <a href="#new-link-modal"
-     id="add-link-btn"
-     class="btn-floating btn-large waves-effect blue tooltipped modal-trigger"
-     data-delay="100"
-     data-position="left"
-     data-tooltip="add a new link">
-    <i class="material-icons">add</i>
-  </a>
-  {% include 'new_link_modal.html' %}
+  </div>
 {% endblock %}
