@@ -3,12 +3,13 @@
     Add new link
   </div>
   <div class="content">
-    <form action="{% url 'create' %}" method="post" class="ui form">
+    <form action="{% url 'create' %}" method="post" class="ui form" id="new-link-form">
+      {% csrf_token %}
       {{ new_link_form }}
     </form>
   </div>
   <div class="actions">
-    <div class="ui green approve button">Create</div>
+    <div id="new-link-save" class="ui green approve button">Create</div>
     <div class="ui cancel button">Cancel</div>
   </div>
 </div>

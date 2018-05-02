@@ -1,6 +1,7 @@
 from hashlib import md5
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 
 from .forms import NewLinkForm
@@ -43,6 +44,16 @@ class ArchivesView(LinkListView):
 
 class LinkCreateView(LoginRequiredMixin, CreateView):
     model = Link
+    fields = ['url', 'title', 'description', 'category']
+    http_method_names = 'post'
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.author = self.request.user
+        return super(LinkCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('index')
 
 
 class LinkUpdateView(LoginRequiredMixin, UpdateView):

@@ -42,6 +42,11 @@ $(document).ready(() => {
     $('.ui.message i.close').click((ev) => { $(ev.currentTarget).closest('.message').transition(); });
     $('button#new-link-btn').click(() => { $('.ui.modal#new-link-modal').modal('show') });
     $('a#profile-link').click(() => { $('.ui.modal#profile-modal').modal('show') });
-    $('button#new-link-save').click(postLink);
+    $('#new-link-save').click(() => {
+        let f = $('form#new-link-form');
+        console.log(f);
+        f.submit();
+        return false;
+    });
     // $('select').material_select();
 });
