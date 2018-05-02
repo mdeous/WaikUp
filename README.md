@@ -1,5 +1,7 @@
 [![maintainability_badge](https://api.codeclimate.com/v1/badges/2ddc51217828000b8267/maintainability)](https://api.codeclimate.com/v1/badges/2ddc51217828000b8267/maintainability)
 
+**WARNING: The Django version of WaikUp is still a WIP and isn't usable for production yet!**
+
 # WaikUp
 Collaborative news sharing platform.
 
@@ -34,7 +36,7 @@ provided `manage.py` script. Help for any command can be viewed with
 
 Main help:
 ```
-$ ./manage.py                         
+$ ./manage.py
 Usage: manage.py [OPTIONS] COMMAND [ARGS]...
 
 Options:
@@ -101,7 +103,7 @@ configuration values there.
 For a complete list of available configuration options, please refer to the official
 [Django documentation](https://docs.djangoproject.com/en/2.0/ref/settings/ "Django settings").
 
-A table describing every custom setting available in the `settings.py` file, its default 
+A table describing every custom setting available in the `settings.py` file, its default
 value, and the environment variable from which they can alternatively be set, is available
 [here](docs/SETTINGS.md "Settings list").
 
