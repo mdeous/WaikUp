@@ -1,6 +1,7 @@
 from hashlib import md5
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView
 
@@ -17,6 +18,21 @@ def global_context(request):
         context['gravatar'] = 'https://www.gravatar.com/avatar/?d=mm'
     context['new_link_form'] = NewLinkForm()
     return context
+
+
+class PostOnlyMixin:
+    http_method_names = 'post'
+
+    def get(self, *args, **kwargs):
+        return redirect('index')
+
+    def get_success_url(self):
+        return reverse('index')
+
+
+class LinkPostMixin(LoginRequiredMixin, PostOnlyMixin):
+    model = Link
+    pk_url_kwarg = 'link_id'
 
 
 class LinkListView(LoginRequiredMixin, ListView):
@@ -42,30 +58,22 @@ class ArchivesView(LinkListView):
     current_page = 'archives'
 
 
-class LinkCreateView(LoginRequiredMixin, CreateView):
-    model = Link
+class LinkCreateView(LinkPostMixin, CreateView):
     fields = ['url', 'title', 'description', 'category']
-    http_method_names = 'post'
 
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.author = self.request.user
         return super(LinkCreateView, self).form_valid(form)
 
-    def get_success_url(self):
-        return reverse('index')
+
+class LinkUpdateView(LinkPostMixin, UpdateView):
+    pass
 
 
-class LinkUpdateView(LoginRequiredMixin, UpdateView):
-    model = Link
-    pk_url_kwarg = 'link_id'
+class LinkArchiveView(LinkPostMixin, UpdateView):
+    pass
 
 
-class LinkArchiveView(LoginRequiredMixin, UpdateView):
-    model = Link
-    pk_url_kwarg = 'link_id'
-
-
-class LinkDeleteView(LoginRequiredMixin, DeleteView):
-    model = Link
-    pk_url_kwarg = 'link_id'
+class LinkDeleteView(LinkPostMixin, PostOnlyMixin, DeleteView):
+    pass
