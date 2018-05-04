@@ -21,10 +21,7 @@ def global_context(request):
 
 
 class PostOnlyMixin:
-    http_method_names = 'post'
-
-    def get(self, *args, **kwargs):
-        return redirect('index')
+    http_method_names = ['post']
 
     def get_success_url(self):
         return reverse('index')
